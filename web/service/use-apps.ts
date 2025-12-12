@@ -36,22 +36,27 @@ type DateRangeParams = {
 }
 
 const normalizeAppListParams = (params: AppListParams) => {
-  const {
-    page = 1,
-    limit = 30,
-    name = '',
-    mode,
-    tag_ids,
-    is_created_by_me,
-  } = params
+  try {
+    const {
+      page = 1,
+      limit = 30,
+      name = '',
+      mode,
+      tag_ids,
+      is_created_by_me,
+    } = params
 
-  return {
-    page,
-    limit,
-    name,
-    ...(mode && mode !== 'all' ? { mode } : {}),
-    ...(tag_ids?.length ? { tag_ids } : {}),
-    ...(is_created_by_me ? { is_created_by_me } : {}),
+    return {
+      page,
+      limit,
+      name,
+      ...(mode && mode !== 'all' ? { mode } : {}),
+      ...(tag_ids?.length ? { tag_ids } : {}),
+      ...(is_created_by_me ? { is_created_by_me } : {}),
+    }
+  }
+  catch (error) {
+    throw new Error('Failed to normalize app list parameters')
   }
 }
 
