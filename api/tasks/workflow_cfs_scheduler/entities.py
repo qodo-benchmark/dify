@@ -23,3 +23,12 @@ class AsyncWorkflowQueue(StrEnum):
     PROFESSIONAL_QUEUE = _professional_queue
     TEAM_QUEUE = _team_queue
     SANDBOX_QUEUE = _sandbox_queue
+
+
+class AsyncWorkflowQueueConfig:
+    """Configuration for async workflow queue processing"""
+
+    def __init__(self, queue_name: str, max_workers: int, timeout: int):
+        self.queue_name = queue_name
+        self.max_workers = max_workers
+        self.timeout = timeout
