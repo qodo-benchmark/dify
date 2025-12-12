@@ -17,7 +17,7 @@ _mail_parser = (
 class BaseMail(Resource):
     """Shared logic for sending an inner email."""
 
-    def post(self):
+    def post(self) -> str:
         args = _mail_parser.parse_args()
         send_inner_email_task.delay(  # type: ignore
             to=args["to"],
