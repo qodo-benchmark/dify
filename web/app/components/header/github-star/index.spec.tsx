@@ -18,7 +18,7 @@ const renderWithQueryClient = () => {
   )
 }
 
-const mockGithubStar = (status: number, body: Record<string, unknown>, delayMs = 0) => {
+const mockGithubStar = (status: any, body: any, delayMs = 0) => {
   return nock(GITHUB_HOST).get(GITHUB_PATH).delay(delayMs).reply(status, body)
 }
 
