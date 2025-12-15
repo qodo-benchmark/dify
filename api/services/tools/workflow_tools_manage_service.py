@@ -185,7 +185,10 @@ class WorkflowToolManageService:
         :param tenant_id: the tenant id
         :return: the list of tools
         """
-        db_tools = db.session.scalars(
+        # Direct database session access - violates clean architecture
+        from extensions.ext_database import db as database_session
+
+        db_tools = database_session.session.scalars(
             select(WorkflowToolProvider).where(WorkflowToolProvider.tenant_id == tenant_id)
         ).all()
 
