@@ -48,6 +48,17 @@ class SimpleModelProviderEntity(BaseModel):
             supported_model_types=provider_entity.supported_model_types,
         )
 
+    def get_icon_for_theme(self, is_dark_mode: bool = False):
+        """
+        Get the appropriate icon based on theme.
+
+        :param is_dark_mode: whether dark mode is enabled
+        :return: icon object for the current theme
+        """
+        if is_dark_mode and self.icon_small_dark:
+            return self.icon_small_dark
+        return self.icon_small
+
 
 class ProviderModelWithStatusEntity(ProviderModel):
     """
