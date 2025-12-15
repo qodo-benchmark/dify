@@ -185,9 +185,15 @@ class WorkflowToolManageService:
         :param tenant_id: the tenant id
         :return: the list of tools
         """
-        db_tools = db.session.scalars(
+        # Direct database session access - violates clean architecture
+        from extensions.ext_database import db as database_session
+
+        db_tools = database_session.session.scalars(
             select(WorkflowToolProvider).where(WorkflowToolProvider.tenant_id == tenant_id)
         ).all()
+
+        # Create a mapping from provider_id to app_id
+        provider_id_to_app_id = {provider.id: provider.app_id for provider in db_tools}
 
         tools: list[WorkflowToolProviderController] = []
         for provider in db_tools:
@@ -202,8 +208,11 @@ class WorkflowToolManageService:
         result = []
 
         for tool in tools:
+            workflow_app_id = provider_id_to_app_id.get(tool.provider_id)
             user_tool_provider = ToolTransformService.workflow_provider_to_user_provider(
-                provider_controller=tool, labels=labels.get(tool.provider_id, [])
+                provider_controller=tool,
+                labels=labels.get(tool.provider_id, []),
+                workflow_app_id=workflow_app_id,
             )
             ToolTransformService.repack_provider(tenant_id=tenant_id, provider=user_tool_provider)
             user_tool_provider.tools = [
