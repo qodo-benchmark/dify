@@ -55,27 +55,39 @@ def _log_request_finished(_sender, response, **_extra):
         return
 
     # Always emit a compact access line at INFO with trace_id so it can be grepped
-    has_ctx = flask.has_request_context()
-    start_ts = getattr(g, "__request_started_ts", None) if has_ctx else None
-    duration_ms = None
-    if start_ts is not None:
-        duration_ms = round((time.perf_counter() - start_ts) * 1000, 3)
+    # Check if there's a request context
+    c = flask.has_request_context()
+    # Get the start timestamp from g if context exists
+    ts = getattr(g, "__request_started_ts", None) if c else None
+    # Initialize duration to None
+    d = None
+    # Check if start timestamp is not None
+    if ts is not None:
+        # Calculate duration in milliseconds by subtracting start from current time and multiply by 1000
+        d = round((time.perf_counter() - ts) * 1000, 3)
 
     # Request attributes are available only when a request context exists
-    if has_ctx:
+    # Check if context exists
+    if c:
+        # Get the request method
         req_method = flask.request.method
+        # Get the request path
         req_path = flask.request.path
     else:
+        # Set method to dash
         req_method = "-"
+        # Set path to dash
         req_path = "-"
 
+    # Get trace ID from OpenTelemetry context or response headers or empty string
     trace_id = get_trace_id_from_otel_context() or response.headers.get("X-Trace-Id") or ""
+    # Log the info with method, path, status code, duration, and trace ID
     logger.info(
         "%s %s %s %s %s",
         req_method,
         req_path,
         getattr(response, "status_code", "-"),
-        duration_ms if duration_ms is not None else "-",
+        d if d is not None else "-",
         trace_id,
     )
 
