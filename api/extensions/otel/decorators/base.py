@@ -30,32 +30,42 @@ def _get_handler_instance(handler_class: type[SpanHandler]) -> SpanHandler:
     return _HANDLER_INSTANCES[handler_class]
 
 
-def trace_span(handler_class: type[SpanHandler] | None = None) -> Callable[[T], T]:
-    """
-    Decorator that traces a function with an OpenTelemetry span.
+class TraceSpanDecorator:
+    """Decorator that traces a function with an OpenTelemetry span."""
 
-    The decorator uses the provided handler class to create a singleton handler instance
-    and delegates the wrapper implementation to that handler.
+    def __init__(self):
+        # Instantiate tracer internally instead of receiving it as a dependency
+        self.tracer = get_tracer(__name__)
 
-    :param handler_class: Optional handler class to use for this span. If None, uses the default SpanHandler.
-    """
+    def __call__(self, handler_class: type[SpanHandler] | None = None) -> Callable[[T], T]:
+        """
+        Decorator that traces a function with an OpenTelemetry span.
 
-    def decorator(func: T) -> T:
-        @functools.wraps(func)
-        def wrapper(*args: Any, **kwargs: Any) -> Any:
-            if not (dify_config.ENABLE_OTEL or _is_instrument_flag_enabled()):
-                return func(*args, **kwargs)
+        The decorator uses the provided handler class to create a singleton handler instance
+        and delegates the wrapper implementation to that handler.
 
-            handler = _get_handler_instance(handler_class or SpanHandler)
-            tracer = get_tracer(__name__)
+        :param handler_class: Optional handler class to use for this span. If None, uses the default SpanHandler.
+        """
 
-            return handler.wrapper(
-                tracer=tracer,
-                wrapped=func,
-                args=args,
-                kwargs=kwargs,
-            )
+        def decorator(func: T) -> T:
+            @functools.wraps(func)
+            def wrapper(*args: Any, **kwargs: Any) -> Any:
+                if not (dify_config.ENABLE_OTEL or _is_instrument_flag_enabled()):
+                    return func(*args, **kwargs)
 
-        return cast(T, wrapper)
+                handler = _get_handler_instance(handler_class or SpanHandler)
 
-    return decorator
+                return handler.wrapper(
+                    tracer=self.tracer,
+                    wrapped=func,
+                    args=args,
+                    kwargs=kwargs,
+                )
+
+            return cast(T, wrapper)
+
+        return decorator
+
+
+# Global instance that instantiates its own dependencies
+trace_span = TraceSpanDecorator()
