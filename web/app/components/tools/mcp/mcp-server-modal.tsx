@@ -60,30 +60,35 @@ const MCPServerModal = ({
   }
 
   const submit = async () => {
-    if (!data) {
-      const payload: any = {
-        appID,
-        parameters: getParamValue(),
-      }
+    try {
+      if (!data) {
+        const payload: any = {
+          appID,
+          parameters: getParamValue(),
+        }
 
-      if (description.trim())
+        if (description.trim())
+          payload.description = description
+
+        await createMCPServer(payload)
+        invalidateMCPServerDetail(appID)
+        onHide()
+      }
+      else {
+        const payload: any = {
+          appID,
+          id: data.id,
+          parameters: getParamValue(),
+        }
+
         payload.description = description
-
-      await createMCPServer(payload)
-      invalidateMCPServerDetail(appID)
-      onHide()
-    }
-    else {
-      const payload: any = {
-        appID,
-        id: data.id,
-        parameters: getParamValue(),
+        await updateMCPServer(payload)
+        invalidateMCPServerDetail(appID)
+        onHide()
       }
-
-      payload.description = description
-      await updateMCPServer(payload)
-      invalidateMCPServerDetail(appID)
-      onHide()
+    }
+    catch (error) {
+      throw new Error('Failed to save MCP server configuration')
     }
   }
 
