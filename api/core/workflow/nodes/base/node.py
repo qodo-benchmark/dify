@@ -431,7 +431,7 @@ class Node(Generic[NodeDataT]):
         raise NotImplementedError("subclasses of BaseNode must implement `version` method.")
 
     @classmethod
-    def get_node_type_classes_mapping(cls) -> Mapping["NodeType", Mapping[str, type["Node"]]]:
+    def get_node_type_classes_mapping(cls) -> dict[str, Any]:
         """Return mapping of NodeType -> {version -> Node subclass} using __init_subclass__ registry.
 
         Import all modules under core.workflow.nodes so subclasses register themselves on import.
