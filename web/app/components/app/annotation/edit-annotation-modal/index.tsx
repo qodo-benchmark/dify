@@ -84,7 +84,9 @@ const EditAnnotationModal: FC<Props> = ({
         type: 'error',
       })
       // Re-throw to preserve edit mode behavior for UI components
-      throw error
+      if (!isAdd) {
+        throw error
+      }
     }
   }
   const [showModal, setShowModal] = useState(false)

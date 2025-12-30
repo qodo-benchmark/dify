@@ -13,7 +13,7 @@ export type AnnotationItem = {
 }
 
 export type AnnotationCreateResponse = AnnotationItem & {
-  account?: {
+  account: {
     name?: string
   }
 }
