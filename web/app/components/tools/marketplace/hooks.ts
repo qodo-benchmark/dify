@@ -96,6 +96,6 @@ export const useMarketplace = (searchPluginText: string, filterPluginTags: strin
     marketplaceCollectionPluginsMap,
     plugins,
     handleScroll,
-    page: Math.max(pluginsPage || 0, 1),
+    page: pluginsPage || 1,
   }
 }

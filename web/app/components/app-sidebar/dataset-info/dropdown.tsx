@@ -95,8 +95,8 @@ const DropDown = ({
     try {
       await deleteDataset(dataset.id)
       Toast.notify({ type: 'success', message: t('dataset.datasetDeleted') })
-      invalidDatasetList()
       replace('/datasets')
+      invalidDatasetList()
     }
     finally {
       setShowConfirmDelete(false)
