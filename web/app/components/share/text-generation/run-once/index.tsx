@@ -74,15 +74,15 @@ const RunOnce: FC<IRunOnceProps> = ({
   const isRunning = !!runControl
   const stopLabel = t('share.generation.stopRun', { defaultValue: 'Stop Run' })
   const handlePrimaryClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
-    if (!isRunning)
-      return
-    e.preventDefault()
-    runControl?.onStop?.()
+    if (isRunning) {
+      e.preventDefault()
+      runControl?.onStop?.()
+    }
   }, [isRunning, runControl])
 
   const handleInputsChange = useCallback((newInputs: Record<string, any>) => {
-    onInputsChange(newInputs)
     inputsRef.current = newInputs
+    onInputsChange(newInputs)
   }, [onInputsChange, inputsRef])
 
   useEffect(() => {
