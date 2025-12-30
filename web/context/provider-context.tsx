@@ -6,6 +6,7 @@ import dayjs from 'dayjs'
 import { useTranslation } from 'react-i18next'
 import { useQueryClient } from '@tanstack/react-query'
 import {
+  commonQueryKeys,
   useModelListByType,
   useModelProviders,
   useSupportRetrievalMethods,
@@ -140,7 +141,7 @@ export const ProviderContextProvider = ({
   const [isAllowPublishAsCustomKnowledgePipelineTemplate, setIsAllowPublishAsCustomKnowledgePipelineTemplate] = useState(false)
 
   const refreshModelProviders = () => {
-    queryClient.invalidateQueries({ queryKey: ['common', 'model-providers'] })
+    queryClient.invalidateQueries({ queryKey: commonQueryKeys.modelProviders })
   }
 
   const fetchPlan = async () => {

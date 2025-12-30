@@ -22,7 +22,7 @@ const ChangePasswordForm = () => {
   const {
     data: verifyTokenRes,
     refetch: revalidateToken,
-  } = useVerifyForgotPasswordToken(token)
+  } = useVerifyForgotPasswordToken(token || undefined)
 
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')

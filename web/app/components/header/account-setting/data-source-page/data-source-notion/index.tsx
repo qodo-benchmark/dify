@@ -35,6 +35,7 @@ const DataSourceNotion: FC<Props> = ({
   const [canConnectNotion, setCanConnectNotion] = useState(false)
   const { data: integrates } = useDataSourceIntegrates({
     initialData: workspaces ? { data: workspaces } : undefined,
+    enabled: !workspaces,
   })
   const { data } = useNotionConnection(canConnectNotion)
   const { t } = useTranslation()

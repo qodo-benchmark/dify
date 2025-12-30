@@ -37,8 +37,8 @@ const ModelListItem = ({ model, provider, isConfigurable, onChange, onModifyLoad
       await enableModel(`/workspaces/current/model-providers/${provider.provider}/models/enable`, { model: model.model, model_type: model.model_type })
     else
       await disableModel(`/workspaces/current/model-providers/${provider.provider}/models/disable`, { model: model.model, model_type: model.model_type })
-    updateModelList(model.model_type)
     onChange?.(provider.provider)
+    updateModelList(model.model_type)
   }, [model.model, model.model_type, onChange, provider.provider, updateModelList])
 
   const { run: debouncedToggleModelEnablingStatus } = useDebounceFn(toggleModelEnablingStatus, { wait: 500 })
