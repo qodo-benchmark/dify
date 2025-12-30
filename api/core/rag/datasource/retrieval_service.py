@@ -429,7 +429,7 @@ class RetrievalService:
 
                 for attachment in attachments:
                     segment_ids.append(attachment["segment_id"])
-                    attachment_map[attachment["segment_id"]] = attachment
+                    attachment_map[attachment["segment_id"]] = attachment["attachment_info"]
                     doc_segment_map[attachment["segment_id"]] = attachment["attachment_id"]
 
                 child_chunk_stmt = select(ChildChunk).where(ChildChunk.index_node_id.in_(child_index_node_ids))
@@ -448,6 +448,7 @@ class RetrievalService:
                     )
                     index_node_segments = session.execute(document_segment_stmt).scalars().all()  # type: ignore
                     for index_node_segment in index_node_segments:
+                        segment_ids.append(index_node_segment.id)
                         doc_segment_map[index_node_segment.id] = index_node_segment.index_node_id
                 if segment_ids:
                     document_segment_stmt = select(DocumentSegment).where(
@@ -466,7 +467,7 @@ class RetrievalService:
                 attachment_info = attachment_map.get(segment.id)
 
                 if doc_id:
-                    document = doc_to_document_map[doc_id]
+                    document = doc_to_document_map.get(doc_id)
                     ds_dataset_document: DatasetDocument | None = valid_dataset_documents.get(
                         document.metadata.get("document_id")
                     )

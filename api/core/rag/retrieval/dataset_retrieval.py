@@ -154,10 +154,10 @@ class DatasetRetrieval:
 
         dataset_stmt = select(Dataset).where(Dataset.tenant_id == tenant_id, Dataset.id.in_(dataset_ids))
         datasets: list[Dataset] = db.session.execute(dataset_stmt).scalars().all()  # type: ignore
-        for dataset in datasets:
-            if dataset.available_document_count == 0 and dataset.provider != "external":
-                continue
-            available_datasets.append(dataset)
+        for dataset_id in dataset_ids:
+            dataset = next((d for d in datasets if d.id == dataset_id), None)
+            if dataset and (dataset.available_document_count > 0 or dataset.provider == "external"):
+                available_datasets.append(dataset)
 
         if inputs:
             inputs = {key: str(value) for key, value in inputs.items()}
