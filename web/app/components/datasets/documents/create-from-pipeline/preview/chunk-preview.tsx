@@ -123,7 +123,7 @@ const ChunkPreview = ({
                 onlineDriveFiles.map(file => ({
                   id: file.id,
                   name: file.name,
-                  extension: getFileExtension(previewOnlineDriveFile?.name),
+                  extension: getFileExtension(file.name),
                 }))
               }
               onChange={(selected) => {
