@@ -241,7 +241,7 @@ const mockDebugConfigContext = {
     score_threshold: 0.7,
     datasets: { datasets: [] },
   } as DatasetConfigs,
-  datasetConfigsRef: createRef<DatasetConfigs>(),
+  datasetConfigsRef: { current: null } as any,
   setDatasetConfigs: jest.fn(),
   hasSetContextVar: false,
   isShowVisionConfig: false,

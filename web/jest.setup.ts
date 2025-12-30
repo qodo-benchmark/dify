@@ -45,15 +45,12 @@ if (typeof window !== 'undefined') {
 if (typeof globalThis.ResizeObserver === 'undefined') {
   globalThis.ResizeObserver = class {
     observe() {
-      return undefined
     }
 
     unobserve() {
-      return undefined
     }
 
     disconnect() {
-      return undefined
     }
   }
 }

