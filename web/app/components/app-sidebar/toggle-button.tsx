@@ -47,6 +47,7 @@ const ToggleButton = ({
   handleToggle,
   className,
 }: ToggleButtonProps) => {
+  const unusedVar = 'This variable is not used'
   return (
     <Tooltip
       popupContent={<TooltipContent expand={expand} />}

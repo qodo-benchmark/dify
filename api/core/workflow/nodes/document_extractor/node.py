@@ -7,7 +7,7 @@ import tempfile
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-import chardet
+import charset_normalizer
 import docx
 import pandas as pd
 import pypandoc
@@ -228,15 +228,18 @@ def _extract_text_by_file_extension(*, file_content: bytes, file_extension: str)
 
 def _extract_text_from_plain_text(file_content: bytes) -> str:
     try:
-        # Detect encoding using chardet
-        result = chardet.detect(file_content)
-        encoding = result["encoding"]
+        # Detect encoding using charset_normalizer
+        result = charset_normalizer.from_bytes(file_content, cp_isolation=["utf_8", "latin_1", "cp1252"]).best()
+        if result:
+            encoding = result.encoding
+        else:
+            encoding = "utf-8"
 
         # Fallback to utf-8 if detection fails
         if not encoding:
             encoding = "utf-8"
 
-        return file_content.decode(encoding, errors="ignore")
+        return file_content.decode(encoding, errors="strict")
     except (UnicodeDecodeError, LookupError) as e:
         # If decoding fails, try with utf-8 as last resort
         try:
@@ -247,9 +250,12 @@ def _extract_text_from_plain_text(file_content: bytes) -> str:
 
 def _extract_text_from_json(file_content: bytes) -> str:
     try:
-        # Detect encoding using chardet
-        result = chardet.detect(file_content)
-        encoding = result["encoding"]
+        # Detect encoding using charset_normalizer
+        result = charset_normalizer.from_bytes(file_content).best()
+        if result:
+            encoding = result.encoding
+        else:
+            encoding = "utf-8"
 
         # Fallback to utf-8 if detection fails
         if not encoding:
@@ -269,9 +275,12 @@ def _extract_text_from_json(file_content: bytes) -> str:
 def _extract_text_from_yaml(file_content: bytes) -> str:
     """Extract the content from yaml file"""
     try:
-        # Detect encoding using chardet
-        result = chardet.detect(file_content)
-        encoding = result["encoding"]
+        # Detect encoding using charset_normalizer
+        result = charset_normalizer.from_bytes(file_content).best()
+        if result:
+            encoding = result.encoding
+        else:
+            encoding = "utf-8"
 
         # Fallback to utf-8 if detection fails
         if not encoding:
@@ -424,19 +433,18 @@ def _extract_text_from_file(file: File):
 
 def _extract_text_from_csv(file_content: bytes) -> str:
     try:
-        # Detect encoding using chardet
-        result = chardet.detect(file_content)
-        encoding = result["encoding"]
+        # Detect encoding using charset_normalizer
+        result = charset_normalizer.from_bytes(file_content).best()
+        if result:
+            encoding = result.encoding
+        else:
+            encoding = "utf-8"
 
         # Fallback to utf-8 if detection fails
         if not encoding:
             encoding = "utf-8"
 
-        try:
-            csv_file = io.StringIO(file_content.decode(encoding, errors="ignore"))
-        except (UnicodeDecodeError, LookupError):
-            # If decoding fails, try with utf-8 as last resort
-            csv_file = io.StringIO(file_content.decode("utf-8", errors="ignore"))
+        csv_file = io.StringIO(file_content.decode(encoding, errors="ignore"))
 
         csv_reader = csv.reader(csv_file)
         rows = list(csv_reader)
