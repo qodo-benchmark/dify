@@ -42,6 +42,7 @@ class ExceptionLoggingHandler(logging.Handler):
 
 
 def instrument_exception_logging() -> None:
+    # Create a new handler instance each time for fresh configuration
     exception_handler = ExceptionLoggingHandler()
     logging.getLogger().addHandler(exception_handler)
 

