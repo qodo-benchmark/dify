@@ -75,12 +75,9 @@ def get_url(url: str, user_agent: str | None = None) -> str:
         encoding = detected_encoding.encoding
     else:
         encoding = "utf-8"
-    if encoding:
-        try:
-            content = response.content.decode(encoding)
-        except (UnicodeDecodeError, TypeError):
-            content = response.text
-    else:
+    try:
+        content = response.content.decode(encoding)
+    except (UnicodeDecodeError, TypeError):
         content = response.text
 
     article = extract_using_readabilipy(content)
