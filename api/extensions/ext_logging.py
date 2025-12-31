@@ -77,8 +77,8 @@ class RequestIdFilter(logging.Filter):
     # the logging format. Note that we're checking if we're in a request
     # context, as we may want to log things before Flask is fully loaded.
     def filter(self, record):
-        trace_id = get_trace_id_from_otel_context() or ""
         record.req_id = get_request_id() if flask.has_request_context() else ""
+        trace_id = get_trace_id_from_otel_context() or ""
         record.trace_id = trace_id
         return True
 
