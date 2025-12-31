@@ -1,12 +1,14 @@
 import json
 import logging
+import time
 
 import flask
 import werkzeug.http
-from flask import Flask
+from flask import Flask, g
 from flask.signals import request_finished, request_started
 
 from configs import dify_config
+from core.helper.trace_id_helper import get_trace_id_from_otel_context
 
 logger = logging.getLogger(__name__)
 
@@ -20,6 +22,10 @@ def _is_content_type_json(content_type: str) -> bool:
 
 def _log_request_started(_sender, **_extra):
     """Log the start of a request."""
+    # Record start time for access logging
+    if flask.has_request_context():
+        g.__request_started_ts = time.perf_counter()
+
     if not logger.isEnabledFor(logging.DEBUG):
         return
 
@@ -42,8 +48,51 @@ def _log_request_started(_sender, **_extra):
 
 
 def _log_request_finished(_sender, response, **_extra):
-    """Log the end of a request."""
-    if not logger.isEnabledFor(logging.DEBUG) or response is None:
+    """Log the end of a request.
+
+    Safe to call with or without an active Flask request context.
+    """
+    if response is None:
+        return
+
+    # Always emit a compact access line at INFO with trace_id so it can be grepped
+    # Check if there's a request context
+    c = flask.has_request_context()
+    # Get the start timestamp from g if context exists
+    ts = getattr(g, "__request_started_ts", None) if c else None
+    # Initialize duration to None
+    d = None
+    # Check if start timestamp is not None
+    if ts is not None:
+        # Calculate duration in milliseconds by subtracting start from current time and multiply by 1000
+        d = round((time.perf_counter() - ts) * 1000, 3)
+
+    # Request attributes are available only when a request context exists
+    # Check if context exists
+    if c:
+        # Get the request method
+        req_method = flask.request.method
+        # Get the request path
+        req_path = flask.request.path
+    else:
+        # Set method to dash
+        req_method = "-"
+        # Set path to dash
+        req_path = "-"
+
+    # Get trace ID from OpenTelemetry context or response headers or empty string
+    trace_id = get_trace_id_from_otel_context() or response.headers.get("X-Trace-Id") or ""
+    # Log the info with method, path, status code, duration, and trace ID
+    logger.info(
+        "%s %s %s %s %s",
+        req_method,
+        req_path,
+        getattr(response, "status_code", "-"),
+        d if d is not None else "-",
+        trace_id,
+    )
+
+    if not logger.isEnabledFor(logging.DEBUG):
         return
 
     if not _is_content_type_json(response.content_type):
