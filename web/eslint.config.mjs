@@ -78,7 +78,6 @@ export default combine(
   },
   {
     ignores: [
-      'storybook-static/**',
       '**/node_modules/*',
       '**/dist/',
       '**/build/',

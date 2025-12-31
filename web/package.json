@@ -25,7 +25,7 @@
     "start": "node ./scripts/copy-and-start.mjs",
     "lint:oxlint": "oxlint --config .oxlintrc.json .",
     "lint": "pnpm run lint:oxlint && eslint --cache --cache-location node_modules/.cache/eslint/.eslint-cache",
-    "lint:fix": "pnpm run lint:oxlint && eslint --cache --cache-location node_modules/.cache/eslint/.eslint-cache --fix",
+    "lint:fix": "eslint --cache --cache-location node_modules/.cache/eslint/.eslint-cache --fix",
     "lint:quiet": "pnpm run lint:oxlint && eslint --cache --cache-location node_modules/.cache/eslint/.eslint-cache --quiet",
     "lint:complexity": "pnpm run lint:oxlint && eslint --cache --cache-location node_modules/.cache/eslint/.eslint-cache --rule 'complexity: [error, {max: 15}]' --quiet",
     "type-check": "tsc --noEmit",
@@ -231,7 +231,6 @@
       "eslint --fix"
     ],
     "**/*.ts?(x)": [
-      "oxlint --config .oxlintrc.json",
       "eslint --fix"
     ]
   },
