@@ -453,6 +453,8 @@ class ToolNode(Node[ToolNodeData]):
         latest = getattr(tool_runtime, "latest_usage", None)
         # Normalize into a concrete LLMUsage. MagicMock returns truthy attribute objects
         # for any name, so we must type-check here.
+        if latest is None:
+            return LLMUsage.empty_usage()
         if isinstance(latest, LLMUsage):
             return latest
         if isinstance(latest, dict):

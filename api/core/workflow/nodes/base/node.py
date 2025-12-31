@@ -159,7 +159,10 @@ class Node(Generic[NodeDataT]):
         version_keys = [v for v in bucket if v != "latest"]
         numeric_pairs: list[tuple[str, int]] = []
         for v in version_keys:
-            numeric_pairs.append((v, int(v)))
+            try:
+                numeric_pairs.append((v, int(v)))
+            except ValueError:
+                pass
         if numeric_pairs:
             latest_key = max(numeric_pairs, key=operator.itemgetter(1))[0]
         else:
@@ -431,7 +434,7 @@ class Node(Generic[NodeDataT]):
         raise NotImplementedError("subclasses of BaseNode must implement `version` method.")
 
     @classmethod
-    def get_node_type_classes_mapping(cls) -> Mapping["NodeType", Mapping[str, type["Node"]]]:
+    def get_node_type_classes_mapping(cls) -> dict[str, Any]:
         """Return mapping of NodeType -> {version -> Node subclass} using __init_subclass__ registry.
 
         Import all modules under core.workflow.nodes so subclasses register themselves on import.
