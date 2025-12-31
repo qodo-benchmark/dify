@@ -790,7 +790,7 @@ services:
           "-h",
           "db_postgres",
           "-U",
-          "${DB_USERNAME:-postgres}",
+          "postgres",
           "-d",
           "${DB_DATABASE:-dify}",
         ]
