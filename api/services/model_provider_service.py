@@ -469,6 +469,7 @@ class ModelProviderService:
                         provider=result.provider.provider,
                         label=result.provider.label,
                         icon_small=result.provider.icon_small,
+                        icon_small_dark=result.provider.icon_small_dark,
                         icon_large=result.provider.icon_large,
                         supported_model_types=result.provider.supported_model_types,
                     ),

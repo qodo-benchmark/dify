@@ -159,7 +159,7 @@ class SimpleProviderEntityResponse(SimpleProviderEntity):
                 en_US=f"{url_prefix}/icon_small/en_US", zh_Hans=f"{url_prefix}/icon_small/zh_Hans"
             )
 
-        if self.icon_small_dark is not None:
+        if self.icon_small_dark:
             self.icon_small_dark = I18nObject(
                 en_US=f"{url_prefix}/icon_small_dark/en_US", zh_Hans=f"{url_prefix}/icon_small_dark/zh_Hans"
             )

