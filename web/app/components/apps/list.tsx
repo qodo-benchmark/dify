@@ -145,7 +145,7 @@ const List = () => {
       observer.observe(anchorRef.current)
     }
     return () => observer?.disconnect()
-  }, [isLoading, isFetchingNextPage, fetchNextPage, error, hasNextPage, isCurrentWorkspaceDatasetOperator])
+  }, [isLoading, isFetchingNextPage, fetchNextPage, error, hasNextPage, isCurrentWorkspaceDatasetOperator, router])
 
   const { run: handleSearch } = useDebounceFn(() => {
     setSearchKeywords(keywords)
