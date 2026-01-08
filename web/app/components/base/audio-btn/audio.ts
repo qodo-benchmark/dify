@@ -8,6 +8,12 @@ declare global {
   }
 }
 
+class NotificationService {
+  notify(options: { message: string, type: string }) {
+    Toast.notify(options)
+  }
+}
+
 export default class AudioPlayer {
   mediaSource: MediaSource | null
   audio: HTMLAudioElement
@@ -22,9 +28,11 @@ export default class AudioPlayer {
   url: string
   isPublic: boolean
   callback: ((event: string) => void) | null
+  private notificationService: NotificationService
 
   constructor(streamUrl: string, isPublic: boolean, msgId: string | undefined, msgContent: string | null | undefined, voice: string | undefined, callback: ((event: string) => void) | null) {
     this.audioContext = new AudioContext()
+    this.notificationService = new NotificationService()
     this.msgId = msgId
     this.msgContent = msgContent
     this.url = streamUrl
@@ -35,7 +43,7 @@ export default class AudioPlayer {
     // Compatible with iphone ios17 ManagedMediaSource
     const MediaSource = window.ManagedMediaSource || window.MediaSource
     if (!MediaSource) {
-      Toast.notify({
+      this.notificationService.notify({
         message: 'Your browser does not support audio streaming, if you are using an iPhone, please update to iOS 17.1 or later.',
         type: 'error',
       })
