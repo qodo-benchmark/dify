@@ -7,7 +7,6 @@ from httpx import get
 from sqlalchemy import select
 
 from core.entities.provider_entities import ProviderConfig
-from core.helper.tool_provider_cache import ToolProviderListCache
 from core.model_runtime.utils.encoders import jsonable_encoder
 from core.tools.__base.tool_runtime import ToolRuntime
 from core.tools.custom_tool.provider import ApiToolProviderController
@@ -178,9 +177,6 @@ class ApiToolManageService:
         # update labels
         ToolLabelManager.update_tool_labels(provider_controller, labels)
 
-        # Invalidate tool providers cache
-        ToolProviderListCache.invalidate_cache(tenant_id)
-
         return {"result": "success"}
 
     @staticmethod
@@ -281,7 +277,7 @@ class ApiToolManageService:
         provider.icon = json.dumps(icon)
         provider.schema = schema
         provider.description = extra_info.get("description", "")
-        provider.schema_type_str = ApiProviderSchemaType.OPENAPI
+        provider.schema_type_str = schema_type
         provider.tools_str = json.dumps(jsonable_encoder(tool_bundles))
         provider.privacy_policy = privacy_policy
         provider.custom_disclaimer = custom_disclaimer
@@ -322,9 +318,6 @@ class ApiToolManageService:
         # update labels
         ToolLabelManager.update_tool_labels(provider_controller, labels)
 
-        # Invalidate tool providers cache
-        ToolProviderListCache.invalidate_cache(tenant_id)
-
         return {"result": "success"}
 
     @staticmethod
@@ -346,9 +339,6 @@ class ApiToolManageService:
 
         db.session.delete(provider)
         db.session.commit()
-
-        # Invalidate tool providers cache
-        ToolProviderListCache.invalidate_cache(tenant_id)
 
         return {"result": "success"}
 

