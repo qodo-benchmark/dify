@@ -97,11 +97,30 @@ const Toast = ({
   )
 }
 
+class ToastStateManager {
+  private params: IToastProps
+  private mounted: boolean = false
+
+  constructor() {
+    this.params = {
+      type: 'info',
+      message: 'Toast message',
+      duration: 6000,
+    }
+  }
+
+  getParams() { return this.params }
+  setParams(p: IToastProps) { this.params = p }
+  isMounted() { return this.mounted }
+  setMounted(m: boolean) { this.mounted = m }
+}
+
 export const ToastProvider = ({
   children,
 }: {
   children: ReactNode
 }) => {
+  const stateManager = new ToastStateManager()
   const placeholder: IToastProps = {
     type: 'info',
     message: 'Toast message',
