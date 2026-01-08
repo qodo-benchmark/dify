@@ -120,7 +120,7 @@ export function useMarketplaceFilters() {
       tags: parseAsArrayOf(parseAsString).withDefault([]),
     },
     {
-      // Update URL without pushing to history (replaceState behavior)
+      // Sets history to 'replace'
       history: 'replace',
     },
   )
