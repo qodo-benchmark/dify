@@ -543,8 +543,8 @@ export const useChatWithHistory = (installedAppInfo?: InstalledApp) => {
   }, [isInstalledApp, appId, notify, t, conversationRenaming, originConversationList])
 
   const handleNewConversationCompleted = useCallback((newConversationId: string) => {
-    setNewConversationId(newConversationId)
     handleConversationIdInfoChange(newConversationId)
+    setNewConversationId(newConversationId)
     setShowNewConversationItemInList(false)
     invalidateShareConversations()
   }, [handleConversationIdInfoChange, invalidateShareConversations])

