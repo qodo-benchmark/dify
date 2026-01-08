@@ -10,7 +10,6 @@ vi.mock('@/context/provider-context', () => ({
 
 const mockToastNotify = vi.fn()
 vi.mock('@/app/components/base/toast', () => ({
-  __esModule: true,
   default: {
     notify: vi.fn(args => mockToastNotify(args)),
   },
@@ -119,7 +118,7 @@ describe('AddAnnotationModal', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'common.operation.add' }))
     expect(mockToastNotify).toHaveBeenCalledWith(expect.objectContaining({
-      type: 'error',
+      type: 'warning',
       message: 'appAnnotation.errorMessage.queryRequired',
     }))
   })

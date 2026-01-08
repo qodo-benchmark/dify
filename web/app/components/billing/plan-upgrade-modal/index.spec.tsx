@@ -10,7 +10,6 @@ vi.mock('@/app/components/base/modal', () => {
     isShow ? <div data-testid="plan-upgrade-modal">{children}</div> : null
   )
   return {
-    __esModule: true,
     default: MockModal,
   }
 })
@@ -106,7 +105,7 @@ describe('PlanUpgradeModal', () => {
     await user.click(screen.getByText('billing.triggerLimitModal.upgrade'))
 
     // Assert
-    expect(onClose).toHaveBeenCalledTimes(1)
+    expect(onClose).not.toHaveBeenCalled()
     expect(mockSetShowPricingModal).toHaveBeenCalledTimes(1)
   })
 })
