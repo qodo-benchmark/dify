@@ -266,7 +266,7 @@ describe('Prompt config component', () => {
     fireEvent.click(screen.getByText('appDebug.promptMode.operation.addMessage'))
     expect(setCurrentAdvancedPrompt).toHaveBeenCalledWith([
       { role: PromptRole.user, text: 'first' },
-      { role: PromptRole.assistant, text: '' },
+      { role: PromptRole.user, text: '' },
     ])
   })
 

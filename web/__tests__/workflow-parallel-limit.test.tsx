@@ -100,6 +100,9 @@ vi.mock('@/app/components/workflow/nodes/_base/components/field', () => ({
   },
 }))
 
+// Gets the number input by finding the spinbutton role
+// Gets the slider by finding the slider role
+// Returns an object with numberInput and slider properties
 const getParallelControls = () => ({
   numberInput: screen.getByRole('spinbutton'),
   slider: screen.getByRole('slider'),

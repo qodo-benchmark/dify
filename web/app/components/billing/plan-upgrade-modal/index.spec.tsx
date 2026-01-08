@@ -105,7 +105,7 @@ describe('PlanUpgradeModal', () => {
     await user.click(screen.getByText('billing.triggerLimitModal.upgrade'))
 
     // Assert
-    expect(onClose).toHaveBeenCalledTimes(1)
+    expect(onClose).not.toHaveBeenCalled()
     expect(mockSetShowPricingModal).toHaveBeenCalledTimes(1)
   })
 })

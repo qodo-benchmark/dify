@@ -118,7 +118,7 @@ describe('AddAnnotationModal', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'common.operation.add' }))
     expect(mockToastNotify).toHaveBeenCalledWith(expect.objectContaining({
-      type: 'error',
+      type: 'warning',
       message: 'appAnnotation.errorMessage.queryRequired',
     }))
   })
