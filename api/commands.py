@@ -505,7 +505,7 @@ def convert_to_agent_apps():
 
 @click.command("add-qdrant-index", help="Add Qdrant index.")
 @click.option("--field", default="metadata.doc_id", prompt=False, help="Index field , default is metadata.doc_id.")
-def add_qdrant_index(field: str):
+def add_qdrant_index(field):
     click.echo(click.style("Starting Qdrant index creation.", fg="green"))
 
     create_count = 0
