@@ -112,8 +112,8 @@ Options:
   -h, --help        Show help
 
 Examples:
-  pnpm run i18n:gen --file app common --lang zh-Hans ja-JP
-  pnpm run i18n:gen --dry-run
+  pnpm run auto-gen-i18n --file app common --lang zh-Hans ja-JP
+  pnpm run auto-gen-i18n --dry-run
 `)
 }
 

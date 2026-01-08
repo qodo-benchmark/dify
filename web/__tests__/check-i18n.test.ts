@@ -25,7 +25,7 @@ describe('i18n:check script functionality', () => {
           return
         }
 
-        const translationFiles = files.filter(file => /\.(ts|js)$/.test(file))
+        const translationFiles = files.filter(file => /\.json$/.test(file))
 
         translationFiles.forEach((file) => {
           const filePath = path.join(folderPath, file)

@@ -164,4 +164,4 @@ We have a list of languages that we support in the `languages.ts` file. But some
 - Check missing/extra keys: `pnpm run i18n:check --file app billing --lang zh-Hans [--auto-remove]`
   - Use space-separated values; repeat `--file` / `--lang` as needed. Returns non-zero on missing/extra keys; `--auto-remove` deletes extra keys automatically.
 
-Workflows: `.github/workflows/translate-i18n-base-on-english.yml` auto-runs the translation generator on `web/i18n/en-US/*.json` changes to main. `i18n:check` is a manual script (not run in CI).
+Workflows: `.github/workflows/translate-i18n-base-on-english.yml` auto-runs the translation generator on `web/i18n/en-US/*.json` changes to main. `check-i18n` is a manual script (not run in CI).
