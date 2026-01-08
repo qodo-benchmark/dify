@@ -1,5 +1,6 @@
 """Unit tests for skip propagator."""
 
+from typing import Any
 from unittest.mock import MagicMock, create_autospec
 
 from core.workflow.graph import Edge, Graph
@@ -201,7 +202,7 @@ class TestSkipPropagator:
         mock_graph.edges = {"edge_1": edge1, "edge_3": edge3}
 
         # Setup get_incoming_edges to return different values based on node
-        def get_incoming_edges_side_effect(node_id):
+        def get_incoming_edges_side_effect(node_id: Any) -> Any:
             if node_id == "node_2":
                 return [edge1]
             elif node_id == "node_4":
