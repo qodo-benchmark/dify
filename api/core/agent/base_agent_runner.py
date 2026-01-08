@@ -51,7 +51,7 @@ class BaseAgentRunner(AppRunner):
         self,
         *,
         tenant_id: str,
-        application_generate_entity: AgentChatAppGenerateEntity,
+        app_generate_entity: AgentChatAppGenerateEntity,
         conversation: Conversation,
         app_config: AgentChatAppConfig,
         model_config: ModelConfigWithCredentialsEntity,
