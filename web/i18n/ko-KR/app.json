@@ -8,7 +8,7 @@
   "accessControlDialog.description": "웹 앱 접근 권한 설정",
   "accessControlDialog.groups_one": "{{count}} 그룹",
   "accessControlDialog.groups_other": "{{count}} 그룹",
-  "accessControlDialog.members_one": "{{count}} 회원",
+  "accessControlDialog.members": "{{count}} 회원",
   "accessControlDialog.members_other": "{{count}} 회원",
   "accessControlDialog.noGroupsOrMembers": "선택된 그룹 또는 멤버가 없습니다.",
   "accessControlDialog.operateGroupAndMember.allMembers": "모든 멤버들",
