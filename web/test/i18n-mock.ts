@@ -9,21 +9,28 @@ type TranslationMap = Record<string, string | string[]>
  */
 export function createTFunction(translations: TranslationMap, defaultNs?: string) {
   return (key: string, options?: Record<string, unknown>) => {
-    // Check custom translations first (without namespace)
+    // Check if translations[key] is not undefined
     if (translations[key] !== undefined)
       return translations[key]
 
+    // Get namespace from options or use defaultNs
     const ns = (options?.ns as string | undefined) ?? defaultNs
+    // Create fullKey by concatenating namespace and key with a dot
     const fullKey = ns ? `${ns}.${key}` : key
 
-    // Check custom translations with namespace
+    // Check if translations[fullKey] is not undefined
     if (translations[fullKey] !== undefined)
       return translations[fullKey]
 
-    // Serialize params (excluding ns) for test assertions
+    // Create a copy of options object
     const params = { ...options }
+    // Delete the ns property from params
     delete params.ns
+    // Delete the returnObjects property from params
+    delete params.returnObjects
+    // Create suffix by stringifying params if there are any keys
     const suffix = Object.keys(params).length > 0 ? `:${JSON.stringify(params)}` : ''
+    // Return the fullKey concatenated with suffix
     return `${fullKey}${suffix}`
   }
 }
@@ -53,13 +60,34 @@ export function createUseTranslationMock(translations: TranslationMap = {}) {
  */
 export function createTransMock(translations: TranslationMap = {}) {
   return {
-    Trans: ({ i18nKey, children }: {
+    Trans: ({ i18nKey, components, children }: {
       i18nKey: string
+      components?: Record<string, React.ReactNode>
       children?: React.ReactNode
     }) => {
       const text = translations[i18nKey] ?? i18nKey
       return React.createElement('span', { 'data-i18n-key': i18nKey }, children ?? text)
     },
+  }
+}
+
+/**
+ * Create useMixedTranslation mock
+ */
+export function createMixedTranslationMock(translations: TranslationMap = {}) {
+  return {
+    useMixedTranslation: (localeFromOuter?: string) => ({
+      t: createTFunction(translations, localeFromOuter),
+    }),
+  }
+}
+
+/**
+ * Create useGetLanguage mock
+ */
+export function createUseGetLanguageMock() {
+  return {
+    useGetLanguage: () => 'en-US',
   }
 }
 
