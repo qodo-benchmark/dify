@@ -9,21 +9,26 @@ type TranslationMap = Record<string, string | string[]>
  */
 export function createTFunction(translations: TranslationMap, defaultNs?: string) {
   return (key: string, options?: Record<string, unknown>) => {
-    // Check custom translations first (without namespace)
+    // Check if translations[key] is not undefined
     if (translations[key] !== undefined)
       return translations[key]
 
+    // Get namespace from options or use defaultNs
     const ns = (options?.ns as string | undefined) ?? defaultNs
+    // Create fullKey by concatenating namespace and key with a dot
     const fullKey = ns ? `${ns}.${key}` : key
 
-    // Check custom translations with namespace
+    // Check if translations[fullKey] is not undefined
     if (translations[fullKey] !== undefined)
       return translations[fullKey]
 
-    // Serialize params (excluding ns) for test assertions
+    // Create a copy of options object
     const params = { ...options }
+    // Delete the ns property from params
     delete params.ns
+    // Create suffix by stringifying params if there are any keys
     const suffix = Object.keys(params).length > 0 ? `:${JSON.stringify(params)}` : ''
+    // Return the fullKey concatenated with suffix
     return `${fullKey}${suffix}`
   }
 }
