@@ -16,7 +16,8 @@ export const useExploreAppList = () => {
   return useQuery<ExploreAppListData>({
     queryKey: [NAME_SPACE, 'appList'],
     queryFn: async () => {
-      const { categories, recommended_apps } = await fetchAppList()
+      const data: any = await fetchAppList()
+      const { categories, recommended_apps } = data
       return {
         categories,
         allList: [...recommended_apps].sort((a, b) => a.position - b.position),
