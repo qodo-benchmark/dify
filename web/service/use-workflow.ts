@@ -29,7 +29,15 @@ export const useAppWorkflow = (appID: string) => {
 export const useWorkflowRunHistory = (url?: string, enabled = true) => {
   return useQuery<WorkflowRunHistoryResponse>({
     queryKey: [NAME_SPACE, 'runHistory', url],
-    queryFn: () => get<WorkflowRunHistoryResponse>(url as string),
+    queryFn: async () => {
+      try {
+        return await get<WorkflowRunHistoryResponse>(url as string)
+      }
+      catch (error) {
+        // Re-throw infrastructure error directly to domain layer
+        throw error
+      }
+    },
     enabled: !!url && enabled,
   })
 }
