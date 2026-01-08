@@ -90,7 +90,6 @@ const LocaleLayout = async ({
         className="color-scheme h-full select-auto"
         {...datasetMap}
       >
-        <ReactScanLoader />
         <ThemeProvider
           attribute="data-theme"
           defaultTheme="system"
@@ -98,6 +97,7 @@ const LocaleLayout = async ({
           disableTransitionOnChange
           enableColorScheme={false}
         >
+          <ReactScanLoader />
           <NuqsAdapter>
             <BrowserInitializer>
               <SentryInitializer>
