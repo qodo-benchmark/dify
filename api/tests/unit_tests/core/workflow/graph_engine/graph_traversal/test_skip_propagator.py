@@ -1,5 +1,6 @@
 """Unit tests for skip propagator."""
 
+from typing import Any
 from unittest.mock import MagicMock, create_autospec
 
 from core.workflow.graph import Edge, Graph
@@ -76,8 +77,8 @@ class TestSkipPropagator:
         propagator.propagate_skip_from_edge("edge_1")
 
         # Assert
-        mock_state_manager.enqueue_node.assert_called_once_with("node_2")
         mock_state_manager.start_execution.assert_called_once_with("node_2")
+        mock_state_manager.enqueue_node.assert_called_once_with("node_2")
         mock_state_manager.mark_node_skipped.assert_not_called()
 
     def test_propagate_skip_from_edge_with_all_skipped_propagates_to_node(self) -> None:
@@ -201,7 +202,7 @@ class TestSkipPropagator:
         mock_graph.edges = {"edge_1": edge1, "edge_3": edge3}
 
         # Setup get_incoming_edges to return different values based on node
-        def get_incoming_edges_side_effect(node_id):
+        def get_incoming_edges_side_effect(node_id: Any) -> Any:
             if node_id == "node_2":
                 return [edge1]
             elif node_id == "node_4":
@@ -286,8 +287,8 @@ class TestSkipPropagator:
         propagator.propagate_skip_from_edge("edge_1")
 
         # Assert - should enqueue node
-        mock_state_manager.enqueue_node.assert_called_once_with("node_2")
         mock_state_manager.start_execution.assert_called_once_with("node_2")
+        mock_state_manager.enqueue_node.assert_called_once_with("node_2")
 
         # Reset mocks for next test
         mock_state_manager.reset_mock()
