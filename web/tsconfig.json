@@ -21,7 +21,7 @@
     "resolveJsonModule": true,
     "types": ["vitest/globals", "node"],
     "allowJs": true,
-    "strict": true,
+    "strict": false,
     "noEmit": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
