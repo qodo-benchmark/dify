@@ -47,6 +47,10 @@ def init_app(app: DifyApp) -> Celery:
     class FlaskTask(Task):
         def __call__(self, *args: object, **kwargs: object) -> object:
             with app.app_context():
+                # Initialize logging context for this task (similar to before_request in Flask)
+                from core.logging.context import init_request_context
+
+                init_request_context()
                 return self.run(*args, **kwargs)
 
     broker_transport_options = {}
