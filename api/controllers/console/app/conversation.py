@@ -179,7 +179,7 @@ annotation_hit_history_model = console_ns.model(
 
 class MessageTextField(fields.Raw):
     def format(self, value):
-        return value[0]["text"] if value else ""
+        return value[0]["text"] if value and len(value) > 0 else ""
 
 
 # Simple message detail model

