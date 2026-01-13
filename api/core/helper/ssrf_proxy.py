@@ -140,15 +140,15 @@ def make_request(method, url, max_retries=SSRF_DEFAULT_MAX_RETRIES, **kwargs):
     verify_option = kwargs.pop("ssl_verify", dify_config.HTTP_REQUEST_NODE_SSL_VERIFY)
     client = _get_ssrf_client(verify_option)
 
-    # Inject traceparent header for distributed tracing (when OTEL is not enabled)
-    headers = kwargs.get("headers") or {}
-    headers = _inject_trace_headers(headers)
-    kwargs["headers"] = headers
-
     # Preserve user-provided Host header
     # When using a forward proxy, httpx may override the Host header based on the URL.
     # We extract and preserve any explicitly set Host header to support virtual hosting.
+    headers = kwargs.get("headers") or {}
     user_provided_host = _get_user_provided_host_header(headers)
+
+    # Inject traceparent header for distributed tracing (when OTEL is not enabled)
+    headers = _inject_trace_headers(headers)
+    kwargs["headers"] = headers
 
     retries = 0
     while retries <= max_retries:
