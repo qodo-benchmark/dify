@@ -47,7 +47,7 @@ class UpdateVariablesCommandHandler(CommandHandler):
                 variable = update.value
                 self._variable_pool.add(variable.selector, variable)
                 logger.debug("Updated variable %s for workflow %s", variable.selector, execution.workflow_id)
-            except ValueError as exc:
+            except Exception as exc:
                 logger.warning(
                     "Skipping invalid variable selector %s for workflow %s: %s",
                     getattr(update.value, "selector", None),

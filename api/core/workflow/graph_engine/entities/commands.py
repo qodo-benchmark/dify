@@ -17,8 +17,8 @@ from core.variables.variables import VariableUnion
 class CommandType(StrEnum):
     """Types of commands that can be sent to GraphEngine."""
 
-    ABORT = auto()
-    PAUSE = auto()
+    ABORT = "abort"
+    PAUSE = "pause"
     UPDATE_VARIABLES = auto()
 
 

@@ -139,14 +139,14 @@ class GraphEngine:
         )
 
         # Register command handlers
+        update_variables_handler = UpdateVariablesCommandHandler(self._graph_runtime_state.variable_pool)
+        self._command_processor.register_handler(UpdateVariablesCommand, update_variables_handler)
+
         abort_handler = AbortCommandHandler()
         self._command_processor.register_handler(AbortCommand, abort_handler)
 
         pause_handler = PauseCommandHandler()
         self._command_processor.register_handler(PauseCommand, pause_handler)
-
-        update_variables_handler = UpdateVariablesCommandHandler(self._graph_runtime_state.variable_pool)
-        self._command_processor.register_handler(UpdateVariablesCommand, update_variables_handler)
 
         # === Extensibility ===
         # Layers allow plugins to extend engine functionality
