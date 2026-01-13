@@ -111,6 +111,7 @@ class DebugLoggingLayer(GraphEngineLayer):
         self.logger.info("=" * 80)
         # Log initial state
         self.logger.info("Initial State:")
+        self.logger.info("Initial outputs: %s", self._format_dict(self.graph_runtime_state.outputs))
 
     @override
     def on_event(self, event: GraphEngineEvent) -> None:

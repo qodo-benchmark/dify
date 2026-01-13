@@ -308,7 +308,9 @@ class GraphEngine:
     def _initialize_layers(self) -> None:
         """Initialize layers with context."""
         self._event_manager.set_layers(self._layers)
+        read_only_state = ReadOnlyGraphRuntimeStateWrapper(self._graph_runtime_state)
         for layer in self._layers:
+            layer.initialize(read_only_state, self._command_channel)
             try:
                 layer.on_graph_start()
             except Exception as e:
