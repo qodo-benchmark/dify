@@ -41,6 +41,7 @@ class WorkerPool:
         event_queue: queue.Queue[GraphNodeEventBase],
         graph: Graph,
         layers: list[GraphEngineLayer],
+        stop_event: threading.Event,
         flask_app: "Flask | None" = None,
         context_vars: "Context | None" = None,
         min_workers: int | None = None,
@@ -81,6 +82,7 @@ class WorkerPool:
         self._worker_counter = 0
         self._lock = threading.RLock()
         self._running = False
+        self._stop_event = stop_event
 
         # No longer tracking worker states with callbacks to avoid lock contention
 
@@ -128,14 +130,10 @@ class WorkerPool:
             if worker_count > 0:
                 logger.debug("Stopping worker pool: %d workers", worker_count)
 
-            # Stop all workers
-            for worker in self._workers:
-                worker.stop()
-
             # Wait for workers to finish
             for worker in self._workers:
                 if worker.is_alive():
-                    worker.join(timeout=10.0)
+                    worker.join(timeout=2.0)
 
             self._workers.clear()
 
@@ -152,6 +150,7 @@ class WorkerPool:
             worker_id=worker_id,
             flask_app=self._flask_app,
             context_vars=self._context_vars,
+            stop_event=self._stop_event,
         )
 
         worker.start()
