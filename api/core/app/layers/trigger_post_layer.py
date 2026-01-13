@@ -37,6 +37,7 @@ class TriggerPostLayer(GraphEngineLayer):
         self.start_time = start_time
         self.cfs_plan_scheduler_entity = cfs_plan_scheduler_entity
         self.session_maker = session_maker
+        super().__init__()
 
     def on_graph_start(self):
         pass
@@ -57,10 +58,6 @@ class TriggerPostLayer(GraphEngineLayer):
                 elapsed_time = (datetime.now(UTC) - self.start_time).total_seconds()
 
                 # Extract relevant data from result
-                if not self.graph_runtime_state:
-                    logger.exception("Graph runtime state is not set")
-                    return
-
                 outputs = self.graph_runtime_state.outputs
 
                 # BASICLY, workflow_execution_id is the same as workflow_run_id
