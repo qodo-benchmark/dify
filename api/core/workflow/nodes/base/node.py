@@ -266,7 +266,7 @@ class Node(Generic[NodeDataT]):
 
     def _should_stop(self) -> bool:
         """Check if execution should be stopped."""
-        return self.graph_runtime_state.stop_event.is_set()
+        return self.graph_runtime_state.stop_event and self.graph_runtime_state.stop_event.is_set()
 
     def run(self) -> Generator[GraphNodeEventBase, None, None]:
         execution_id = self.ensure_execution_id()

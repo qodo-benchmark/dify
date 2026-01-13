@@ -322,10 +322,10 @@ class GraphEngine:
 
     def _start_execution(self, *, resume: bool = False) -> None:
         """Start execution subsystems."""
-        self._stop_event.clear()
         paused_nodes: list[str] = []
         if resume:
             paused_nodes = self._graph_runtime_state.consume_paused_nodes()
+        self._stop_event.clear()
 
         # Start worker pool (it calculates initial workers internally)
         self._worker_pool.start()
