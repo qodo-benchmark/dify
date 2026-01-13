@@ -142,4 +142,4 @@ class TestDocumentDetailDataSourceInfo:
 
         # Should return empty dict for local_file type (handled in the model)
         detail_result = document.data_source_detail_dict
-        assert detail_result == {}
+        assert detail_result == {"file_path": "/tmp/test.txt"}

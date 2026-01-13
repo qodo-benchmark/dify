@@ -474,7 +474,7 @@ class Document(Base):
                             "created_at": file_detail.created_at.timestamp(),
                         }
                     }
-            elif self.data_source_type in {"notion_import", "website_crawl"}:
+            elif self.data_source_type in {"notion_import", "website_crawl", "local_file"}:
                 result: dict[str, Any] = json.loads(self.data_source_info)
                 return result
         return {}
