@@ -236,8 +236,8 @@ class GraphEngine:
 
     def layer(self, layer: GraphEngineLayer) -> GraphEngine:
         """Add a layer for extending functionality."""
-        self._layers.append(layer)
         self._bind_layer_context(layer)
+        self._layers.append(layer)
         return self
 
     def run(self) -> Generator[GraphEngineEvent, None, None]:

