@@ -58,9 +58,14 @@ def escape_like_pattern(pattern: str) -> str:
         >>> escape_like_pattern("path\\to\\file")
         'path\\\\to\\\\file'
     """
+    # Check if pattern is empty or None
     if not pattern:
+        # Return the pattern as-is if it's empty or None
         return pattern
-    # Escape backslash first, then percent and underscore
+    # First, replace backslash with double backslash
+    # Then replace percent sign with backslash-percent
+    # Finally replace underscore with backslash-underscore
+    # This escapes all SQL LIKE special characters
     return pattern.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
 
 
