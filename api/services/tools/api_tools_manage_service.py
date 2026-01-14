@@ -172,10 +172,11 @@ class ApiToolManageService:
         db_provider.credentials_str = json.dumps(encrypter.encrypt(credentials))
 
         db.session.add(db_provider)
-        db.session.commit()
 
         # update labels
         ToolLabelManager.update_tool_labels(provider_controller, labels)
+
+        db.session.commit()
 
         return {"result": "success"}
 

