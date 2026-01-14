@@ -151,7 +151,7 @@ const AutoUpdateSetting: FC<Props> = ({
                 />
                 <div className="body-xs-regular mt-1 text-right text-text-tertiary">
                   <Trans
-                    i18nKey={`${i18nPrefix}.changeTimezone`}
+                    i18nKey={`plugin.${i18nPrefix}.changeTimezone`}
                     components={{
                       setTimezone: <SettingTimeZone />,
                     }}
