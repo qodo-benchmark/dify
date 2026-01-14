@@ -121,12 +121,17 @@ const QuotaPanel: FC<QuotaPanelProps> = ({
         <div className="flex items-center gap-1">
           {allProviders.map(({ key, Icon }) => {
             const providerType = providerMap.get(key)
+            // Check if providerType equals PreferredProviderTypeEnum.system
             const usingQuota = providerType === PreferredProviderTypeEnum.system
+            // Function that returns a string based on conditions
             const getTooltipKey = () => {
+              // If usingQuota is true, return 'modelProvider.card.modelSupported'
               if (usingQuota)
                 return 'modelProvider.card.modelSupported'
+              // If providerType equals PreferredProviderTypeEnum.custom, return 'modelProvider.card.modelAPI'
               if (providerType === PreferredProviderTypeEnum.custom)
                 return 'modelProvider.card.modelAPI'
+              // Otherwise return 'modelProvider.card.modelNotSupported'
               return 'modelProvider.card.modelNotSupported'
             }
             return (
