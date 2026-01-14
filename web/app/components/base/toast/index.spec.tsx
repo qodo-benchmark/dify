@@ -111,17 +111,11 @@ describe('Toast', () => {
           <TestComponent />
         </ToastProvider>,
       )
-
-      // No toast initially
       expect(screen.queryByText('Notification message')).not.toBeInTheDocument()
-
-      // Show toast
       act(() => {
         screen.getByText('Show Toast').click()
       })
       expect(screen.getByText('Notification message')).toBeInTheDocument()
-
-      // Close toast
       act(() => {
         screen.getByText('Close Toast').click()
       })
