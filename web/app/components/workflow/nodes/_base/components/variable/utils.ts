@@ -34,7 +34,7 @@ import type { PromptItem } from '@/models/debug'
 import type { RAGPipelineVariable } from '@/models/pipeline'
 import type { SchemaTypeDefinition } from '@/service/use-common'
 import { uniq } from 'es-toolkit/array'
-import { isArray } from 'es-toolkit/compat'
+import { isArray } from 'es-toolkit/predicate'
 import { produce } from 'immer'
 import {
   AGENT_OUTPUT_STRUCT,
