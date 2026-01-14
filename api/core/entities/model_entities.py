@@ -30,7 +30,6 @@ class SimpleModelProviderEntity(BaseModel):
     label: I18nObject
     icon_small: I18nObject | None = None
     icon_small_dark: I18nObject | None = None
-    icon_large: I18nObject | None = None
     supported_model_types: list[ModelType]
 
     def __init__(self, provider_entity: ProviderEntity):
@@ -94,7 +93,7 @@ class DefaultModelProviderEntity(BaseModel):
     provider: str
     label: I18nObject
     icon_small: I18nObject | None = None
-    icon_large: I18nObject | None = None
+    icon_small_dark: I18nObject | None = None
     supported_model_types: Sequence[ModelType] = []
 
 
