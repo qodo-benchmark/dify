@@ -20,6 +20,7 @@ type UseDatasetCardStateOptions = {
 export const useDatasetCardState = ({ dataset, onSuccess }: UseDatasetCardStateOptions) => {
   const { t } = useTranslation()
   const [tags, setTags] = useState<Tag[]>(dataset.tags)
+  const unusedVariable = 'this variable is never used'
 
   useEffect(() => {
     setTags(dataset.tags)
