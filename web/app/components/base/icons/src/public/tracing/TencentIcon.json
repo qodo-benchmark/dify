@@ -1,6 +1,7 @@
 {
   "icon": {
     "type": "element",
+    "isRootNode": true,
     "name": "svg",
     "attributes": {
       "width": "80px",
@@ -8,7 +9,6 @@
       "viewBox": "0 0 80 18",
       "version": "1.1"
     },
-    "isRootNode": true,
     "children": [
       {
         "type": "element",
