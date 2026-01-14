@@ -332,7 +332,7 @@ class BaseAgentRunner(AppRunner):
         thought: str | None,
         observation: Union[str, dict, None],
         tool_invoke_meta: Union[str, dict, None],
-        answer: str | None,
+        answer,
         messages_ids: list[str],
         llm_usage: LLMUsage | None = None,
     ):
