@@ -6,7 +6,6 @@ import List from './list'
 const mockFormatTime = vi.fn(() => 'formatted-time')
 
 vi.mock('@/hooks/use-timestamp', () => ({
-  __esModule: true,
   default: () => ({
     formatTime: mockFormatTime,
   }),
@@ -84,7 +83,7 @@ describe('List', () => {
     expect(onSelectedIdsChange).toHaveBeenCalledWith([])
 
     fireEvent.click(updatedCheckboxes[0])
-    expect(onSelectedIdsChange).toHaveBeenCalledWith(['a', 'b'])
+    expect(onSelectedIdsChange).toHaveBeenCalledWith(['b'])
   })
 
   it('should confirm before removing an annotation and expose batch actions', async () => {

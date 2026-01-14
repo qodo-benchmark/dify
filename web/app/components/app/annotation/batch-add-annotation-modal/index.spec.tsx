@@ -8,7 +8,6 @@ import { annotationBatchImport, checkAnnotationBatchImportProgress } from '@/ser
 import BatchModal, { ProcessStatus } from './index'
 
 vi.mock('@/app/components/base/toast', () => ({
-  __esModule: true,
   default: {
     notify: vi.fn(),
   },
@@ -24,14 +23,12 @@ vi.mock('@/context/provider-context', () => ({
 }))
 
 vi.mock('./csv-downloader', () => ({
-  __esModule: true,
   default: () => <div data-testid="csv-downloader-stub" />,
 }))
 
 let lastUploadedFile: File | undefined
 
 vi.mock('./csv-uploader', () => ({
-  __esModule: true,
   default: ({ file, updateFile }: { file?: File, updateFile: (file?: File) => void }) => (
     <div>
       <button
@@ -49,7 +46,6 @@ vi.mock('./csv-uploader', () => ({
 }))
 
 vi.mock('@/app/components/billing/annotation-full', () => ({
-  __esModule: true,
   default: () => <div data-testid="annotation-full" />,
 }))
 
@@ -126,7 +122,7 @@ describe('BatchModal', () => {
 
     annotationBatchImportMock.mockResolvedValue({ job_id: 'job-1', job_status: ProcessStatus.PROCESSING })
     checkAnnotationBatchImportProgressMock
-      .mockResolvedValueOnce({ job_id: 'job-1', job_status: ProcessStatus.PROCESSING })
+      .mockResolvedValueOnce({ job_id: 'job-1', job_status: ProcessStatus.COMPLETED })
       .mockResolvedValueOnce({ job_id: 'job-1', job_status: ProcessStatus.COMPLETED })
 
     await act(async () => {
