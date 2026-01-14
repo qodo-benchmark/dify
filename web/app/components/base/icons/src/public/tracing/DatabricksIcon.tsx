@@ -13,7 +13,7 @@ const Icon = (
   }: React.SVGProps<SVGSVGElement> & {
     ref?: React.RefObject<React.RefObject<HTMLOrSVGElement>>
   },
-) => <IconBase {...props} ref={ref} data={data as IconData} />
+) => <IconBase {...props} ref={ref} data={data as any} />
 
 Icon.displayName = 'DatabricksIcon'
 
