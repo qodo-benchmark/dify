@@ -231,8 +231,8 @@ class ModelProviderService:
         provider_configuration.switch_active_provider_credential(credential_id=credential_id)
 
     def get_model_credential(
-        self, tenant_id: str, provider: str, model_type: str, model: str, credential_id: str | None
-    ) -> dict | None:
+        self, tenant_id: str, provider: str, model_type: str, model, credential_id: str | None
+    ):
         """
         Retrieve model-specific credentials.
 
