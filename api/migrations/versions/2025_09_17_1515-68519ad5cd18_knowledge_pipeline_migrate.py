@@ -344,13 +344,13 @@ def upgrade():
 
     with op.batch_alter_table('workflow_draft_variables', schema=None) as batch_op:
         batch_op.add_column(sa.Column('file_id', models.types.StringUUID(), nullable=True, comment='Reference to WorkflowDraftVariableFile if variable is offloaded to external storage'))
+        batch_op.create_index('workflow_draft_variable_file_id_idx', ['file_id'], unique=False)
         batch_op.add_column(
             sa.Column(
                 'is_default_value', sa.Boolean(), nullable=False,
                     server_default=sa.text(text="FALSE"),
                     comment='Indicates whether the current value is the default for a conversation variable. Always `FALSE` for other types of variables.',)
             )
-        batch_op.create_index('workflow_draft_variable_file_id_idx', ['file_id'], unique=False)
         
     if _is_pg(conn):
         with op.batch_alter_table('workflows', schema=None) as batch_op:

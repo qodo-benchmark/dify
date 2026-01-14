@@ -66,14 +66,14 @@ def upgrade():
             batch_op.add_column(sa.Column('type', sa.String(length=40), server_default=sa.text("'dataset'"), nullable=False))
 
     with op.batch_alter_table('message_annotations', schema=None) as batch_op:
-        batch_op.add_column(sa.Column('question', models.types.LongText(), nullable=True))
-        batch_op.add_column(sa.Column('hit_count', sa.Integer(), server_default=sa.text('0'), nullable=False))
         batch_op.alter_column('conversation_id',
                 existing_type=models.types.StringUUID(),
                 nullable=True)
         batch_op.alter_column('message_id',
                 existing_type=models.types.StringUUID(),
                 nullable=True)
+        batch_op.add_column(sa.Column('question', models.types.LongText(), nullable=True))
+        batch_op.add_column(sa.Column('hit_count', sa.Integer(), server_default=sa.text('0'), nullable=False))
 
     # ### end Alembic commands ###
 

