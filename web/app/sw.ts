@@ -93,7 +93,7 @@ const serwist = new Serwist({
     entries: [
       {
         url: offlineUrl,
-        matcher({ request }) {
+        matcher({ request }: any) {
           return request.destination === 'document'
         },
       },
