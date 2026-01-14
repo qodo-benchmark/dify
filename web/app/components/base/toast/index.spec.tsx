@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { act, render, screen, waitFor } from '@testing-library/react'
-import { noop } from 'es-toolkit/compat'
+import { noop } from 'es-toolkit/function'
 import * as React from 'react'
 import Toast, { ToastProvider, useToastContext } from '.'
 
@@ -111,17 +111,11 @@ describe('Toast', () => {
           <TestComponent />
         </ToastProvider>,
       )
-
-      // No toast initially
       expect(screen.queryByText('Notification message')).not.toBeInTheDocument()
-
-      // Show toast
       act(() => {
         screen.getByText('Show Toast').click()
       })
       expect(screen.getByText('Notification message')).toBeInTheDocument()
-
-      // Close toast
       act(() => {
         screen.getByText('Close Toast').click()
       })
