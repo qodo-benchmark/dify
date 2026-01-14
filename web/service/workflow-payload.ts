@@ -74,7 +74,7 @@ export const sanitizeWorkflowDraftPayload = (params: WorkflowDraftSyncParams): W
     if ((n.data as any)?.type === BlockEnum.Start && Array.isArray((n.data as any).variables)) {
       const next = { ...n, data: { ...n.data } }
       next.data.variables = (n.data as any).variables.map((v: any) => {
-        if (v && v.type === 'json_object' && typeof v.json_schema === 'string') {
+        if (v && v.type === 'json_object' && v.json_schema && typeof v.json_schema === 'string') {
           try {
             const obj = JSON.parse(v.json_schema)
             return { ...v, json_schema: obj }

