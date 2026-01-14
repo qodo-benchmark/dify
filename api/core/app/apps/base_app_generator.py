@@ -1,4 +1,3 @@
-import json
 from collections.abc import Generator, Mapping, Sequence
 from typing import TYPE_CHECKING, Any, Union, final
 
@@ -76,12 +75,33 @@ class BaseAppGenerator:
         user_inputs = {**user_inputs, **files_inputs, **file_list_inputs}
 
         # Check if all files are converted to File
-        if any(filter(lambda v: isinstance(v, dict), user_inputs.values())):
-            raise ValueError("Invalid input type")
-        if any(
-            filter(lambda v: isinstance(v, dict), filter(lambda item: isinstance(item, list), user_inputs.values()))
-        ):
-            raise ValueError("Invalid input type")
+        # Loop through user_inputs items to find invalid dict keys
+        invalid_dict_keys = [
+            k
+            for k, v in user_inputs.items()
+            # Check if value is dict
+            if isinstance(v, dict)
+            # Check if type is not FILE or JSON_OBJECT
+            and entity_dictionary[k].type not in {VariableEntityType.FILE, VariableEntityType.JSON_OBJECT}
+        ]
+        # If there are invalid dict keys, raise ValueError
+        if invalid_dict_keys:
+            raise ValueError(f"Invalid input type for {invalid_dict_keys}")
+
+        # Loop through user_inputs items to find invalid list dict keys
+        invalid_list_dict_keys = [
+            k
+            for k, v in user_inputs.items()
+            # Check if value is list
+            if isinstance(v, list)
+            # Check if any item in list is dict
+            and any(isinstance(item, dict) for item in v)
+            # Check if type is not FILE_LIST
+            and entity_dictionary[k].type != VariableEntityType.FILE_LIST
+        ]
+        # If there are invalid list dict keys, raise ValueError
+        if invalid_list_dict_keys:
+            raise ValueError(f"Invalid input type for {invalid_list_dict_keys}")
 
         return user_inputs
 
@@ -178,12 +198,8 @@ class BaseAppGenerator:
                     elif value == 0:
                         value = False
             case VariableEntityType.JSON_OBJECT:
-                if not isinstance(value, str):
-                    raise ValueError(f"{variable_entity.variable} in input form must be a string")
-                try:
-                    json.loads(value)
-                except json.JSONDecodeError:
-                    raise ValueError(f"{variable_entity.variable} in input form must be a valid JSON object")
+                if not isinstance(value, dict):
+                    raise ValueError(f"{variable_entity.variable} in input form must be a dict")
             case _:
                 raise AssertionError("this statement should be unreachable.")
 
