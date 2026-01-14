@@ -6,5 +6,5 @@ cd "$SCRIPT_DIR/../.."
 
 PYTEST_TIMEOUT="${PYTEST_TIMEOUT:-20}"
 
-# libs
+# libs - run backend tests
 pytest --timeout "${PYTEST_TIMEOUT}" api/tests/unit_tests

