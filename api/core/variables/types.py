@@ -54,7 +54,7 @@ class SegmentType(StrEnum):
         return self in _ARRAY_TYPES
 
     @classmethod
-    def infer_segment_type(cls, value: Any) -> SegmentType | None:
+    def infer_segment_type(cls, value: Any) -> str | None:
         """
         Attempt to infer the `SegmentType` based on the Python type of the `value` parameter.
 
