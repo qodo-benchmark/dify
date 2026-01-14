@@ -43,6 +43,7 @@ class SimpleModelProviderEntity(BaseModel):
             label=provider_entity.label,
             icon_small=provider_entity.icon_small,
             icon_small_dark=provider_entity.icon_small_dark,
+            icon_large=provider_entity.icon_large,
             supported_model_types=provider_entity.supported_model_types,
         )
 
