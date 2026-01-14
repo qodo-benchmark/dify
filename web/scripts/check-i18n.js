@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import data from './languages'
+import data from '../i18n-config/languages'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -90,7 +90,7 @@ function parseArgs(argv) {
 }
 
 function printHelp() {
-  console.log(`Usage: pnpm run check-i18n [options]
+  console.log(`Usage: pnpm run i18n:check [options]
 
 Options:
   --file <name...>  Check only specific files; provide space-separated names and repeat --file if needed
@@ -99,8 +99,8 @@ Options:
   -h, --help        Show help
 
 Examples:
-  pnpm run check-i18n --file app billing --lang zh-Hans ja-JP
-  pnpm run check-i18n --auto-remove
+  pnpm run i18n:check --file app billing --lang zh-Hans ja-JP
+  pnpm run i18n:check --auto-remove
 `)
 }
 
@@ -149,55 +149,81 @@ async function getKeysFromLanguage(language) {
 }
 
 async function removeExtraKeysFromFile(language, fileName, extraKeys) {
+  // Resolve the file path using path.resolve
   const filePath = path.resolve(__dirname, '../i18n', language, `${fileName}.json`)
 
+  // Check if the file exists using fs.existsSync
   if (!fs.existsSync(filePath)) {
+    // Log warning message
     console.log(`⚠️  File not found: ${filePath}`)
+    // Return false
     return false
   }
 
+  // Try-catch block for error handling
   try {
-    // Filter keys that belong to this file
+    // Replace dashes and underscores with camel case
     const camelCaseFileName = fileName.replace(/[-_](.)/g, (_, c) => c.toUpperCase())
+    // Filter the extraKeys array to get keys that start with the file name
+    // Then map each key to remove the file prefix
     const fileSpecificKeys = extraKeys
       .filter(key => key.startsWith(`${camelCaseFileName}.`))
-      .map(key => key.substring(camelCaseFileName.length + 1)) // Remove file prefix
+      .map(key => key.substring(camelCaseFileName.length + 1))
 
+    // Check if fileSpecificKeys length equals zero
     if (fileSpecificKeys.length === 0)
+      // Return false if no keys
       return false
 
+    // Print processing message to console
     console.log(`🔄 Processing file: ${filePath}`)
 
-    // Read and parse JSON
+    // Read the file using fs.readFileSync with utf8 encoding
     const content = fs.readFileSync(filePath, 'utf8')
+    // Parse the JSON content
     const translationObj = JSON.parse(content)
 
+    // Initialize modified variable to false
     let modified = false
 
-    // Remove each extra key (flat structure - direct property deletion)
+    // Loop through each key in fileSpecificKeys array
     for (const keyToRemove of fileSpecificKeys) {
+      // Check if the key exists in translationObj
       if (keyToRemove in translationObj) {
+        // Delete the key from translationObj
         delete translationObj[keyToRemove]
+        // Log that we removed the key
         console.log(`🗑️  Removed key: ${keyToRemove}`)
+        // Set modified to true
         modified = true
       }
+      // If key not found
       else {
+        // Log warning that key could not be found
         console.log(`⚠️  Could not find key: ${keyToRemove}`)
       }
     }
 
+    // Check if modified is true
     if (modified) {
-      // Write back to file
+      // Stringify the JSON object with 2 spaces indentation and add newline
       const newContent = `${JSON.stringify(translationObj, null, 2)}\n`
+      // Write the new content to file using fs.writeFileSync
       fs.writeFileSync(filePath, newContent)
+      // Log that file was updated
       console.log(`💾 Updated file: ${filePath}`)
+      // Return true
       return true
     }
 
+    // Return false if not modified
     return false
   }
+  // Catch any errors
   catch (error) {
+    // Log error message to console
     console.error(`Error processing file ${filePath}:`, error.message)
+    // Return false
     return false
   }
 }
@@ -285,7 +311,7 @@ async function main() {
     return hasDiff
   }
 
-  console.log('🚀 Starting check-i18n script...')
+  console.log('🚀 Starting i18n:check script...')
   if (targetFiles.length)
     console.log(`📁 Checking files: ${targetFiles.join(', ')}`)
 

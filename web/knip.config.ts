@@ -168,9 +168,8 @@ const config: KnipConfig = {
     // ========================================================================
     // 🔒 Utility scripts (not part of application runtime)
     // ========================================================================
-    // These scripts are run manually (e.g., pnpm gen-icons, pnpm check-i18n)
+    // These scripts are run manually (e.g., pnpm gen-icons, pnpm i18n:check)
     // and are not imported by the application code.
-    'scripts/**',
     'bin/**',
     'i18n-config/**',
 
