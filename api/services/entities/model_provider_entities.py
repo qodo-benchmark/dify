@@ -167,6 +167,19 @@ class DefaultModelResponse(BaseModel):
     model_config = ConfigDict(protected_namespaces=())
 
 
+class ProviderQuotaInfo:
+    """
+    Custom class to hold provider quota information for display.
+    """
+
+    def __init__(self, provider_name: str, quota_type: ProviderQuotaType, remaining: int, total: int):
+        self.provider_name = provider_name
+        self.quota_type = quota_type
+        self.remaining = remaining
+        self.total = total
+        self.usage_percentage = (total - remaining) / total * 100 if total > 0 else 0
+
+
 class ModelWithProviderEntityResponse(ProviderModelWithStatusEntity):
     """
     Model with provider entity.
