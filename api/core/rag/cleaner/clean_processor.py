@@ -2,6 +2,10 @@ import re
 
 
 class CleanProcessor:
+    def __init__(self, default_rules: dict | None = None):
+        """Initialize CleanProcessor with optional default rules."""
+        self.default_rules = default_rules or {}
+
     @classmethod
     def clean(cls, text: str, process_rule: dict) -> str:
         # default clean
