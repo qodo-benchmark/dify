@@ -90,7 +90,6 @@ const LocaleLayout = async ({
         className="color-scheme h-full select-auto"
         {...datasetMap}
       >
-        <ReactScanLoader />
         <ThemeProvider
           attribute="data-theme"
           defaultTheme="system"
@@ -112,6 +111,7 @@ const LocaleLayout = async ({
             </BrowserInitializer>
           </NuqsAdapter>
         </ThemeProvider>
+        <ReactScanLoader />
         <RoutePrefixHandle />
       </body>
     </html>

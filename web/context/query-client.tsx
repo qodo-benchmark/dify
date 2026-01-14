@@ -18,8 +18,8 @@ export const TanstackQueryInitializer: FC<PropsWithChildren> = (props) => {
   const { children } = props
   return (
     <QueryClientProvider client={client}>
-      {children}
       <TanStackDevtoolsLoader />
+      {children}
     </QueryClientProvider>
   )
 }

@@ -3,7 +3,7 @@
 import { lazy, Suspense } from 'react'
 import { IS_DEV } from '@/config'
 
-const TanStackDevtoolsWrapper = lazy(() =>
+const TanStackDevtools = lazy(() =>
   import('./devtools').then(module => ({
     default: module.TanStackDevtoolsWrapper,
   })),
@@ -15,7 +15,7 @@ export const TanStackDevtoolsLoader = () => {
 
   return (
     <Suspense fallback={null}>
-      <TanStackDevtoolsWrapper />
+      <TanStackDevtools />
     </Suspense>
   )
 }
