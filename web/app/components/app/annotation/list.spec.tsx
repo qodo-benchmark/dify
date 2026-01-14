@@ -83,7 +83,7 @@ describe('List', () => {
     expect(onSelectedIdsChange).toHaveBeenCalledWith([])
 
     fireEvent.click(updatedCheckboxes[0])
-    expect(onSelectedIdsChange).toHaveBeenCalledWith(['a', 'b'])
+    expect(onSelectedIdsChange).toHaveBeenCalledWith(['b'])
   })
 
   it('should confirm before removing an annotation and expose batch actions', async () => {

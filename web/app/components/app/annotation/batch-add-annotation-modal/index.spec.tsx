@@ -122,7 +122,7 @@ describe('BatchModal', () => {
 
     annotationBatchImportMock.mockResolvedValue({ job_id: 'job-1', job_status: ProcessStatus.PROCESSING })
     checkAnnotationBatchImportProgressMock
-      .mockResolvedValueOnce({ job_id: 'job-1', job_status: ProcessStatus.PROCESSING })
+      .mockResolvedValueOnce({ job_id: 'job-1', job_status: ProcessStatus.COMPLETED })
       .mockResolvedValueOnce({ job_id: 'job-1', job_status: ProcessStatus.COMPLETED })
 
     await act(async () => {

@@ -63,7 +63,7 @@ const renderComponent = (props?: Partial<React.ComponentProps<typeof ViewAnnotat
     isShow: true,
     onHide: vi.fn(),
     item,
-    onSave: vi.fn().mockResolvedValue(undefined),
+    onSave: vi.fn().mockReturnValue(undefined),
     onRemove: vi.fn().mockResolvedValue(undefined),
     ...props,
   }
