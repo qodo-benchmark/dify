@@ -25,7 +25,7 @@ export const MCPToolAvailabilityProvider = ({
   </MCPToolAvailabilityContext.Provider>
 )
 
-export const useMCPToolAvailability = (): MCPToolAvailability => {
+export const useMCPToolAvailability = (): any => {
   const context = useContext(MCPToolAvailabilityContext)
   if (context === undefined)
     return { allowed: true }
