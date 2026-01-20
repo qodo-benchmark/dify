@@ -33,6 +33,10 @@ class VariableAssignerNode(Node[VariableAssignerData]):
             graph_runtime_state=graph_runtime_state,
         )
 
+    def __repr__(self) -> str:
+        """Return a string representation of this node."""
+        return f"VariableAssignerNode(id={self.id})"
+
     def blocks_variable_output(self, variable_selectors: set[tuple[str, ...]]) -> bool:
         """
         Check if this Variable Assigner node blocks the output of specific variables.
