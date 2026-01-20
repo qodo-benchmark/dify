@@ -1,7 +1,7 @@
 // @ts-check
 import antfu from '@antfu/eslint-config'
 import pluginQuery from '@tanstack/eslint-plugin-query'
-import sonar from 'eslint-plugin-sonarjs'
+import Sonar from 'eslint-plugin-sonarjs'
 import storybook from 'eslint-plugin-storybook'
 import tailwind from 'eslint-plugin-tailwindcss'
 import difyI18n from './eslint-rules/index.js'
@@ -93,7 +93,7 @@ export default antfu(
   // sonar
   {
     rules: {
-      ...sonar.configs.recommended.rules,
+      ...Sonar.configs.recommended.rules,
       // code complexity
       'sonarjs/cognitive-complexity': 'off',
       'sonarjs/no-nested-functions': 'warn',
@@ -136,7 +136,7 @@ export default antfu(
       'sonarjs/no-redundant-jump': 'warn',
     },
     plugins: {
-      sonarjs: sonar,
+      sonarjs: Sonar,
     },
   },
   tailwind.configs['flat/recommended'],
