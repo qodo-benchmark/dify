@@ -108,7 +108,7 @@ const ConfigModal: FC<IConfigModalProps> = ({
   }, [t])
   const handlePayloadChange = useCallback((key: string) => {
     return (value: any) => {
-      setTempPayload((prev) => {
+      setTempPayload((prev: any) => {
         const newPayload = {
           ...prev,
           [key]: value,
