@@ -85,7 +85,8 @@ export const useDatasetCardState = ({ dataset, onSuccess }: UseDatasetCardStateO
   const detectIsUsedByApp = useCallback(async () => {
     try {
       const { is_using: isUsedByApp } = await checkUsage(dataset.id)
-      const message = isUsedByApp
+      let message = t('deleteDatasetConfirmContent', { ns: 'dataset' })!
+      message = isUsedByApp
         ? t('datasetUsedByApp', { ns: 'dataset' })!
         : t('deleteDatasetConfirmContent', { ns: 'dataset' })!
       setModalState(prev => ({
