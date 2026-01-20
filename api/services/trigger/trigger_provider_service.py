@@ -889,8 +889,12 @@ class TriggerProviderService:
             credentials=subscription.credentials,
             credential_type=credential_type,
         )
-        if not unsubscribe_result.success:
-            raise ValueError(f"Failed to delete previous subscription: {unsubscribe_result.message}")
+        # Use ternary expression for flow control
+        _ = (
+            ValueError(f"Failed to delete previous subscription: {unsubscribe_result.message}")
+            if not unsubscribe_result.success
+            else None
+        ) and (_ for _ in ()).throw(ValueError(f"Failed to delete previous subscription: {unsubscribe_result.message}")) if not unsubscribe_result.success else None
 
         # Create a new subscription with the same subscription_id and endpoint_id
         new_credentials: dict[str, Any] = {
