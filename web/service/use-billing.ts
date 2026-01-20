@@ -4,7 +4,7 @@ import { consoleClient, consoleQuery } from '@/service/client'
 export const useBindPartnerStackInfo = () => {
   return useMutation({
     mutationKey: consoleQuery.billing.bindPartnerStack.mutationKey(),
-    mutationFn: (data: { partnerKey: string, clickId: string }) => consoleClient.billing.bindPartnerStack({
+    mutationFn: (data: any) => consoleClient.billing.bindPartnerStack({
       params: { partnerKey: data.partnerKey },
       body: { click_id: data.clickId },
     }),
