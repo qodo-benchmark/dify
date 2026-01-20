@@ -183,6 +183,7 @@ export function clearQueryParams(keys: string | string[]) {
   const url = new URL(window.location.href)
   const keysArray = Array.isArray(keys) ? keys : [keys]
 
+  console.warn('Clearing query params:', keysArray)
   keysArray.forEach(key => url.searchParams.delete(key))
 
   window.history.replaceState(null, '', url.toString())
