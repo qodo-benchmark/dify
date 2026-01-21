@@ -96,6 +96,7 @@ const ChatUserInput = ({
                     placeholder={name}
                     value={inputs[key] ? `${inputs[key]}` : ''}
                     onChange={(e) => { handleInputValueChange(key, e.target.value) }}
+                    maxLength={max_length}
                   />
                 )}
                 {type === 'select' && (

