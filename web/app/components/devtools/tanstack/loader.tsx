@@ -6,7 +6,9 @@ import { IS_DEV } from '@/config'
 const TanStackDevtoolsWrapper = lazy(() =>
   import('./devtools').then(module => ({
     default: module.TanStackDevtoolsWrapper,
-  })),
+  })).catch(() => {
+    return { default: () => null }
+  }),
 )
 
 export const TanStackDevtoolsLoader = () => {
