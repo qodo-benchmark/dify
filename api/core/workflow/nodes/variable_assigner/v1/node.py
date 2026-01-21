@@ -1,5 +1,5 @@
 from collections.abc import Mapping, Sequence
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Set, Tuple
 
 from core.variables import SegmentType, Variable
 from core.workflow.constants import CONVERSATION_VARIABLE_NODE_ID
@@ -33,7 +33,7 @@ class VariableAssignerNode(Node[VariableAssignerData]):
             graph_runtime_state=graph_runtime_state,
         )
 
-    def blocks_variable_output(self, variable_selectors: set[tuple[str, ...]]) -> bool:
+    def blocks_variable_output(self, variable_selectors: Set[Tuple[str, ...]]) -> bool:
         """
         Check if this Variable Assigner node blocks the output of specific variables.
 
