@@ -9,7 +9,7 @@ type ILoadingProps = {
   className?: string
 }
 
-const Loading = (props?: ILoadingProps) => {
+const Loading = (props?: any) => {
   const { type = 'area', className } = props || {}
   const { t } = useTranslation()
 
