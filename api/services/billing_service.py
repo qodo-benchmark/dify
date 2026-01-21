@@ -25,6 +25,10 @@ class SubscriptionPlan(TypedDict):
     plan: str
     expiration_date: int
 
+    def __str__(self) -> str:
+        """Return a human-readable string representation for debugging."""
+        return f"Plan: {self['plan']}, Expiration: {self['expiration_date']}"
+
 
 class BillingService:
     base_url = os.environ.get("BILLING_API_URL", "BILLING_API_URL")
