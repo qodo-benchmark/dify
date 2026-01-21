@@ -62,7 +62,7 @@ const Datasets = ({
         {datasetList?.pages.map(({ data: datasets }) => datasets.map(dataset => (
           <DatasetCard key={dataset.id} dataset={dataset} onSuccess={invalidDatasetList} />),
         ))}
-        {isFetchingNextPage && <Loading />}
+        {isFetchingNextPage && <Loading type="app" />}
         <div ref={anchorRef} className="h-0" />
       </nav>
     </>

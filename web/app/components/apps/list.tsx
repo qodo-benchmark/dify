@@ -248,7 +248,7 @@ const List = () => {
             // No apps - show empty state
             return <Empty />
           })()}
-          {isFetchingNextPage && (
+          {hasAnyApp && isFetchingNextPage && (
             <AppCardSkeleton count={3} />
           )}
         </div>
