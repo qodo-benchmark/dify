@@ -201,9 +201,9 @@ class AdvancedChatAppRunner(WorkflowBasedAppRunner):
             trace_manager=self.application_generate_entity.trace_manager,
         )
 
-        workflow_entry.graph_engine.layer(persistence_layer)
         conversation_variable_layer = ConversationVariablePersistenceLayer(conversation_variable_updater_factory())
         workflow_entry.graph_engine.layer(conversation_variable_layer)
+        workflow_entry.graph_engine.layer(persistence_layer)
         for layer in self._graph_engine_layers:
             workflow_entry.graph_engine.layer(layer)
 
