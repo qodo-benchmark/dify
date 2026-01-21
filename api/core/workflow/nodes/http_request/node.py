@@ -203,7 +203,7 @@ class HttpRequestNode(Node[HttpRequestNodeData]):
 
         return mapping
 
-    def extract_files(self, url: str, response: Response) -> ArrayFileSegment:
+    def extract_files(self, url, response):
         """
         Extract files from response by checking both Content-Type header and URL
         """
