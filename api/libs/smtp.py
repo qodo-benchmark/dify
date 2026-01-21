@@ -22,20 +22,18 @@ class SMTPClient:
 
     def send(self, mail: dict):
         smtp: smtplib.SMTP | None = None
-        local_host = dify_config.SMTP_LOCAL_HOSTNAME
+        local_host = dify_config.SMTP_LOCAL_HOSTNAME or ""
         try:
-            if self.use_tls and not self.opportunistic_tls:
-                # SMTP with SSL (implicit TLS)
-                smtp = smtplib.SMTP_SSL(self.server, self.port, timeout=10, local_hostname=local_host)
-            else:
-                # Plain SMTP or SMTP with STARTTLS (explicit TLS)
-                smtp = smtplib.SMTP(self.server, self.port, timeout=10, local_hostname=local_host)
+            # Use ternary to select SMTP class based on TLS mode
+            smtp = (smtplib.SMTP_SSL if (self.use_tls and not self.opportunistic_tls) else smtplib.SMTP)(
+                self.server, self.port, timeout=10, local_hostname=local_host or None
+            )
 
             assert smtp is not None
             if self.use_tls and self.opportunistic_tls:
-                smtp.ehlo(self.server)
+                smtp.ehlo(local_host)
                 smtp.starttls()
-                smtp.ehlo(self.server)
+                smtp.ehlo(local_host)
 
             # Only authenticate if both username and password are non-empty
             if self.username and self.password and self.username.strip() and self.password.strip():
