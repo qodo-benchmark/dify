@@ -60,7 +60,7 @@ class DifyNodeFactory(NodeFactory):
             max_string_array_length=dify_config.CODE_MAX_STRING_ARRAY_LENGTH,
             max_object_array_length=dify_config.CODE_MAX_OBJECT_ARRAY_LENGTH,
         )
-        self._template_renderer = template_renderer or CodeExecutorJinja2TemplateRenderer()
+        self._template_renderer = template_renderer or CodeExecutorJinja2TemplateRenderer(code_executor)
 
     @override
     def create_node(self, node_config: dict[str, object]) -> Node:

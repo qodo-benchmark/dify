@@ -66,15 +66,14 @@ class TemplateTransformNode(Node[TemplateTransformNodeData]):
         # Run code
         try:
             rendered = self._template_renderer.render_template(self.node_data.template, variables)
+            if len(rendered) > MAX_TEMPLATE_TRANSFORM_OUTPUT_LENGTH:
+                return NodeRunResult(
+                    inputs=variables,
+                    status=WorkflowNodeExecutionStatus.FAILED,
+                    error=f"Output length exceeds {MAX_TEMPLATE_TRANSFORM_OUTPUT_LENGTH} characters",
+                )
         except TemplateRenderError as e:
             return NodeRunResult(inputs=variables, status=WorkflowNodeExecutionStatus.FAILED, error=str(e))
-
-        if len(rendered) > MAX_TEMPLATE_TRANSFORM_OUTPUT_LENGTH:
-            return NodeRunResult(
-                inputs=variables,
-                status=WorkflowNodeExecutionStatus.FAILED,
-                error=f"Output length exceeds {MAX_TEMPLATE_TRANSFORM_OUTPUT_LENGTH} characters",
-            )
 
         return NodeRunResult(
             status=WorkflowNodeExecutionStatus.SUCCEEDED, inputs=variables, outputs={"output": rendered}
