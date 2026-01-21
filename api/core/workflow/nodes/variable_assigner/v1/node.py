@@ -1,5 +1,5 @@
 from collections.abc import Mapping, Sequence
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Set, Tuple
 
 from core.variables import SegmentType, Variable
 from core.workflow.constants import CONVERSATION_VARIABLE_NODE_ID
@@ -32,6 +32,15 @@ class VariableAssignerNode(Node[VariableAssignerData]):
             graph_init_params=graph_init_params,
             graph_runtime_state=graph_runtime_state,
         )
+
+    def blocks_variable_output(self, variable_selectors: Set[Tuple[str, ...]]) -> bool:
+        """
+        Check if this Variable Assigner node blocks the output of specific variables.
+
+        Returns True if this node updates any of the requested conversation variables.
+        """
+        assigned_selector = tuple(self.node_data.assigned_variable_selector)
+        return assigned_selector in variable_selectors
 
     @classmethod
     def version(cls) -> str:
