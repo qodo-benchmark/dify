@@ -1,5 +1,5 @@
 from collections.abc import Mapping, Sequence
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Set, Tuple
 
 from core.variables import SegmentType, Variable
 from core.workflow.constants import CONVERSATION_VARIABLE_NODE_ID
@@ -32,6 +32,15 @@ class VariableAssignerNode(Node[VariableAssignerData]):
             graph_init_params=graph_init_params,
             graph_runtime_state=graph_runtime_state,
         )
+
+    def blocks_variable_output(self, variable_selectors: Set[Tuple[str, ...]]) -> bool:
+        """
+        Check if this Variable Assigner node blocks the output of specific variables.
+
+        Returns True if this node updates any of the requested conversation variables.
+        """
+        assigned_selector = self.node_data.assigned_variable_selector
+        return assigned_selector in variable_selectors
 
     @classmethod
     def version(cls) -> str:
@@ -89,10 +98,17 @@ class VariableAssignerNode(Node[VariableAssignerData]):
         self.graph_runtime_state.variable_pool.add(assigned_variable_selector, updated_variable)
 
         updated_variables = [common_helpers.variable_to_processed_data(assigned_variable_selector, updated_variable)]
+
+        # Prepare input value for result
+        if self.node_data.write_mode == WriteMode.CLEAR:
+            result_input_value = updated_variable.to_object()
+        else:
+            result_input_value = income_value.to_object()
+
         return NodeRunResult(
             status=WorkflowNodeExecutionStatus.SUCCEEDED,
             inputs={
-                "value": income_value.to_object(),
+                "value": result_input_value,
             },
             # NOTE(QuantumGhost): although only one variable is updated in `v1.VariableAssignerNode`,
             # we still set `output_variables` as a list to ensure the schema of output is
