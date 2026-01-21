@@ -430,3 +430,722 @@ class TestTemplateTransformNode:
         assert "#python" in result.outputs["output"]
         assert "#ai" in result.outputs["output"]
         assert "#workflow" in result.outputs["output"]
+
+    @patch(
+        "core.workflow.nodes.template_transform.template_transform_node.CodeExecutorJinja2TemplateRenderer.render_template"
+    )
+    def test_run_with_boolean_values(self, mock_execute, mock_graph, mock_graph_runtime_state, graph_init_params):
+        """Test _run with boolean variable values."""
+        node_data = {
+            "title": "Boolean Template",
+            "variables": [{"variable": "is_active", "value_selector": ["sys", "active_status"]}],
+            "template": "{% if is_active %}Active{% else %}Inactive{% endif %}",
+        }
+
+        mock_status = MagicMock()
+        mock_status.to_object.return_value = True
+
+        mock_graph_runtime_state.variable_pool.get.return_value = mock_status
+        mock_execute.return_value = "Active"
+
+        node = TemplateTransformNode(
+            id="test_node",
+            config=node_data,
+            graph_init_params=graph_init_params,
+            graph=mock_graph,
+            graph_runtime_state=mock_graph_runtime_state,
+        )
+
+        result = node._run()
+
+        assert result.status == WorkflowNodeExecutionStatus.SUCCEEDED
+        assert result.outputs["output"] == "Active"
+
+    @patch(
+        "core.workflow.nodes.template_transform.template_transform_node.CodeExecutorJinja2TemplateRenderer.render_template"
+    )
+    def test_run_with_nested_dict_values(self, mock_execute, mock_graph, mock_graph_runtime_state, graph_init_params):
+        """Test _run with nested dictionary variable values."""
+        node_data = {
+            "title": "Nested Dict Template",
+            "variables": [{"variable": "data", "value_selector": ["sys", "nested_data"]}],
+            "template": "User: {{ data.user.name }}, Company: {{ data.company.name }}",
+        }
+
+        mock_data = MagicMock()
+        mock_data.to_object.return_value = {
+            "user": {"name": "Alice", "id": 123},
+            "company": {"name": "TechCorp", "id": 456},
+        }
+
+        mock_graph_runtime_state.variable_pool.get.return_value = mock_data
+        mock_execute.return_value = "User: Alice, Company: TechCorp"
+
+        node = TemplateTransformNode(
+            id="test_node",
+            config=node_data,
+            graph_init_params=graph_init_params,
+            graph=mock_graph,
+            graph_runtime_state=mock_graph_runtime_state,
+        )
+
+        result = node._run()
+
+        assert result.status == WorkflowNodeExecutionStatus.SUCCEEDED
+        assert "Alice" in result.outputs["output"]
+        assert "TechCorp" in result.outputs["output"]
+
+    @patch(
+        "core.workflow.nodes.template_transform.template_transform_node.CodeExecutorJinja2TemplateRenderer.render_template"
+    )
+    def test_run_with_filter_upper(self, mock_execute, mock_graph, mock_graph_runtime_state, graph_init_params):
+        """Test _run with upper filter."""
+        node_data = {
+            "title": "Filter Template",
+            "variables": [{"variable": "text", "value_selector": ["sys", "input_text"]}],
+            "template": "{{ text | upper }}",
+        }
+
+        mock_text = MagicMock()
+        mock_text.to_object.return_value = "hello world"
+
+        mock_graph_runtime_state.variable_pool.get.return_value = mock_text
+        mock_execute.return_value = "HELLO WORLD"
+
+        node = TemplateTransformNode(
+            id="test_node",
+            config=node_data,
+            graph_init_params=graph_init_params,
+            graph=mock_graph,
+            graph_runtime_state=mock_graph_runtime_state,
+        )
+
+        result = node._run()
+
+        assert result.status == WorkflowNodeExecutionStatus.SUCCEEDED
+        assert result.outputs["output"] == "HELLO WORLD"
+
+    @patch(
+        "core.workflow.nodes.template_transform.template_transform_node.CodeExecutorJinja2TemplateRenderer.render_template"
+    )
+    def test_run_with_filter_lower(self, mock_execute, mock_graph, mock_graph_runtime_state, graph_init_params):
+        """Test _run with lower filter."""
+        node_data = {
+            "title": "Filter Template",
+            "variables": [{"variable": "text", "value_selector": ["sys", "input_text"]}],
+            "template": "{{ text | lower }}",
+        }
+
+        mock_text = MagicMock()
+        mock_text.to_object.return_value = "HELLO WORLD"
+
+        mock_graph_runtime_state.variable_pool.get.return_value = mock_text
+        mock_execute.return_value = "hello world"
+
+        node = TemplateTransformNode(
+            id="test_node",
+            config=node_data,
+            graph_init_params=graph_init_params,
+            graph=mock_graph,
+            graph_runtime_state=mock_graph_runtime_state,
+        )
+
+        result = node._run()
+
+        assert result.status == WorkflowNodeExecutionStatus.SUCCEEDED
+        assert result.outputs["output"] == "hello world"
+
+    @patch(
+        "core.workflow.nodes.template_transform.template_transform_node.CodeExecutorJinja2TemplateRenderer.render_template"
+    )
+    def test_run_with_filter_length(self, mock_execute, mock_graph, mock_graph_runtime_state, graph_init_params):
+        """Test _run with length filter."""
+        node_data = {
+            "title": "Length Filter Template",
+            "variables": [{"variable": "items", "value_selector": ["sys", "list_items"]}],
+            "template": "Count: {{ items | length }}",
+        }
+
+        mock_items = MagicMock()
+        mock_items.to_object.return_value = ["a", "b", "c", "d"]
+
+        mock_graph_runtime_state.variable_pool.get.return_value = mock_items
+        mock_execute.return_value = "Count: 4"
+
+        node = TemplateTransformNode(
+            id="test_node",
+            config=node_data,
+            graph_init_params=graph_init_params,
+            graph=mock_graph,
+            graph_runtime_state=mock_graph_runtime_state,
+        )
+
+        result = node._run()
+
+        assert result.status == WorkflowNodeExecutionStatus.SUCCEEDED
+        assert result.outputs["output"] == "Count: 4"
+
+    @patch(
+        "core.workflow.nodes.template_transform.template_transform_node.CodeExecutorJinja2TemplateRenderer.render_template"
+    )
+    def test_run_with_filter_default(self, mock_execute, mock_graph, mock_graph_runtime_state, graph_init_params):
+        """Test _run with default filter."""
+        node_data = {
+            "title": "Default Filter Template",
+            "variables": [{"variable": "value", "value_selector": ["sys", "optional_value"]}],
+            "template": "{{ value | default('N/A') }}",
+        }
+
+        mock_graph_runtime_state.variable_pool.get.return_value = None
+        mock_execute.return_value = "N/A"
+
+        node = TemplateTransformNode(
+            id="test_node",
+            config=node_data,
+            graph_init_params=graph_init_params,
+            graph=mock_graph,
+            graph_runtime_state=mock_graph_runtime_state,
+        )
+
+        result = node._run()
+
+        assert result.status == WorkflowNodeExecutionStatus.SUCCEEDED
+        assert result.outputs["output"] == "N/A"
+
+    @patch(
+        "core.workflow.nodes.template_transform.template_transform_node.CodeExecutorJinja2TemplateRenderer.render_template"
+    )
+    def test_run_with_multiline_template(self, mock_execute, mock_graph, mock_graph_runtime_state, graph_init_params):
+        """Test _run with multiline template."""
+        node_data = {
+            "title": "Multiline Template",
+            "variables": [
+                {"variable": "name", "value_selector": ["sys", "user_name"]},
+                {"variable": "email", "value_selector": ["sys", "user_email"]},
+            ],
+            "template": """Hello {{ name }},
+Welcome to our service!
+Your email: {{ email }}""",
+        }
+
+        mock_name = MagicMock()
+        mock_name.to_object.return_value = "Bob"
+        mock_email = MagicMock()
+        mock_email.to_object.return_value = "bob@example.com"
+
+        variable_map = {
+            ("sys", "user_name"): mock_name,
+            ("sys", "user_email"): mock_email,
+        }
+        mock_graph_runtime_state.variable_pool.get.side_effect = lambda selector: variable_map.get(tuple(selector))
+        mock_execute.return_value = """Hello Bob,
+Welcome to our service!
+Your email: bob@example.com"""
+
+        node = TemplateTransformNode(
+            id="test_node",
+            config=node_data,
+            graph_init_params=graph_init_params,
+            graph=mock_graph,
+            graph_runtime_state=mock_graph_runtime_state,
+        )
+
+        result = node._run()
+
+        assert result.status == WorkflowNodeExecutionStatus.SUCCEEDED
+        assert "Bob" in result.outputs["output"]
+        assert "bob@example.com" in result.outputs["output"]
+
+    @patch(
+        "core.workflow.nodes.template_transform.template_transform_node.CodeExecutorJinja2TemplateRenderer.render_template"
+    )
+    def test_run_with_string_concatenation(
+        self, mock_execute, mock_graph, mock_graph_runtime_state, graph_init_params
+    ):
+        """Test _run with string concatenation."""
+        node_data = {
+            "title": "Concatenation Template",
+            "variables": [
+                {"variable": "first", "value_selector": ["sys", "first_name"]},
+                {"variable": "last", "value_selector": ["sys", "last_name"]},
+            ],
+            "template": "{{ first ~ ' ' ~ last }}",
+        }
+
+        mock_first = MagicMock()
+        mock_first.to_object.return_value = "Jane"
+        mock_last = MagicMock()
+        mock_last.to_object.return_value = "Doe"
+
+        variable_map = {
+            ("sys", "first_name"): mock_first,
+            ("sys", "last_name"): mock_last,
+        }
+        mock_graph_runtime_state.variable_pool.get.side_effect = lambda selector: variable_map.get(tuple(selector))
+        mock_execute.return_value = "Jane Doe"
+
+        node = TemplateTransformNode(
+            id="test_node",
+            config=node_data,
+            graph_init_params=graph_init_params,
+            graph=mock_graph,
+            graph_runtime_state=mock_graph_runtime_state,
+        )
+
+        result = node._run()
+
+        assert result.status == WorkflowNodeExecutionStatus.SUCCEEDED
+        assert result.outputs["output"] == "Jane Doe"
+
+    @patch(
+        "core.workflow.nodes.template_transform.template_transform_node.CodeExecutorJinja2TemplateRenderer.render_template"
+    )
+    def test_run_with_conditional_if_else(
+        self, mock_execute, mock_graph, mock_graph_runtime_state, graph_init_params
+    ):
+        """Test _run with conditional if-else statements."""
+        node_data = {
+            "title": "Conditional Template",
+            "variables": [{"variable": "score", "value_selector": ["sys", "test_score"]}],
+            "template": "{% if score >= 90 %}A{% elif score >= 80 %}B{% else %}C{% endif %}",
+        }
+
+        mock_score = MagicMock()
+        mock_score.to_object.return_value = 85
+
+        mock_graph_runtime_state.variable_pool.get.return_value = mock_score
+        mock_execute.return_value = "B"
+
+        node = TemplateTransformNode(
+            id="test_node",
+            config=node_data,
+            graph_init_params=graph_init_params,
+            graph=mock_graph,
+            graph_runtime_state=mock_graph_runtime_state,
+        )
+
+        result = node._run()
+
+        assert result.status == WorkflowNodeExecutionStatus.SUCCEEDED
+        assert result.outputs["output"] == "B"
+
+    @patch(
+        "core.workflow.nodes.template_transform.template_transform_node.CodeExecutorJinja2TemplateRenderer.render_template"
+    )
+    def test_run_with_loop_range(self, mock_execute, mock_graph, mock_graph_runtime_state, graph_init_params):
+        """Test _run with loop using range."""
+        node_data = {
+            "title": "Range Loop Template",
+            "variables": [{"variable": "count", "value_selector": ["sys", "num_items"]}],
+            "template": "{% for i in range(count) %}{{ i }}{% if not loop.last %}, {% endif %}{% endfor %}",
+        }
+
+        mock_count = MagicMock()
+        mock_count.to_object.return_value = 5
+
+        mock_graph_runtime_state.variable_pool.get.return_value = mock_count
+        mock_execute.return_value = "0, 1, 2, 3, 4"
+
+        node = TemplateTransformNode(
+            id="test_node",
+            config=node_data,
+            graph_init_params=graph_init_params,
+            graph=mock_graph,
+            graph_runtime_state=mock_graph_runtime_state,
+        )
+
+        result = node._run()
+
+        assert result.status == WorkflowNodeExecutionStatus.SUCCEEDED
+        assert result.outputs["output"] == "0, 1, 2, 3, 4"
+
+    @patch(
+        "core.workflow.nodes.template_transform.template_transform_node.CodeExecutorJinja2TemplateRenderer.render_template"
+    )
+    def test_run_with_loop_index(self, mock_execute, mock_graph, mock_graph_runtime_state, graph_init_params):
+        """Test _run with loop using index."""
+        node_data = {
+            "title": "Loop Index Template",
+            "variables": [{"variable": "items", "value_selector": ["sys", "list_items"]}],
+            "template": "{% for item in items %}{{ loop.index }}. {{ item }}\n{% endfor %}",
+        }
+
+        mock_items = MagicMock()
+        mock_items.to_object.return_value = ["First", "Second", "Third"]
+
+        mock_graph_runtime_state.variable_pool.get.return_value = mock_items
+        mock_execute.return_value = "1. First\n2. Second\n3. Third\n"
+
+        node = TemplateTransformNode(
+            id="test_node",
+            config=node_data,
+            graph_init_params=graph_init_params,
+            graph=mock_graph,
+            graph_runtime_state=mock_graph_runtime_state,
+        )
+
+        result = node._run()
+
+        assert result.status == WorkflowNodeExecutionStatus.SUCCEEDED
+        assert "1. First" in result.outputs["output"]
+        assert "2. Second" in result.outputs["output"]
+
+    @patch(
+        "core.workflow.nodes.template_transform.template_transform_node.CodeExecutorJinja2TemplateRenderer.render_template"
+    )
+    def test_run_with_special_characters(self, mock_execute, mock_graph, mock_graph_runtime_state, graph_init_params):
+        """Test _run with special characters in variables."""
+        node_data = {
+            "title": "Special Chars Template",
+            "variables": [{"variable": "text", "value_selector": ["sys", "input_text"]}],
+            "template": "{{ text }}",
+        }
+
+        mock_text = MagicMock()
+        mock_text.to_object.return_value = "Hello @#$%^&* World!"
+
+        mock_graph_runtime_state.variable_pool.get.return_value = mock_text
+        mock_execute.return_value = "Hello @#$%^&* World!"
+
+        node = TemplateTransformNode(
+            id="test_node",
+            config=node_data,
+            graph_init_params=graph_init_params,
+            graph=mock_graph,
+            graph_runtime_state=mock_graph_runtime_state,
+        )
+
+        result = node._run()
+
+        assert result.status == WorkflowNodeExecutionStatus.SUCCEEDED
+        assert result.outputs["output"] == "Hello @#$%^&* World!"
+
+    @patch(
+        "core.workflow.nodes.template_transform.template_transform_node.CodeExecutorJinja2TemplateRenderer.render_template"
+    )
+    def test_run_with_unicode_characters(self, mock_execute, mock_graph, mock_graph_runtime_state, graph_init_params):
+        """Test _run with unicode characters."""
+        node_data = {
+            "title": "Unicode Template",
+            "variables": [{"variable": "text", "value_selector": ["sys", "unicode_text"]}],
+            "template": "{{ text }}",
+        }
+
+        mock_text = MagicMock()
+        mock_text.to_object.return_value = "Hello 世界 🌍"
+
+        mock_graph_runtime_state.variable_pool.get.return_value = mock_text
+        mock_execute.return_value = "Hello 世界 🌍"
+
+        node = TemplateTransformNode(
+            id="test_node",
+            config=node_data,
+            graph_init_params=graph_init_params,
+            graph=mock_graph,
+            graph_runtime_state=mock_graph_runtime_state,
+        )
+
+        result = node._run()
+
+        assert result.status == WorkflowNodeExecutionStatus.SUCCEEDED
+        assert result.outputs["output"] == "Hello 世界 🌍"
+
+    @patch(
+        "core.workflow.nodes.template_transform.template_transform_node.CodeExecutorJinja2TemplateRenderer.render_template"
+    )
+    def test_run_with_empty_string(self, mock_execute, mock_graph, mock_graph_runtime_state, graph_init_params):
+        """Test _run with empty string variable."""
+        node_data = {
+            "title": "Empty String Template",
+            "variables": [{"variable": "text", "value_selector": ["sys", "empty_text"]}],
+            "template": "Value: '{{ text }}'",
+        }
+
+        mock_text = MagicMock()
+        mock_text.to_object.return_value = ""
+
+        mock_graph_runtime_state.variable_pool.get.return_value = mock_text
+        mock_execute.return_value = "Value: ''"
+
+        node = TemplateTransformNode(
+            id="test_node",
+            config=node_data,
+            graph_init_params=graph_init_params,
+            graph=mock_graph,
+            graph_runtime_state=mock_graph_runtime_state,
+        )
+
+        result = node._run()
+
+        assert result.status == WorkflowNodeExecutionStatus.SUCCEEDED
+        assert result.outputs["output"] == "Value: ''"
+
+    @patch(
+        "core.workflow.nodes.template_transform.template_transform_node.CodeExecutorJinja2TemplateRenderer.render_template"
+    )
+    def test_run_with_zero_value(self, mock_execute, mock_graph, mock_graph_runtime_state, graph_init_params):
+        """Test _run with zero value."""
+        node_data = {
+            "title": "Zero Value Template",
+            "variables": [{"variable": "num", "value_selector": ["sys", "number"]}],
+            "template": "Number: {{ num }}",
+        }
+
+        mock_num = MagicMock()
+        mock_num.to_object.return_value = 0
+
+        mock_graph_runtime_state.variable_pool.get.return_value = mock_num
+        mock_execute.return_value = "Number: 0"
+
+        node = TemplateTransformNode(
+            id="test_node",
+            config=node_data,
+            graph_init_params=graph_init_params,
+            graph=mock_graph,
+            graph_runtime_state=mock_graph_runtime_state,
+        )
+
+        result = node._run()
+
+        assert result.status == WorkflowNodeExecutionStatus.SUCCEEDED
+        assert result.outputs["output"] == "Number: 0"
+
+    @patch(
+        "core.workflow.nodes.template_transform.template_transform_node.CodeExecutorJinja2TemplateRenderer.render_template"
+    )
+    def test_run_with_negative_number(self, mock_execute, mock_graph, mock_graph_runtime_state, graph_init_params):
+        """Test _run with negative number."""
+        node_data = {
+            "title": "Negative Number Template",
+            "variables": [{"variable": "balance", "value_selector": ["sys", "account_balance"]}],
+            "template": "Balance: ${{ balance }}",
+        }
+
+        mock_balance = MagicMock()
+        mock_balance.to_object.return_value = -50.25
+
+        mock_graph_runtime_state.variable_pool.get.return_value = mock_balance
+        mock_execute.return_value = "Balance: $-50.25"
+
+        node = TemplateTransformNode(
+            id="test_node",
+            config=node_data,
+            graph_init_params=graph_init_params,
+            graph=mock_graph,
+            graph_runtime_state=mock_graph_runtime_state,
+        )
+
+        result = node._run()
+
+        assert result.status == WorkflowNodeExecutionStatus.SUCCEEDED
+        assert result.outputs["output"] == "Balance: $-50.25"
+
+    @patch(
+        "core.workflow.nodes.template_transform.template_transform_node.CodeExecutorJinja2TemplateRenderer.render_template"
+    )
+    def test_run_with_float_precision(self, mock_execute, mock_graph, mock_graph_runtime_state, graph_init_params):
+        """Test _run with float precision."""
+        node_data = {
+            "title": "Float Precision Template",
+            "variables": [{"variable": "value", "value_selector": ["sys", "precise_value"]}],
+            "template": "Value: {{ '%.2f' % value }}",
+        }
+
+        mock_value = MagicMock()
+        mock_value.to_object.return_value = 3.14159265
+
+        mock_graph_runtime_state.variable_pool.get.return_value = mock_value
+        mock_execute.return_value = "Value: 3.14"
+
+        node = TemplateTransformNode(
+            id="test_node",
+            config=node_data,
+            graph_init_params=graph_init_params,
+            graph=mock_graph,
+            graph_runtime_state=mock_graph_runtime_state,
+        )
+
+        result = node._run()
+
+        assert result.status == WorkflowNodeExecutionStatus.SUCCEEDED
+        assert result.outputs["output"] == "Value: 3.14"
+
+    @patch(
+        "core.workflow.nodes.template_transform.template_transform_node.CodeExecutorJinja2TemplateRenderer.render_template"
+    )
+    def test_run_with_large_number(self, mock_execute, mock_graph, mock_graph_runtime_state, graph_init_params):
+        """Test _run with large number."""
+        node_data = {
+            "title": "Large Number Template",
+            "variables": [{"variable": "population", "value_selector": ["sys", "world_population"]}],
+            "template": "Population: {{ population }}",
+        }
+
+        mock_population = MagicMock()
+        mock_population.to_object.return_value = 8000000000
+
+        mock_graph_runtime_state.variable_pool.get.return_value = mock_population
+        mock_execute.return_value = "Population: 8000000000"
+
+        node = TemplateTransformNode(
+            id="test_node",
+            config=node_data,
+            graph_init_params=graph_init_params,
+            graph=mock_graph,
+            graph_runtime_state=mock_graph_runtime_state,
+        )
+
+        result = node._run()
+
+        assert result.status == WorkflowNodeExecutionStatus.SUCCEEDED
+        assert result.outputs["output"] == "Population: 8000000000"
+
+    @patch(
+        "core.workflow.nodes.template_transform.template_transform_node.CodeExecutorJinja2TemplateRenderer.render_template"
+    )
+    def test_run_with_mixed_types_in_list(self, mock_execute, mock_graph, mock_graph_runtime_state, graph_init_params):
+        """Test _run with mixed types in list."""
+        node_data = {
+            "title": "Mixed Types Template",
+            "variables": [{"variable": "items", "value_selector": ["sys", "mixed_items"]}],
+            "template": "{% for item in items %}{{ item }}{% if not loop.last %}, {% endif %}{% endfor %}",
+        }
+
+        mock_items = MagicMock()
+        mock_items.to_object.return_value = [1, "two", 3.0, True]
+
+        mock_graph_runtime_state.variable_pool.get.return_value = mock_items
+        mock_execute.return_value = "1, two, 3.0, True"
+
+        node = TemplateTransformNode(
+            id="test_node",
+            config=node_data,
+            graph_init_params=graph_init_params,
+            graph=mock_graph,
+            graph_runtime_state=mock_graph_runtime_state,
+        )
+
+        result = node._run()
+
+        assert result.status == WorkflowNodeExecutionStatus.SUCCEEDED
+        assert "1, two, 3.0, True" == result.outputs["output"]
+
+    @patch(
+        "core.workflow.nodes.template_transform.template_transform_node.CodeExecutorJinja2TemplateRenderer.render_template"
+    )
+    def test_run_with_empty_list(self, mock_execute, mock_graph, mock_graph_runtime_state, graph_init_params):
+        """Test _run with empty list."""
+        node_data = {
+            "title": "Empty List Template",
+            "variables": [{"variable": "items", "value_selector": ["sys", "empty_items"]}],
+            "template": "{% if items %}Has items{% else %}No items{% endif %}",
+        }
+
+        mock_items = MagicMock()
+        mock_items.to_object.return_value = []
+
+        mock_graph_runtime_state.variable_pool.get.return_value = mock_items
+        mock_execute.return_value = "No items"
+
+        node = TemplateTransformNode(
+            id="test_node",
+            config=node_data,
+            graph_init_params=graph_init_params,
+            graph=mock_graph,
+            graph_runtime_state=mock_graph_runtime_state,
+        )
+
+        result = node._run()
+
+        assert result.status == WorkflowNodeExecutionStatus.SUCCEEDED
+        assert result.outputs["output"] == "No items"
+
+    @patch(
+        "core.workflow.nodes.template_transform.template_transform_node.CodeExecutorJinja2TemplateRenderer.render_template"
+    )
+    def test_run_with_empty_dict(self, mock_execute, mock_graph, mock_graph_runtime_state, graph_init_params):
+        """Test _run with empty dictionary."""
+        node_data = {
+            "title": "Empty Dict Template",
+            "variables": [{"variable": "data", "value_selector": ["sys", "empty_data"]}],
+            "template": "{% if data %}Has data{% else %}No data{% endif %}",
+        }
+
+        mock_data = MagicMock()
+        mock_data.to_object.return_value = {}
+
+        mock_graph_runtime_state.variable_pool.get.return_value = mock_data
+        mock_execute.return_value = "No data"
+
+        node = TemplateTransformNode(
+            id="test_node",
+            config=node_data,
+            graph_init_params=graph_init_params,
+            graph=mock_graph,
+            graph_runtime_state=mock_graph_runtime_state,
+        )
+
+        result = node._run()
+
+        assert result.status == WorkflowNodeExecutionStatus.SUCCEEDED
+        assert result.outputs["output"] == "No data"
+
+    @patch(
+        "core.workflow.nodes.template_transform.template_transform_node.CodeExecutorJinja2TemplateRenderer.render_template"
+    )
+    def test_run_with_whitespace_control(self, mock_execute, mock_graph, mock_graph_runtime_state, graph_init_params):
+        """Test _run with whitespace control."""
+        node_data = {
+            "title": "Whitespace Control Template",
+            "variables": [{"variable": "items", "value_selector": ["sys", "list_items"]}],
+            "template": "{%- for item in items -%}{{ item }}{%- endfor -%}",
+        }
+
+        mock_items = MagicMock()
+        mock_items.to_object.return_value = ["a", "b", "c"]
+
+        mock_graph_runtime_state.variable_pool.get.return_value = mock_items
+        mock_execute.return_value = "abc"
+
+        node = TemplateTransformNode(
+            id="test_node",
+            config=node_data,
+            graph_init_params=graph_init_params,
+            graph=mock_graph,
+            graph_runtime_state=mock_graph_runtime_state,
+        )
+
+        result = node._run()
+
+        assert result.status == WorkflowNodeExecutionStatus.SUCCEEDED
+        assert result.outputs["output"] == "abc"
+
+    @patch(
+        "core.workflow.nodes.template_transform.template_transform_node.CodeExecutorJinja2TemplateRenderer.render_template"
+    )
+    def test_run_with_escape_filter(self, mock_execute, mock_graph, mock_graph_runtime_state, graph_init_params):
+        """Test _run with escape filter for HTML."""
+        node_data = {
+            "title": "Escape Filter Template",
+            "variables": [{"variable": "html", "value_selector": ["sys", "html_content"]}],
+            "template": "{{ html | escape }}",
+        }
+
+        mock_html = MagicMock()
+        mock_html.to_object.return_value = "<script>alert('xss')</script>"
+
+        mock_graph_runtime_state.variable_pool.get.return_value = mock_html
+        mock_execute.return_value = "&lt;script&gt;alert(&#39;xss&#39;)&lt;/script&gt;"
+
+        node = TemplateTransformNode(
+            id="test_node",
+            config=node_data,
+            graph_init_params=graph_init_params,
+            graph=mock_graph,
+            graph_runtime_state=mock_graph_runtime_state,
+        )
+
+        result = node._run()
+
+        assert result.status == WorkflowNodeExecutionStatus.SUCCEEDED
+        assert "&lt;script&gt;" in result.outputs["output"]
