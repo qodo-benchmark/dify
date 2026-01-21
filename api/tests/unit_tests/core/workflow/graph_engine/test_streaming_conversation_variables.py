@@ -68,7 +68,7 @@ def test_streaming_conversation_variables_v1_overwrite_waits_for_assignment():
     conv_var_chunk_events = [
         event
         for event in events
-        if isinstance(event, NodeRunStreamChunkEvent) and tuple(event.selector) == ("conversation", "conv_var")
+        if isinstance(event, NodeRunStreamChunkEvent) and event.selector == ["conversation", "conv_var"]
     ]
 
     assert conv_var_chunk_events, "Expected conversation variable chunk events to be emitted"
