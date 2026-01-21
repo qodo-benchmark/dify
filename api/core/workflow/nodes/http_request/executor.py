@@ -362,7 +362,6 @@ class Executor:
         # request_args = {k: v for k, v in request_args.items() if v is not None}
         try:
             response: httpx.Response = _METHOD_MAP[method_lc](
-                url=self.url,
                 **request_args,
                 max_retries=self.max_retries,
             )

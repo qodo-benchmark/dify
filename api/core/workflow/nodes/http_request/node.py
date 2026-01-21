@@ -98,8 +98,8 @@ class HttpRequestNode(Node[HttpRequestNodeData]):
                 timeout=self._get_request_timeout(self.node_data),
                 variable_pool=self.graph_runtime_state.variable_pool,
                 max_retries=0,
-                http_client=self._http_client,
-                file_manager=self._file_manager,
+                http_client=ssrf_proxy,
+                file_manager=file_manager,
             )
             process_data["request"] = http_executor.to_log()
 
@@ -203,7 +203,7 @@ class HttpRequestNode(Node[HttpRequestNodeData]):
 
         return mapping
 
-    def extract_files(self, url: str, response: Response) -> ArrayFileSegment:
+    def extract_files(self, url, response):
         """
         Extract files from response by checking both Content-Type header and URL
         """
