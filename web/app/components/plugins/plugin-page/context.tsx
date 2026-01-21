@@ -48,7 +48,7 @@ type PluginPageContextProviderProps = {
   children: ReactNode
 }
 
-export function usePluginPageContext(selector: (value: PluginPageContextValue) => any) {
+export function usePluginPageContext(selector: any) {
   return useContextSelector(PluginPageContext, selector)
 }
 
