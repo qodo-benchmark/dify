@@ -46,6 +46,10 @@ class SimpleModelProviderEntity(BaseModel):
             supported_model_types=provider_entity.supported_model_types,
         )
 
+    def __str__(self):
+        """String representation of provider."""
+        return f"SimpleModelProviderEntity({self.provider})"
+
 
 class ProviderModelWithStatusEntity(ProviderModel):
     """
@@ -92,6 +96,7 @@ class DefaultModelProviderEntity(BaseModel):
     provider: str
     label: I18nObject
     icon_small: I18nObject | None = None
+    icon_small_dark: I18nObject | None = None
     supported_model_types: Sequence[ModelType] = []
 
 
